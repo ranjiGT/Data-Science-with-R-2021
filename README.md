@@ -15,6 +15,7 @@ Indirectly, the measures are taken to slow, the spread of the virus has affected
 :bulb:**`Objective 2`:** 
 We propose to know the impact of COVID-19 in Twitter/Linkedin. This is done by retrieving the top tweets or popular posts from a specific location after the coronavirus outbreak across the globe. It will help us analyze the various responses taken by the administration as well as people's response as the virus unfolded. We target to extract hashtags like *#covidjobs, #workfromhome, #wfh, #remotejobs* etc., in order to get the related posts pertaining to it and analyze the engagement of people in this subject and maximize reach based on similar interests. Retrieving the re-tweeted tweets or posts will help us understand the effects of COVID-19 among people. We perform sentimental analysis on the tweets in order to understand the sentiments of people is crucial during this time of pandemic. 
 
+:bulb:**`Objective 3`:** Our final major objective will be for [`Infodemics`](https://www.nature.com/articles/s41598-020-73510-5), that is to perform a comparative analysis and also to outline the interaction patterns of information spreading dynamics around the same argument in different environments having different interaction settings and audiences and reporting the rumor amplification parameters for each the social media due to COVID-19 to show how inaccurate and the misinformation is spread on different mainstream online platforms and its ill-effects raging the fear among the common public in day-to-day life.
 
 ## `DATASETS` :globe_with_meridians:
 
@@ -43,5 +44,3 @@ Dataset can be downloaded here: [A Global Study of Digital Crisis Interaction am
 
 This dataset comprises of raw survey data collected from mobile devices in form of questions and answers format along with combined data in CSV format.
 
-
-**`Objective 3`:** Our final major objective will be for [`Infodemics`](https://www.nature.com/articles/s41598-020-73510-5), that is to perform a comparative analysis and also to outline the interaction patterns of information spreading dynamics around the same argument in different environments having different interaction settings and audiences and reporting the rumor amplification parameters for each the social media due to COVID-19 to show how inaccurate and the misinformation is spread on different mainstream online platforms and its ill-effects raging the fear among the common public in day-to-day life.
