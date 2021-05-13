@@ -44,3 +44,7 @@ Dataset can be downloaded here: [A Global Study of Digital Crisis Interaction am
 
 This dataset comprises of raw survey data collected from mobile devices in form of questions and answers format along with combined data in CSV format.
 
+### Other useful links:
+
+- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7536964/
+- http://thinktostart.com/analyze-linkedin-with-r/
