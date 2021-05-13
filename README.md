@@ -32,7 +32,7 @@ These datasets mainly focuses on stress levels, sources of stress and trust in i
 **2. Twitter/Linkedin Data**  
 We aim work on the most recent dataset aggregated from Twitter and Linkedin using twitteR, Rlinkedin and rtweet libraries within a particular time and location. 
 
-Here `twitteR` and `Rlinkedin` which provides an interface and access to Twitter and Linkedin web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data .
+Here [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) and [`Rlinkedin`](https://cran.r-project.org/web/packages/Rlinkedin/Rlinkedin.pdf) which provides an interface and access to Twitter and Linkedin web API respectively, [`rtweet`](https://cran.r-project.org/web/packages/rtweet/rtweet.pdf) which acts as the client for Twitter's REST and stream APIs will be used to retrieve data .
 
 
 **3. Social Media & COVID-19 raw survey data**   
