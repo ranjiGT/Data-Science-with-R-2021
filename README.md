@@ -48,3 +48,6 @@ This dataset comprises of raw survey data collected from mobile devices in form 
 
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7536964/
 - http://thinktostart.com/analyze-linkedin-with-r/
+
+### Project course website:
+- https://brain.cs.uni-magdeburg.de/kmd/DataSciR/index.html
