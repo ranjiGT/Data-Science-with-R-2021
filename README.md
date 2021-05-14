@@ -19,7 +19,7 @@ We propose to know the impact of COVID-19 in Twitter/Linkedin. This is done by r
 
 ## `DATASETS` :globe_with_meridians:
 
-**1. COVIDISTRESS all global survey data**  
+**1\. COVIDISTRESS all global survey data**  
 (The COVIDiSTRESS global survey is an open science collaboration,
 created by researchers in over 40 countries to rapidly and organically
 collect data on human experiences of the Coronavirus epidemic 2020.)
@@ -30,13 +30,13 @@ Dataset can be downloaded here:
 These datasets mainly focuses on stress levels, sources of stress and trust in institutions across the EU. Furthermore, also include factors such as loneliness, media use, personality, social provisions and perceived sources of psychological relief.
 
 
-**2. Twitter/Linkedin Data**  
+**2\. Twitter/Linkedin Data**  
 We aim work on the most recent dataset aggregated from Twitter and Linkedin using twitteR, Rlinkedin and rtweet libraries within a particular time and location. 
 
 Here [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) and [`Rlinkedin`](https://cran.r-project.org/web/packages/Rlinkedin/Rlinkedin.pdf) which provides an interface and access to Twitter and Linkedin web API respectively, [`rtweet`](https://cran.r-project.org/web/packages/rtweet/rtweet.pdf) which acts as the client for Twitter's REST and stream APIs will be used to retrieve data .
 
 
-**3. Social Media & COVID-19 raw survey data**   
+**3\. Social Media & COVID-19 raw survey data**   
 (Social Media & COVID-19: A Global Study of Digital Crisis Interaction among Gen Z and Millennials)
 Dataset can be downloaded here: [A Global Study of Digital Crisis Interaction among Gen Z and Millennials] 
 
