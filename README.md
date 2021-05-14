@@ -2,14 +2,15 @@
 
 ## `Psychological & Behavioural distress of COVID-19 & Infodemics`
 
-## `PREFACE` :scroll:
+## `Preface` :scroll:
 
 The coronavirus COVID-19 pandemic is an **unprecedented** health crisis. One of the biggest impacts of this situation has been the facts on our collective, mental health studies on the global burden of disease were already shown by WHO that mental disorders, make a 5 out of 10 leading causes of disability worldwide and this is before the pandemic started. The stress, anxiety, depression stemming from fear, isolation, and stigma around COVID-19 affected, all of us in one way or another. Many people are losing their jobs and the elderly are isolated from their usual support network. Of course, the past year has been hard on healthcare workers having to work long hours, personal risk of exposure to the virus, and witnessing firsthand the loss of people's colleagues and loved ones. The issue is that the effects of the pandemic and mental health, maybe for longer-lasting than the disease itself.    
 
 Indirectly, the measures are taken to slow, the spread of the virus has affected our physical activity levels, our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point, both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and portray some meaningful insights on global survey data.
 
 
-## `PROJECT OBJECTIVES` (TBD) :hourglass:
+## `Project Objectives` (TBD) :hourglass:
+
 :bulb:**`Objective 1`:** Here we aim to analyze and visualize the survey dataset to come up with certain descriptive and diagnostic statistics including the number of countries that participated in the survey. We look forward to analyzing the various stress levels from each country, with a focus on visualizing the distress scale with the source of distress and the level of distress. Further, we plan to visualize the coping scale which consists of the source of coping and detailing what was the personal conscious effort, to solve personal and interpersonal problems, to master, minimize or tolerate stress and conflict. We also target to depict the visualization of the level of trust such as Country's Civil service, Country's Police, Country's Healthcare system, WHO, Government's measures against COVID which also play a crucial role. We extend to diagnose on areas such as compliance and the level of agreement, the concern level, and the key factor of media from where the respondents sought to agree to take the information from. The different relationship between perceived stress, social support, loneliness, and extroversion according to different age groups will also be set as our basis for analysis.  :heavy_check_mark:
 
 :bulb:**`Objective 2`:** 
@@ -17,7 +18,7 @@ We propose to know the impact of COVID-19 in Twitter/Linkedin. This is done by r
 
 :bulb:**`Objective 3`:** Our final major objective will be for [`Infodemics`](https://www.nature.com/articles/s41598-020-73510-5), that is to perform a comparative analysis and also to outline the interaction patterns of information spreading dynamics around the same argument in different environments having different interaction settings and audiences and reporting the rumor amplification parameters for each the social media due to COVID-19 to show how inaccurate and the misinformation is spread on different mainstream online platforms and its ill-effects raging the fear among the common public in day-to-day life.
 
-## `DATASETS` :globe_with_meridians:
+## `Datasets` :globe_with_meridians:
 
 **1\. COVIDISTRESS all global survey data**  
 (The COVIDiSTRESS global survey is an open science collaboration,
