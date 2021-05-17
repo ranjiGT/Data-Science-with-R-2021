@@ -1,4 +1,4 @@
-# `Data Science with R 2021` <img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" align="right" alt="" width="120" />
+# `Data Science with R 2021` <img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" align="right" alt="" width="140" />
 
 ## `Psychological & Behavioural distress of COVID-19 & Infodemics`
 
