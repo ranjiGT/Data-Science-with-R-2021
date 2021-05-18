@@ -94,7 +94,7 @@ Create Project Website | Sujith, Usama, Madhuri
 Create Project Screencast  | Ranji Raj, Madhuri, Vishnu
 Final Project Presentation | All team members
 |
-![](C:/Users/User/Downloads/Data-Science-with-R-2021-master/Data-Science-with-R-2021-master/project proposal/Roadmap.jpg)
+![](C:/Users/User/Downloads/Data-Science-with-R-2021-master/Data-Science-with-R-2021-master/project proposal/roadmap.jpg)
 
 ```{r, include=FALSE}
 options(tinytex.verbose = TRUE)
