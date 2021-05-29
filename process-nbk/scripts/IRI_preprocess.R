@@ -192,10 +192,17 @@ colnames(data_scatter_gov) <- c("country", "govloc", "govglob")
 write.csv(data_scatter_gov,'data_scatter_gov.csv')
 data_scatterplot_gov <- read.csv("data_scatter_gov.csv")
 
-par(pty = "s")
-plot(govloc~govglob, col="lightblue", pch=19, cex=2, xlim=c(-10,10), ylim=c(-10,10), xlab="trust in global governments", ylab="trust in country's government", data=data_scatterplot_gov)
-text(govloc~govglob, labels=country,data=data_scatterplot_gov, cex=0.9, font=2)
+# par(pty = "s")
+# plot(govloc~govglob, col="lightblue", pch=19, cex=2, xlim=c(-10,10), ylim=c(-10,10), xlab="trust in global governments", ylab="trust in country's government", data=data_scatterplot_gov)
+# text(govloc~govglob, labels=country,data=data_scatterplot_gov, cex=0.9, font=2)
 
+ggplot(data_scatterplot_gov, aes(x=govglob, y=govloc)) +
+  geom_point(col="blue", alpha = 0.9) + 
+  geom_text(label=data_scatterplot_gov$country)+
+  xlab("Trust in global governments")+
+  ylab("Trust in country's government")+
+  ggtitle("Plot for trust among citizens in Country's government for 12 different countries")
+  
 
 column1scient <- c("Australia","Brazil","Croatia","Finland","France","Germany","Italy","Netherlands", "New Zealand","Portugal","United Kingdom","United States")
 column2scient <- c(scientloc.mean_aus,scientloc.mean_bra,scientloc.mean_cro,scientloc.mean_fin,scientloc.mean_fra,scientloc.mean_ger,scientloc.mean_ita,scientloc.mean_nld, scientloc.mean_nz, scientloc.mean_por,scientloc.mean_uk,scientloc.mean_usa)
@@ -207,6 +214,13 @@ colnames(data_scatter_scient) <- c("country", "scientloc", "scientglob")
 write.csv(data_scatter_scient,'data_scatter_scient.csv')
 data_scatterplot_scient <- read.csv("data_scatter_scient.csv")
 
-par(pty = "s")
-plot(scientloc~scientglob, col="lightblue", pch=19, cex=2, xlim=c(-10,10), ylim=c(-10,10), xlab="trust in scientists globally", ylab="trust in country's scientists", data=data_scatterplot_scient)
-text(scientloc~scientglob, labels=country,data=data_scatterplot_scient, cex=0.9, font=2)
+# par(pty = "s")
+# plot(scientloc~scientglob, col="lightblue", pch=19, cex=2, xlim=c(-10,10), ylim=c(-10,10), xlab="trust in scientists globally", ylab="trust in country's scientists", data=data_scatterplot_scient)
+# text(scientloc~scientglob, labels=country,data=data_scatterplot_scient, cex=0.9, font=2)
+
+ggplot(data_scatterplot_scient, aes(x=scientglob, y=scientloc)) +
+  geom_point(col="blue", alpha = 0.9) + 
+  geom_text(label=data_scatterplot_scient$country)+
+  xlab("Trust in country's scientists")+
+  ylab("Trust in scientists globally")+
+  ggtitle("Plot for trust among citizens in Country's scientists for 12 different countries")
