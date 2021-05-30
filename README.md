@@ -16,12 +16,12 @@ Folder Structure Conventions
 ### A top-level directory layout
 
     .
-    ├── data                   # Compiled files (alternatively `dist`)
+    ├── data                   # Parent files (.csv, .sav)
     ├── files                    # logo and misc. files
     ├── process-nbk
-            ├── data                    #Compiled files (**.csv**)
-            ├── fig                         #Compiled images (`.png`, `.jp(e)g`)
-            └── scripts                         #Compiled codes(`.R`, `.Rmd`)
+            ├── data                    #Compiled files (.csv)
+            ├── fig                         #Compiled images (.png, .jp(e)g)
+            └── scripts                         #Compiled codes(.R, .Rmd)
     ├── project_proposal                    # Low-level design (LLD) documentation files                  
     ├── .gitignore
     ├── LICENSE
