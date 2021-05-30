@@ -19,7 +19,7 @@ Folder Structure Conventions
     ├── data                   # Compiled files (alternatively `dist`)
     ├── files                    # logo and misc. files
     ├── process-nbk
-            ├── data                    #Compiled files (`.csv*`)
+            ├── data                    #Compiled files (**.csv**)
             ├── fig                         #Compiled images (`.png`, `.jp(e)g`)
             └── scripts                         #Compiled codes(`.R`, `.Rmd`)
     ├── project_proposal                    # Low-level design (LLD) documentation files                  
