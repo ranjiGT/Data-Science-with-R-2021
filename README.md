@@ -11,16 +11,19 @@ In this limelight, although the measures are taken to slow the spread of the vir
 Folder Structure Conventions
 ============================
 
-> Folder structure options and naming conventions for software projects
+> Folder structure and naming conventions for this project
 
-### A typical top-level directory layout
+### A top-level directory layout
 
     .
-    ├── build                   # Compiled files (alternatively `dist`)
-    ├── docs                    # Documentation files (alternatively `doc`)
-    ├── src                     # Source files (alternatively `lib` or `app`)
-    ├── test                    # Automated tests (alternatively `spec` or `tests`)
-    ├── tools                   # Tools and utilities
+    ├── data                   # Compiled files (alternatively `dist`)
+    ├── files                    # logo and misc. files
+    ├── process-nbk
+            ├── data                    #Compiled files (`.csv*`)
+            ├── fig                         #Compiled images (`.png`, `.jp(e)g`)
+            └── scripts                         #Compiled codes(`.R`, `.Rmd`)
+    ├── project_proposal                    # Low-level design (LLD) documentation files                  
+    ├── .gitignore
     ├── LICENSE
     └── README.md
 
