@@ -115,11 +115,11 @@ colnames(tweets2021_raw)
 ```
 For more powerful insights, we use only the columns "text", "hashtags" and "location" and we speciafically clean up the columns text and hashtags. Let's do some basic analysis to see the top locations of tweets.
 
-```{r locations, echo=FALSE, background=TRUE}
+```{r locations, echo=FALSE}
 library(tidyverse)
 ```
 
-```{r, message=FALSE}
+```{r}
 
 tweets2021_raw %>% 
   filter(!is.na(location) & location != "") %>% 
@@ -134,9 +134,74 @@ https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview
 
 ```{r}
 
+library(tidytext)
+`%notin%` <- Negate(`%in%`)
+tweets2021_raw %>% 
+  unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(hashtag, "^#"),
+        hashtag %notin% c("#coronavirus","#COVID19", "#covid19","#Covid19", "#Coronavirus")) %>%
+  count(hashtag, sort = TRUE) %>%
+  top_n(10)
 
 ```
 
+**Create ggplot for the above**
 
+# Wordcloud
+
+## Unigrams
+```{r, eval=FALSE}
+words <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  count(word, sort = TRUE)
+
+library(wordcloud) 
+words %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+  
+"https://medium.com/@traffordDataLab/exploring-tweets-in-r-54f6011a193d"
+
+## Bigrams
+```{r, eval=FALSE}
+words_bigrams <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+
+library(wordcloud) 
+words_bigrams %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+
+```{r, eval=FALSE}
+# codes for adding only images
+include_graphics(img1_path)
+```
+
+Clean up
 
 # **References** 
