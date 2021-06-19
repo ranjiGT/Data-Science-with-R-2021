@@ -3,12 +3,12 @@ title: "R Notebook for data cleaning - Objective 3 (Infodemic Risk Index)"
 subtitle: Project covidistress - IRI
 author: "Author: Ranji Raj"
 output:
-  html_notebook:
-    toc: yes
-    toc_float: yes
   html_document:
     df_print: paged
     toc: yes
+  html_notebook:
+    toc: yes
+    toc_float: yes
 ---
 
 ### Taken from the transparencies of

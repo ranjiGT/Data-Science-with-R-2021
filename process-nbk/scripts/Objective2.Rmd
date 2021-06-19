@@ -1,0 +1,75 @@
+---
+title: "Twitter Analysis"
+author: "Vishnu Jayanand"
+date: "June 19th, 2021"
+output:
+  html_document:
+    css: style.css
+    df_print: paged
+    toc: true
+    number_sections : true
+    toc_depth: 2
+    toc_float: true 
+    theme: flatly
+    highlight: textmate
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Overview** {-} 
+
+We propose to know the impact of COVID-19 tackling infodemics and misinformation on
+Twitter. This is done by extracting recent popular tweets from a specific location across different countries.
+It will help us describe the false information that is spread with the sole purpose of causing confusion and
+harm. We target to extract hashtags like #covid19, #misinformation, #fakenews, #disinformation, #, etc.,
+to get the related posts about it and analyze how the information processing and decision-making behaviors
+are compromised. We perform sentimental analysis on the tweets to understand the sentiments of people
+which is crucial during the time of this pandemic
+
+# Twitter Data
+
+We have primarily two datasets - one of them contains tweets from the onset of the pandemic and the other are very recent tweets (June 2021). Our main objective here is to figure out 
+how the sentiments have changed over the months.
+
+For the security purposes, we show the skeletal code to extract the tweets using fake credentials. We would load the data via .rds file for our extracted tweets.
+
+```{r connection, eval=FALSE}
+library(rtweet)
+library(dplyr)
+library(tidyr)
+library(twitteR)
+library(tidytext)
+
+appname <- "CovidDistress"
+key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
+secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
+access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
+access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+
+twitter_token <- create_token(
+  app = appname,
+  consumer_key = key,
+  consumer_secret = secret,
+  access_token = access_token,
+  access_secret = access_secret,
+  set_renv = TRUE)
+
+corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", n=20000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+
+saveRDS(corona_tweets, "../data/tweets2021.rds")
+```
+
+We can now load saved RDS file using the command below
+```{r loadRDS}
+tweets2021_raw <- readRDS("../data/tweets2021.rds")
+
+```
+
+There are `r nrow(tweets2021_raw)` tweets from the dataset which is more than what we intended. This is because we set **retryonratelimit** to TRUE. These tweets are dated from ***`r format(as.Date(min(tweets2021_raw$created_at)), "%B %d %Y")`*** to ***`r format(as.Date(max(tweets2021_raw$created_at)), "%B %d, %Y")`***
+
+Here's a sample row from the dataset
+```{r echo=FALSE}
+gt::gt(tweets2021_raw[1,])
+```
