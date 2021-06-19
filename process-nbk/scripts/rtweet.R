@@ -7,16 +7,15 @@ library(dplyr)
 library(tidyr)
 library(twitteR)
 library(tidytext)
-
 # whatever name you assigned to your created app
-appname <- ""
+appname <- "CovidDistress"
 #api key (example below is not a real key)
-key <- ""
+key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
 #api secret (example below is not a real key)
-secret <- ""
+secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
 # create token named "twitter_token"
-access_token <- ""
-access_secret <- "" 
+access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
+access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
 twitter_token <- create_token(
   app = appname,
   consumer_key = key,
