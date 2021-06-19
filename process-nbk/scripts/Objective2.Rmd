@@ -1,7 +1,11 @@
 ---
-title: "Twitter Analysis"
-author: "Vishnu Jayanand"
+title: |
+  ![](../data/Signet_INF_3.jpg){width=400px style="display: block; margin:0 auto"}
+  <center>Twitter Analysis</center>
+  ![](../data/logo.svg){width=100px style="display: block; margin:0 auto"}
+author: Vishnu Jayanand
 date: "June 19th, 2021"
+bibliography: references.bib
 output:
   html_document:
     css: style.css
@@ -12,10 +16,14 @@ output:
     toc_float: true 
     theme: flatly
     highlight: textmate
+header-includes:
+- \usepackage{titling}
+- \pretitle{\begin{center} \includegraphics[width=5in,height=5in]{Signet_INF_3.jpg}\LARGE\\}
+- \posttitle{\end{center}} \usepackage{fancyhdr} \pagestyle{fancy} 
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 # **Overview** {-} 
@@ -33,7 +41,7 @@ which is crucial during the time of this pandemic
 We have primarily two datasets - one of them contains tweets from the onset of the pandemic and the other are very recent tweets (June 2021). Our main objective here is to figure out 
 how the sentiments have changed over the months.
 
-For the security purposes, we show the skeletal code to extract the tweets using fake credentials. We would load the data via .rds file for our extracted tweets.
+For the security purposes, we show the skeletal code to extract the tweets using fake credentials. We would load the data via .rds file for our extracted tweets. [@twitterTutorial]
 
 ```{r connection, eval=FALSE}
 library(rtweet)
@@ -73,3 +81,7 @@ Here's a sample row from the dataset
 ```{r echo=FALSE}
 gt::gt(tweets2021_raw[1,])
 ```
+
+We also have another dataset that 
+
+# **References** 
