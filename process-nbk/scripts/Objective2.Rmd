@@ -23,7 +23,7 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # **Overview** {-} 
@@ -82,6 +82,61 @@ Here's a sample row from the dataset
 gt::gt(tweets2021_raw[1,])
 ```
 
-We also have another dataset that 
+We also have few other datasets that has tweets from 2020 and with other hashtags
+
+```{r eval=FALSE}
+
+tweets2021_vaccine<- search_tweets(q = "#vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_vaccine_and_covid19<- search_tweets(q = "#covid19 AND #vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job <- search_tweets(q = "#job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job_covid19 <- search_tweets(q = "#covid19 AND #job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_jobloss <- search_tweets(q = "#covid19 AND #jobloss", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+```
+
+
+**To be added**
+1. English Word Cloud (Old Vs New)
+2. Frequency Chart (Old Vs New)
+3. Postive and Negative Common Words (Old Vs New)
+4. Sentiment Analysis Bar graph (Old Vs New)
+5. A world map for seeing the tweets world wide (Old Vs New If Possible)
+6. German Word Cloud
+7. Sentiment Regarding Vaccine Word Cloud/Bar Graph
+8. Prefferred Vaccine Word Cloud/Bar Graph
+9. Mental Health Word Cloud/Bar Graph
+
+# Data Cleaning and Preparation
+
+To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns
+
+```{r datacleaning, echo=FALSE, message=FALSE}
+colnames(tweets2021_raw)
+```
+For more powerful insights, we use only the columns "text", "hashtags" and "location" and we speciafically clean up the columns text and hashtags. Let's do some basic analysis to see the top locations of tweets.
+
+```{r locations, echo=FALSE, background=TRUE}
+library(tidyverse)
+```
+
+```{r, message=FALSE}
+
+tweets2021_raw %>% 
+  filter(!is.na(location) & location != "") %>% 
+  count(location, sort = TRUE) %>% 
+  top_n(10)
+
+```
+
+
+It is however important to note that Twitter API is based on relevance and not completedness
+https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview
+
+```{r}
+
+
+```
+
+
 
 # **References** 
