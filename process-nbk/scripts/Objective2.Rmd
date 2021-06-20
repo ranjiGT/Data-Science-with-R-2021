@@ -106,7 +106,7 @@ tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_
 8. Prefferred Vaccine Word Cloud/Bar Graph
 9. Mental Health Word Cloud/Bar Graph
 
-# Data Cleaning and Preparation
+# Data Exploration
 
 To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns
 
@@ -117,6 +117,7 @@ For more powerful insights, we use only the columns "text", "hashtags" and "loca
 
 ```{r locations, echo=FALSE}
 library(tidyverse)
+library(tidytext)
 ```
 
 ```{r}
@@ -134,7 +135,6 @@ https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview
 
 ```{r}
 
-library(tidytext)
 `%notin%` <- Negate(`%in%`)
 tweets2021_raw %>% 
   unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
@@ -202,6 +202,168 @@ words_bigrams %>%
 include_graphics(img1_path)
 ```
 
-Clean up
+# Sentiment Analysis
+
+Understand people's sentiments
+
+```{r, eval=FALSE}
+# json libraries
+library(rjson)
+library(jsonlite)
+# plotting and pipes - tidyverse!
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tidytext)
+# date time
+library(lubridate)
+library(zoo)
+library(tm)
+library(wordcloud)
+library(RColorBrewer)
+library(wordcloud2)
+library(tm)
+library(rtweet)
+library(dplyr)
+library(tidyr)
+library(twitteR)
+library(tidytext)
+library(tidyverse)
+```
+
+Get a list of words
+```{r, eval=FALSE}
+tweet2021_wordlist <- tweets2021_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+```
+
+Plot the top 15 words
+```{r, eval=FALSE}
+
+#Not sure if we should include this.. not very insightful
+tweet2021_wordlist %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets")
+```
+```{r, eval=FALSE}
+# join sentiment classification to the tweet words
+bing_word_counts <- tweet2021_wordlist %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  ungroup()
+```
+
+```{r, eval=FALSE}
+bing_word_counts %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(title = "Sentiment during 2021 June",
+       y = "Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+
+library(wordcloud)
+
+tidy_books %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
+library(reshape2)
+
+tidy_books %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = c("gray20", "gray80"),
+                   max.words = 100)
+```
+
+```{r, eval=FALSE}
+
+#Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
+
+#Grabbing text data from tweets
+tweets2021DF <- tweets2021_raw['text']
+
+#Clean text data - remove emoticons and other symbols
+tweets2021DF$text <- iconv(tweets2021DF$text,'UTF-8','ASCII')
+
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+
+tweets2021DF_clean <- f_clean_tweets(tweets2021DF)
+
+
+corona.corpus <- Corpus(VectorSource(tweets2021DF_clean))
+
+doc.term.matrix <- DocumentTermMatrix(corona.corpus,control = list(removePunctuation=T,
+                                                                   removeNumbers = T,
+                                                                   tolower = T))
+
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2021DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2021DF_clean)
+
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+
+#References
+library(ggplot2)
+ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
+  theme(legend.position = "none") +
+  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19")
+
+```
+
+
+
+
 
 # **References** 
