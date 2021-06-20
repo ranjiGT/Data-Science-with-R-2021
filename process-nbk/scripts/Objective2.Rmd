@@ -1,0 +1,422 @@
+---
+title: |
+  ![](../data/Signet_INF_3.jpg){width=400px style="display: block; margin:0 auto"}
+  <center>Twitter Analysis</center>
+  ![](../data/logo.svg){width=100px style="display: block; margin:0 auto"}
+author: Vishnu Jayanand
+date: "June 19th, 2021"
+bibliography: references.bib
+output:
+  html_document:
+    css: style.css
+    df_print: paged
+    toc: true
+    number_sections : true
+    toc_depth: 2
+    toc_float: true 
+    theme: flatly
+    highlight: textmate
+header-includes:
+- \usepackage{titling}
+- \pretitle{\begin{center} \includegraphics[width=5in,height=5in]{Signet_INF_3.jpg}\LARGE\\}
+- \posttitle{\end{center}} \usepackage{fancyhdr} \pagestyle{fancy} 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# **Overview** {-} 
+
+We propose to know the impact of COVID-19 tackling infodemics and misinformation on
+Twitter. This is done by extracting recent popular tweets from a specific location across different countries.
+It will help us describe the false information that is spread with the sole purpose of causing confusion and
+harm. We target to extract hashtags like #covid19, #misinformation, #fakenews, #disinformation, #, etc.,
+to get the related posts about it and analyze how the information processing and decision-making behaviors
+are compromised. We perform sentimental analysis on the tweets to understand the sentiments of people
+which is crucial during the time of this pandemic
+
+# Twitter Data
+
+We have primarily two datasets - one of them contains tweets from the onset of the pandemic and the other are very recent tweets (June 2021). Our main objective here is to figure out 
+how the sentiments have changed over the months.
+
+For the security purposes, we show the skeletal code to extract the tweets using fake credentials. We would load the data via .rds file for our extracted tweets. [@twitterTutorial]
+
+```{r connection, eval=FALSE}
+library(rtweet)
+library(dplyr)
+library(tidyr)
+library(twitteR)
+library(tidytext)
+
+appname <- "CovidDistress"
+key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
+secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
+access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
+access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+
+twitter_token <- create_token(
+  app = appname,
+  consumer_key = key,
+  consumer_secret = secret,
+  access_token = access_token,
+  access_secret = access_secret,
+  set_renv = TRUE)
+
+corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", n=20000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+
+saveRDS(corona_tweets, "../data/tweets2021.rds")
+```
+
+We can now load saved RDS file using the command below
+```{r loadRDS}
+tweets2021_raw <- readRDS("../data/tweets2021.rds")
+
+```
+
+There are `r nrow(tweets2021_raw)` tweets from the dataset which is more than what we intended. This is because we set **retryonratelimit** to TRUE. These tweets are dated from ***`r format(as.Date(min(tweets2021_raw$created_at)), "%B %d %Y")`*** to ***`r format(as.Date(max(tweets2021_raw$created_at)), "%B %d, %Y")`***
+
+Here's a sample row from the dataset
+```{r echo=FALSE}
+gt::gt(tweets2021_raw[1,])
+```
+
+We also have few other datasets that has tweets from 2020 and with other hashtags
+
+```{r eval=FALSE}
+
+tweets2021_vaccine<- search_tweets(q = "#vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_vaccine_and_covid19<- search_tweets(q = "#covid19 AND #vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job <- search_tweets(q = "#job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job_covid19 <- search_tweets(q = "#covid19 AND #job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_jobloss <- search_tweets(q = "#covid19 AND #jobloss", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+```
+
+
+**To be added**
+1. English Word Cloud (Old Vs New)
+2. Frequency Chart (Old Vs New)
+3. Postive and Negative Common Words (Old Vs New)
+4. Sentiment Analysis Bar graph (Old Vs New)
+5. A world map for seeing the tweets world wide (Old Vs New If Possible)
+6. German Word Cloud
+7. Sentiment Regarding Vaccine Word Cloud/Bar Graph
+8. Prefferred Vaccine Word Cloud/Bar Graph
+9. Mental Health Word Cloud/Bar Graph
+
+# Data Exploration
+
+To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns
+
+```{r datacleaning, echo=FALSE, message=FALSE}
+colnames(tweets2021_raw)
+```
+For more powerful insights, we use only the columns "text", "hashtags" and "location" and we speciafically clean up the columns text and hashtags. Let's do some basic analysis to see the top locations of tweets.
+
+```{r locations, echo=FALSE}
+library(tidyverse)
+library(tidytext)
+```
+
+```{r}
+
+tweets2021_raw %>% 
+  filter(!is.na(location) & location != "") %>% 
+  count(location, sort = TRUE) %>% 
+  top_n(10)
+
+```
+
+
+It is however important to note that Twitter API is based on relevance and not completedness
+https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview
+
+```{r}
+
+`%notin%` <- Negate(`%in%`)
+tweets2021_raw %>% 
+  unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(hashtag, "^#"),
+        hashtag %notin% c("#coronavirus","#COVID19", "#covid19","#Covid19", "#Coronavirus")) %>%
+  count(hashtag, sort = TRUE) %>%
+  top_n(10)
+
+```
+
+**Create ggplot for the above**
+
+# Wordcloud
+
+## Unigrams
+```{r, eval=FALSE}
+words <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  count(word, sort = TRUE)
+
+library(wordcloud) 
+words %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+  
+
+## Bigrams
+```{r, eval=FALSE}
+words_bigrams <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+
+library(wordcloud) 
+words_bigrams %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+
+## Insights
+
+**To be added by Madhuri**
+
+```{r, eval=FALSE}
+# codes for adding only images
+include_graphics(img1_path)
+```
+
+# Sentiment Analysis
+
+Understand people's sentiments
+
+```{r, eval=FALSE}
+# json libraries
+library(rjson)
+library(jsonlite)
+# plotting and pipes - tidyverse!
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tidytext)
+# date time
+library(lubridate)
+library(zoo)
+library(tm)
+library(wordcloud)
+library(RColorBrewer)
+library(wordcloud2)
+library(tm)
+library(rtweet)
+library(dplyr)
+library(tidyr)
+library(twitteR)
+library(tidytext)
+library(tidyverse)
+```
+
+Get a list of words
+```{r, eval=FALSE}
+tweet2021_wordlist <- tweets2021_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+```
+
+Plot the top 15 words
+```{r, eval=FALSE}
+
+#Not sure if we should include this.. not very insightful
+tweet2021_wordlist %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets")
+```
+```{r, eval=FALSE}
+# join sentiment classification to the tweet words
+bing_word_counts <- tweet2021_wordlist %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  ungroup()
+```
+
+```{r, eval=FALSE}
+bing_word_counts %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(title = "Sentiment during 2021 June",
+       y = "Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+
+library(wordcloud)
+
+tweet2021_wordlist %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
+library(reshape2)
+
+tweet2021_wordlist %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = c("gray20", "gray80"),
+                   max.words = 100)
+```
+
+```{r, eval=FALSE}
+library(syuzhet)
+#Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
+
+#Grabbing text data from tweets
+tweets2021DF <- tweets2021_raw['text']
+
+#Clean text data - remove emoticons and other symbols
+tweets2021DF$text <- iconv(tweets2021DF$text,'UTF-8','ASCII')
+
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+
+tweets2021DF_clean <- f_clean_tweets(tweets2021DF)
+
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2021DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2021DF_clean)
+
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+
+#References
+library(ggplot2)
+ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
+  theme(legend.position = "none") +
+  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19")
+
+```
+## Insights
+
+# Network Analysis
+```{r, eval=FALSE}
+# Network Analysis
+
+# library(devtools)
+#install_github("dgrtwo/widyr")
+library(widyr)
+
+tweets2021_raw$stripped_text <- tweets2021DF_clean
+
+# remove punctuation, convert to lowercase, add id for each tweet!
+tweets2021_raw_paired_words <- tweets2021_raw %>%
+  dplyr::select(stripped_text) %>%
+  unnest_tokens(paired_words, stripped_text, token = "ngrams", n = 2)
+
+tweets2021_raw_paired_words %>%
+  count(paired_words, sort = TRUE)
+
+library(tidyr)
+tweets2021_raw_separated_words <- tweets2021_raw_paired_words %>%
+  separate(paired_words, c("word1", "word2"), sep = " ")
+
+tweets2021_raw_filtered <- tweets2021_raw_separated_words %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts:
+covid_words_counts <- tweets2021_raw_filtered %>%
+  count(word1, word2, sort = TRUE)
+
+head(covid_words_counts)
+
+library(igraph)
+library(ggraph)
+
+# plot climate change word network
+# (plotting graph edges is currently broken)
+covid_words_counts %>%
+        filter(n >= 100) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n))
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
+        labs(title = "Word Network: Tweets using the hashtag - Climate Change",
+             subtitle = "Text mining twitter data ",
+             x = "", y = "")
+
+```
+## Insights
+
+References to be added to the .bib file
+http://rstudio-pubs-static.s3.amazonaws.com/283881_efbb666d653a4eb3b0c5e5672e3446c6.html
+"https://medium.com/@traffordDataLab/exploring-tweets-in-r-54f6011a193d"
+https://www.tidytextmining.com/sentiment.html
+https://www.earthdatascience.org/courses/earth-analytics/get-data-using-apis/text-mining-twitter-data-intro-r/
+
+
+# **References** 
