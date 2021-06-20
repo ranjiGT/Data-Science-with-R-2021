@@ -29,7 +29,7 @@ twitter_token <- create_token(
 # Extract tweet with word corona
 # Here q takes query argument, we are extracting tweets with the words covid OR COVID-19, 1000 indicates top 1000 tweets
 corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", n=100000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
-
+corona_tweets <- readRDS("D:/OneDrive/Documents/Documents/OvGU/SoSe 21/Data Science with R/Project/Data-Science-with-R-2021/process-nbk/data/tweets2021.rds")
 #Remove retweets from the extracted tweets
 corona_tweets_organic <- corona_tweets[corona_tweets$is_retweet==FALSE, ]
 
@@ -45,7 +45,7 @@ select(corona_tweets, hashtags) %>%
   unnest() %>% 
   mutate(hashtags = tolower(hashtags)) %>% 
   count(hashtags, sort=TRUE) %>% 
-  filter(hashtags != "rstats") %>% 
+  filter(hashtags != "coronavirus") %>% 
   top_n(10)
 
 coronaDF <- corona_tweets['text']
