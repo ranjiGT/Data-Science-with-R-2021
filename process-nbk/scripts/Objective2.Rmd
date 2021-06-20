@@ -168,7 +168,6 @@ words %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 ```
   
-"https://medium.com/@traffordDataLab/exploring-tweets-in-r-54f6011a193d"
 
 ## Bigrams
 ```{r, eval=FALSE}
@@ -196,6 +195,10 @@ words_bigrams %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 ```
 
+
+## Insights
+
+**To be added by Madhuri**
 
 ```{r, eval=FALSE}
 # codes for adding only images
@@ -361,9 +364,93 @@ ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=s
   xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19")
 
 ```
+## Insights
 
+# Network Analysis
+```{r, eval=FALSE}
+# Network Analysis
 
+# library(devtools)
+#install_github("dgrtwo/widyr")
+library(widyr)
 
+tweets2021_raw$stripped_text <- gsub("http.*","",  tweets2021_raw$text)
+tweets2021_raw$stripped_text <- gsub("https.*","", tweets2021_raw$stripped_text)
+# remove punctuation, convert to lowercase, add id for each tweet!
+tweets2021_raw_paired_words <- tweets2021_raw %>%
+  dplyr::select(stripped_text) %>%
+  unnest_tokens(paired_words, stripped_text, token = "ngrams", n = 2)
+
+tweets2021_raw_paired_words %>%
+  count(paired_words, sort = TRUE)
+## # A tibble: 134,656 x 2
+##    paired_words         n
+##    <chr>            <int>
+##  1 climate change    1021
+##  2 of the             804
+##  3 in the             798
+##  4 climatechange is   570
+##  5 is a               442
+##  6 of climatechange   437
+##  7 on the             383
+##  8 on climatechange   364
+##  9 to the             354
+## 10 this is            331
+## # … with 134,646 more rows
+library(tidyr)
+tweets2021_raw_separated_words <- tweets2021_raw_paired_words %>%
+  separate(paired_words, c("word1", "word2"), sep = " ")
+
+tweets2021_raw_filtered <- tweets2021_raw_separated_words %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts:
+covid_words_counts <- tweets2021_raw_filtered %>%
+  count(word1, word2, sort = TRUE)
+
+head(covid_words_counts)
+
+Finally, plot the data
+
+library(igraph)
+library(ggraph)
+
+# plot climate change word network
+# (plotting graph edges is currently broken)
+covid_words_counts %>%
+        filter(n >= 200) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n))
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
+        labs(title = "Word Network: Tweets using the hashtag - Climate Change",
+             subtitle = "Text mining twitter data ",
+             x = "", y = "")
+
+# plot climate change word network
+# (plotting graph edges is currently broken)
+flood_word_counts %>%
+        filter(n >= 50) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
+        labs(title = "Word Network: Tweets during the 2013 Colorado Flood Event",
+             subtitle = "September 2013 - Text mining twitter data ",
+             x = "", y = "") +
+        theme_void()
+```
+## Insights
+
+References to be added to the .bib file
+http://rstudio-pubs-static.s3.amazonaws.com/283881_efbb666d653a4eb3b0c5e5672e3446c6.html
+"https://medium.com/@traffordDataLab/exploring-tweets-in-r-54f6011a193d"
+https://www.tidytextmining.com/sentiment.html
+https://www.earthdatascience.org/courses/earth-analytics/get-data-using-apis/text-mining-twitter-data-intro-r/
 
 
 # **References** 
