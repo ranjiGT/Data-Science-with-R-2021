@@ -240,7 +240,8 @@ tweet2021_wordlist <- tweets2021_raw %>%
   dplyr::select(text) %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
          text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
-         text = str_remove_all(text, "[^\x01-\x7F]")) %>%
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
   unnest_tokens(word, text) %>%
   anti_join(stop_words) %>%
   # anti_join(numbers) %>%
@@ -289,13 +290,13 @@ bing_word_counts %>%
 
 library(wordcloud)
 
-tidy_books %>%
+tweet2021_wordlist %>%
   anti_join(stop_words) %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 100))
 library(reshape2)
 
-tidy_books %>%
+tweet2021_wordlist %>%
   inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
   acast(word ~ sentiment, value.var = "n", fill = 0) %>%
@@ -304,7 +305,7 @@ tidy_books %>%
 ```
 
 ```{r, eval=FALSE}
-
+library(syuzhet)
 #Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
 
 #Grabbing text data from tweets
@@ -341,13 +342,6 @@ f_clean_tweets <- function (tweets) {
 
 tweets2021DF_clean <- f_clean_tweets(tweets2021DF)
 
-
-corona.corpus <- Corpus(VectorSource(tweets2021DF_clean))
-
-doc.term.matrix <- DocumentTermMatrix(corona.corpus,control = list(removePunctuation=T,
-                                                                   removeNumbers = T,
-                                                                   tolower = T))
-
 #Get nrc emotions
 sentiment <- get_nrc_sentiment(tweets2021DF_clean)
 sentiment_nonemotions <- get_sentiment(tweets2021DF_clean)
@@ -374,8 +368,8 @@ ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=s
 #install_github("dgrtwo/widyr")
 library(widyr)
 
-tweets2021_raw$stripped_text <- gsub("http.*","",  tweets2021_raw$text)
-tweets2021_raw$stripped_text <- gsub("https.*","", tweets2021_raw$stripped_text)
+tweets2021_raw$stripped_text <- tweets2021DF_clean
+
 # remove punctuation, convert to lowercase, add id for each tweet!
 tweets2021_raw_paired_words <- tweets2021_raw %>%
   dplyr::select(stripped_text) %>%
@@ -383,20 +377,7 @@ tweets2021_raw_paired_words <- tweets2021_raw %>%
 
 tweets2021_raw_paired_words %>%
   count(paired_words, sort = TRUE)
-## # A tibble: 134,656 x 2
-##    paired_words         n
-##    <chr>            <int>
-##  1 climate change    1021
-##  2 of the             804
-##  3 in the             798
-##  4 climatechange is   570
-##  5 is a               442
-##  6 of climatechange   437
-##  7 on the             383
-##  8 on climatechange   364
-##  9 to the             354
-## 10 this is            331
-## # … with 134,646 more rows
+
 library(tidyr)
 tweets2021_raw_separated_words <- tweets2021_raw_paired_words %>%
   separate(paired_words, c("word1", "word2"), sep = " ")
@@ -411,15 +392,13 @@ covid_words_counts <- tweets2021_raw_filtered %>%
 
 head(covid_words_counts)
 
-Finally, plot the data
-
 library(igraph)
 library(ggraph)
 
 # plot climate change word network
 # (plotting graph edges is currently broken)
 covid_words_counts %>%
-        filter(n >= 200) %>%
+        filter(n >= 100) %>%
         graph_from_data_frame() %>%
         ggraph(layout = "fr") +
         # geom_edge_link(aes(edge_alpha = n, edge_width = n))
@@ -430,19 +409,6 @@ covid_words_counts %>%
              subtitle = "Text mining twitter data ",
              x = "", y = "")
 
-# plot climate change word network
-# (plotting graph edges is currently broken)
-flood_word_counts %>%
-        filter(n >= 50) %>%
-        graph_from_data_frame() %>%
-        ggraph(layout = "fr") +
-        # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
-        geom_node_point(color = "darkslategray4", size = 3) +
-        geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
-        labs(title = "Word Network: Tweets during the 2013 Colorado Flood Event",
-             subtitle = "September 2013 - Text mining twitter data ",
-             x = "", y = "") +
-        theme_void()
 ```
 ## Insights
 
