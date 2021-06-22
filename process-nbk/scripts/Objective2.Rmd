@@ -72,6 +72,8 @@ saveRDS(corona_tweets, "../data/tweets2021.rds")
 We can now load saved RDS file using the command below
 ```{r loadRDS}
 tweets2021_raw <- readRDS("../data/tweets2021.rds")
+tweets2020_raw <- read.csv("../data/Covid-tweets_2020.csv")
+
 
 ```
 
@@ -126,6 +128,10 @@ tweets2021_raw %>%
   filter(!is.na(location) & location != "") %>% 
   count(location, sort = TRUE) %>% 
   top_n(10)
+tweets2020_raw %>% 
+  filter(!is.na(user_location) & user_location != "") %>% 
+  count(user_location, sort = TRUE) %>% 
+  top_n(10)
 
 ```
 
@@ -166,6 +172,23 @@ words <- tweets2021_raw %>%
 library(wordcloud) 
 words %>% 
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+
+words_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  count(word, sort = TRUE)
+
+library(wordcloud) 
+words_2020 %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+
 ```
   
 
@@ -192,6 +215,29 @@ words_bigrams <- tweets2021_raw %>%
 
 library(wordcloud) 
 words_bigrams %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+
+words_bigrams_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+
+library(wordcloud) 
+words_bigrams_2020 %>% 
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 ```
 
@@ -248,6 +294,20 @@ tweet2021_wordlist <- tweets2021_raw %>%
   anti_join(get_stopwords(language = "spa")) %>%
   filter(!word %in% c("rt", "t.co")) %>%
   filter(!word %in% c("https", "19", "â" , "fe0f"))
+
+tweet2020_wordlist <- tweets2020_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+
 ```
 
 Plot the top 15 words
@@ -264,11 +324,28 @@ tweet2021_wordlist %>%
   coord_flip() +
   labs(x = "Count",
        y = "Unique words",
-       title = "Count of unique words found in tweets")
+       title = "Count of unique words found in tweets in 2021")
+
+tweet2020_wordlist %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets in 2020")
 ```
 ```{r, eval=FALSE}
 # join sentiment classification to the tweet words
 bing_word_counts <- tweet2021_wordlist %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  ungroup()
+
+bing_word_counts_2020 <- tweet2020_wordlist %>%
   inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
   ungroup()
@@ -288,20 +365,20 @@ bing_word_counts %>%
        x = NULL) +
   coord_flip()
 
-library(wordcloud)
+bing_word_counts_2020 %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(title = "Sentiment during 2020 January",
+       y = "Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
 
-tweet2021_wordlist %>%
-  anti_join(stop_words) %>%
-  count(word) %>%
-  with(wordcloud(word, n, max.words = 100))
-library(reshape2)
 
-tweet2021_wordlist %>%
-  inner_join(get_sentiments("bing")) %>%
-  count(word, sentiment, sort = TRUE) %>%
-  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
-  comparison.cloud(colors = c("gray20", "gray80"),
-                   max.words = 100)
 ```
 
 ```{r, eval=FALSE}
@@ -355,7 +432,61 @@ rownames(sentiment_scores) <- NULL
 library(ggplot2)
 ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
   theme(legend.position = "none") +
-  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19")
+  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19 in the year 2021")
+
+```
+```{r 2020_data_sent_analysis, eval=FALSE}
+library(syuzhet)
+#Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
+
+#Grabbing text data from tweets
+tweets2020DF <- tweets2020_raw['text']
+
+#Clean text data - remove emoticons and other symbols
+tweets2020DF$text <- iconv(tweets2020DF$text,'UTF-8','ASCII')
+
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+
+tweets2020DF_clean <- f_clean_tweets(tweets2020DF)
+
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2020DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2020DF_clean)
+
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+
+#References
+library(ggplot2)
+ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
+  theme(legend.position = "none") +
+  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19 in the year 2021")
 
 ```
 ## Insights
@@ -405,8 +536,58 @@ covid_words_counts %>%
         # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
         geom_node_point(color = "darkslategray4", size = 3) +
         geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
-        labs(title = "Word Network: Tweets using the hashtag - Climate Change",
-             subtitle = "Text mining twitter data ",
+        labs(title = "Word Network: Tweets using the hashtag",
+             subtitle = "Year 2021 ",
+             x = "", y = "")
+
+```
+```{r nw_analysis_2020, eval=FALSE}
+# Network Analysis
+
+# library(devtools)
+#install_github("dgrtwo/widyr")
+
+library(widyr)
+
+tweets2020_raw$stripped_text <- tweets2020DF_clean
+
+# remove punctuation, convert to lowercase, add id for each tweet!
+tweets2020_raw_paired_words <- tweets2020_raw %>%
+  dplyr::select(stripped_text) %>%
+  unnest_tokens(paired_words, stripped_text, token = "ngrams", n = 2)
+
+tweets2020_raw_paired_words %>%
+  count(paired_words, sort = TRUE)
+
+library(tidyr)
+tweets2020_raw_separated_words <- tweets2020_raw_paired_words %>%
+  separate(paired_words, c("word1", "word2"), sep = " ")
+
+tweets2020_raw_filtered <- tweets2020_raw_separated_words %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts:
+covid_words_counts_2020 <- tweets2020_raw_filtered %>%
+  count(word1, word2, sort = TRUE)
+
+head(covid_words_counts_2020)
+
+library(igraph)
+library(ggraph)
+
+# plot climate change word network
+# (plotting graph edges is currently broken)
+covid_words_counts_2020 %>%
+        filter(n >= 100) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n))
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
+        labs(title = "Word Network: Tweets using the hashtag",
+             subtitle = "Year 2020 ",
              x = "", y = "")
 
 ```
