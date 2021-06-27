@@ -216,7 +216,7 @@ ui <-
                      "and the trust score comes from the national government.",
                      br(),
                      "People believe in conspiracy theories
-                                   for a variety of reasons-to explain random events, to feel special or unique, or for a sense of social
+                                   for a variety of reasons—to explain random events, to feel special or unique, or for a sense of social
                                    belonging,",
                      br(),
                      " to name a few. It also seems interesting that in our analysis the measure of Conspiracy
