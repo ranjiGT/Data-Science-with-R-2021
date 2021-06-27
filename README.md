@@ -9,7 +9,7 @@ The coronavirus COVID-19 pandemic is an unprecedented health crisis that has imp
 In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels, our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point, both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and portray some meaningful insights on global survey data.
 
 
-## DATASETS
+## `Datasets`
 
 **1. COVIDISTRESS all global survey data**  
 (The COVIDiSTRESS global survey is an open science collaboration,
