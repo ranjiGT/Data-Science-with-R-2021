@@ -27,11 +27,11 @@ Folder Structure :open_file_folder:
     ├── LICENSE
     └── README.md
 
-### _Process Notebook_:
+### `_Process Notebook_`:
 
-### _Screencast_:
+### `_Screencast_`:
 
-### Project website (_Shiny app_)
+### `Project website (_Shiny app_)`
 - https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
