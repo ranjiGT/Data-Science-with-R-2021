@@ -395,7 +395,7 @@ ggplot(df_bar, aes(x=fct_reorder(Country, PSS10_avg), y=PSS10_avg, width=.6,fill
 
 Here we can see that Pakistan and India has highest Stress level due to France and Italy has the lowest Stress level from the countries we have selected. The upper and lower line represents upper and lower link and middle line represents the average value of stress for the respective countries.
 
-## World Map of corona counteries
+## World Map of Stress Levels in Countries affected with Corona
 
 
 ```{r}
@@ -417,10 +417,18 @@ data_summary <- function(data, varname, groupnames){
 }
 
 #create dataframe for the plot
-df_b<- data_summary(dmap, varname="PSS10_avg", 
+df_b_world<- data_summary(dmap, varname="PSS10_avg", 
                     groupnames="Country")
 
-glimpse(df_b) #check the stats
+library(plotly)
+df_world <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv")
+
+mergedData <- merge(df_b_world,df_world,by.x=c("Country"),by.y=c("COUNTRY"))
+
+world_map_stress_levels <- plot_ly(mergedData, type='choropleth', locations=mergedData$CODE, z=mergedData$PSS10_avg, text=mergedData$COUNTRY, colorscale="Portland")
+
+world_map_stress_levels
+
 ```
 
 ### Visualization of the distress scale
