@@ -11,7 +11,7 @@ In this limelight, although the measures are taken to slow the spread of the vir
 
 ## `Datasets` :globe_with_meridians:	
 
-<center>**1. COVIDISTRESS all global survey data**</center>  
+**1. COVIDISTRESS all global survey data** 
 (The COVIDiSTRESS global survey is an open science collaboration,
 created by researchers in over 40 countries to rapidly and organically
 collect data on human experiences of the Coronavirus epidemic 2020.)
