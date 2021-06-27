@@ -279,14 +279,18 @@ ui <-
                                   br(),
                                 )),
                                 "It is seemingly evident that in early 2020 New Zealand was declared as a COVID-19 free country so we estimate the
-                             trust in its government is",br()," remarkably higher in comparison to other countries of the world. On the contrary,
+                             trust in its government is",
+                                br(),
+                                " remarkably higher in comparison to other countries of the world. On the contrary,
                              it modeled a low trust score in global governments",
                                 br(),
                                 "At the same time trust score in Brazil's local government is extremely lower but it shows a high trust in
                             global governments.",
                                 br(),
                                 "This shows a strong and negative correlation between trust in a particular country's
-                            government and in global government. The confidence band is an ",br(),"indicator that it is 95% confident that the true
+                            government and in global government. The confidence band is an ",
+                                br(),
+                                "indicator that it is 95% confident that the true
                             regression line lies in that gray zone."
                                 
                               ),
@@ -308,12 +312,21 @@ ui <-
                                 ,
                                 
                                 "For the same set of 12 different countries, we do a comparative analysis by plotting the trust in the scientists
-                                    of their country vs. the trust in ",br(),"global scientists. From our data, it is evident that for `Italy` the trust in
-                                    local government is as low as 5.78 whereas globally it is just 5.31. For `Brazil`",br()," the local trust score is nearly
+                                    of their country vs. the trust in ",
+                                br(),
+                                "global scientists. From our data, it is evident that for `Italy` the
+                                    trust in
+                                    local government is as low as 5.78 whereas globally it is just 5.31. For `Brazil`",
+                                br(),
+                                " the local trust score
+                                    is nearly
                                     8.4 whereas the global trust score around 8.6.",
                                 br(),
                                 "This shows a strong and positive correlation between trust in a particular country's scientists and in global
-                                    scientists. The confidence band shows",br()," that it is 95% confident that the true regression line lies in that gray zone."
+                                    scientists. The confidence band shows",
+                                br(),
+                                " that it is 95% confident that the true regression line lies i
+                                n that gray zone."
                                 
                               )
                             ))
@@ -345,7 +358,7 @@ ui <-
                    # Show a plot of the generated distribution
                    mainPanel(
                      tags$h4(class = "tweet-header",
-                             uiOutput("tweet_header"),),
+                             uiOutput("tweet_header"), ),
                      tags$div(class = "plot-wraper twitter-plot",
                               uiOutput("tweet_plot")),
                      tags$div(class = "tweet-summary",
