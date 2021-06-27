@@ -1,0 +1,162 @@
+Country,PSS10_avg,CODE
+Afghanistan,2.791176471,AFG
+Albania,3.036788618,ALB
+Algeria,2.993777778,DZA
+Andorra,2.3,AND
+Angola,2.671428571,AGO
+Antigua and Barbuda,2.9,ATG
+Argentina,2.741580696,ARG
+Armenia,2.4,ARM
+Australia,2.813909465,AUS
+Austria,2.576358364,AUT
+Azerbaijan,2.8625,AZE
+Bahrain,2.55,BHR
+Bangladesh,2.961677722,BGD
+Barbados,NA,BRB
+Belarus,2.850595238,BLR
+Belgium,2.6328432,BEL
+Belize,3,BLZ
+Benin,2.8,BEN
+Bhutan,3.5,BTN
+Bolivia,2.583333333,BOL
+Bosnia and Herzegovina,2.86259067,BIH
+Brazil,3.107380698,BRA
+Brunei,2.871967712,BRN
+Bulgaria,2.79781746,BGR
+Burkina Faso,3.8,BFA
+Cabo Verde,2.7,CPV
+Cambodia,2.666666667,KHM
+Cameroon,3.425,CMR
+Canada,2.764868337,CAN
+Chile,2.627659574,CHL
+China,2.609302326,CHN
+Colombia,2.610416667,COL
+Comoros,1.7,COM
+"Congo, Democratic Republic of the",2.2,COD
+"Congo, Republic of the",3.4,COG
+Costa Rica,3.066666667,CRI
+Croatia,2.916814665,HRV
+Cuba,2.75,CUB
+Cyprus,2.781333333,CYP
+Czech Republic,2.690594076,CZE
+Denmark,2.397116559,DNK
+Djibouti,2.775,DJI
+Dominica,2.6,DMA
+Dominican Republic,3,DOM
+Ecuador,2.573985891,ECU
+Egypt,2.603389831,EGY
+El Salvador,3.1,SLV
+Eritrea,3.5,ERI
+Estonia,2.584848485,EST
+Ethiopia,2.5,ETH
+Fiji,3.183333333,FJI
+Finland,2.454476703,FIN
+France,2.569148211,FRA
+Gabon,2.425,GAB
+Georgia,2.777020202,GEO
+Germany,2.630156038,DEU
+Ghana,2.733333333,GHA
+Greece,2.743162709,GRC
+Grenada,2.645959596,GRD
+Guatemala,2.912260536,GTM
+Guinea,2.8,GIN
+Guinea-Bissau,4,GNB
+Haiti,2.766666667,HTI
+Honduras,2.925,HND
+Hungary,2.735634589,HUN
+Iceland,2.512169312,ISL
+India,2.865116279,IND
+Indonesia,2.759961084,IDN
+Iran,2.728571429,IRN
+Iraq,2.7,IRQ
+Ireland,2.665757576,IRL
+Israel,2.738011696,ISR
+Italy,2.575898376,ITA
+Jamaica,3.0625,JAM
+Japan,3.016239511,JPN
+Jordan,2.714285714,JOR
+Kazakhstan,2.6,KAZ
+Kenya,2.95,KEN
+Kiribati,3.3,KIR
+"Korea, North",2.8,PRK
+"Korea, South",2.707644566,KOR
+Kosovo,2.90809628,KSV
+Kuwait,3.7,KWT
+Kyrgyzstan,2.758333333,KGZ
+Laos,2.02,LAO
+Latvia,2.591316527,LVA
+Lebanon,2.8,LBN
+Lesotho,2.641666667,LSO
+Liberia,2.5,LBR
+Libya,3.2,LBY
+Liechtenstein,2.56,LIE
+Lithuania,2.507528232,LTU
+Luxembourg,2.599122807,LUX
+Madagascar,2.3,MDG
+Malawi,NA,MWI
+Malaysia,2.722875817,MYS
+Maldives,4.5,MDV
+Mali,2.65,MLI
+Malta,2.375757576,MLT
+Mauritius,2.85,MUS
+Mexico,2.720698779,MEX
+"Micronesia, Federated States of",3.4,FSM
+Moldova,3.25,MDA
+Monaco,2.525,MCO
+Montenegro,2.711601307,MNE
+Morocco,2.457657658,MAR
+Namibia,3.6,NAM
+Nepal,2.391666667,NPL
+Netherlands,2.479205607,NLD
+New Zealand,2.455102041,NZL
+Nicaragua,3.014814815,NIC
+Niger,3.5,NER
+Nigeria,3.163157895,NGA
+Norway,2.58974359,NOR
+Oman,2.666666667,OMN
+Pakistan,2.881828704,PAK
+Panama,2.628571429,PAN
+Paraguay,3.25,PRY
+Peru,2.515037594,PER
+Philippines,2.848375612,PHL
+Poland,2.992961722,POL
+Portugal,2.860512028,PRT
+Qatar,2.59047619,QAT
+Romania,2.707017544,ROU
+Russia,2.612,RUS
+Rwanda,3.4,RWA
+Saint Lucia,3.857142857,LCA
+Saint Vincent and the Grenadines,NA,VCT
+San Marino,2.52,SMR
+Sao Tome and Principe,NA,STP
+Saudi Arabia,2.55,SAU
+Senegal,3.6,SEN
+Serbia,2.727192982,SRB
+Singapore,2.930555556,SGP
+Slovakia,2.797435897,SVK
+Slovenia,3.005769231,SVN
+Somalia,2.22,SOM
+South Africa,2.648204265,ZAF
+Spain,2.687804878,ESP
+Suriname,2.771428571,SUR
+Sweden,2.539221364,SWE
+Switzerland,2.37141062,CHE
+Syria,2.9,SYR
+Taiwan,2.593711494,TWN
+Tanzania,3.1,TZA
+Thailand,2.696581197,THA
+Trinidad and Tobago,2.95,TTO
+Tunisia,2.54,TUN
+Turkey,3.147140156,TUR
+Uganda,2.8,UGA
+Ukraine,2.802430556,UKR
+United Arab Emirates,2.665023474,ARE
+United Kingdom,2.724930368,GBR
+United States,2.742760572,USA
+Uruguay,2.733333333,URY
+Uzbekistan,1.5,UZB
+Vanuatu,NA,VUT
+Venezuela,2.842857143,VEN
+Vietnam,2.571865616,VNM
+Zambia,2,ZMB
+Zimbabwe,2.833333333,ZWE
