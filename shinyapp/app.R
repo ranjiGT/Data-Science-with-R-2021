@@ -185,8 +185,7 @@ ui <-
               br()
             )
           )
-        ),
-        fluidRow()
+        )
       ),
       
       tabPanel("Infodemics",
@@ -194,135 +193,146 @@ ui <-
                  class = "data-panel",
                  navlistPanel(
                    tabPanel(
-                     "Patient locations",
-                     
-                     tags$div(class = "plot-wraper patient-plot",
-                              plotlyOutput("patient_loc_map")),
-                     tags$div(
-                       class = "patient-caption",
-                       tags$div(
-                         "This shows us the locations of patients of our across the globe plotted on the world map.The outbreak spread from the Chinese city of Wuhan to more than 180 countries and territories affecting every continent except Antartica. Efforts to stamp out the pneumonia-like illness have driven all the countries to enforce lockdowns, widespread halts of international travel, mass layoffs and shattered financial markets."
+                     "Trust Sources",
+                     fluidRow(column(
+                       1,
+                       offset = 0,
+                       br(),
+                       
+                       tags$img(
+                         src = "Trust in Media sources.png",
+                         width = "900px",
+                         height = "320px"
                        )
-                     )
-                   ),
-                   tabPanel("Symptoms",
-                            tabsetPanel(
-                              tabPanel(
-                                "Outline",
-                                tags$div(class = "plot-wraper patient-plot",
-                                         wordcloud2Output("symptom_wordcloud")),
-                                tags$div(
-                                  class = "patient-caption",
-                                  tags$div(
-                                    "From our wordcloud we can say that cough and fever are most common symptoms among the patients. People generally develop signs and symptoms, including mild respiratory symptoms and fever, on an average of 5-6 days after infection (mean incubation period 5-6 days, range 1-14 days)."
-                                  )
-                                )
-                              ),
-                              tabPanel(
-                                "Distribution",
-                                tags$div(class = "plot-wraper patient-plot",
-                                         plotlyOutput("symptom_piechart")),
-                                tags$div(
-                                  class = "patient-caption",
-                                  tags$div(
-                                    "We plotted a pie chart to display the common symptoms seen initially in Wuhan, China which is the origin.It describes the highest ranked symptoms seen together in the origin of COVID-19 that is Wuhan,China.Covid-19 symptoms are  non-specific and the disease presentation can range from no symptoms(asymptomatic) to severe pneumonia and death."
-                                  )
-                                )
-                              )
-                            )),
-                   tabPanel(
-                     "Age Group Analysis",
-                     tabsetPanel(
-                       tabPanel(
-                         "Distribution",
-                         tags$div(class = "plot-wraper patient-plot",
-                                  plotlyOutput("age_dist_plot")),
-                         tags$div(
-                           class = "patient-caption",
-                           tags$div(
-                             "We compared the age distribution among the patients ( Child, Adult and Senior Adult) . The age group between 40 to 60 have been affected the most. From our analysis ans well as confirmed by International research the percentage of children among the confirmed COVID-19 patients is low, ranging from 1% in young children to 6% in older children.  Children with COVID-19 do have the same symptoms as adults. The most common symptoms in children are coughing, fever and sore throat. Worldwide, very few children with COVID-19 have died.In clusters of patients, adults are almost always the source patient. On basis of this, decisions such as re-opening of schools and childcare facilities were made [@Children]."
-                           )
-                         )
-                       ),
-                       tabPanel(
-                         "Likely To Recover",
-                         tags$div(class = "plot-wraper patient-plot",
-                                  plotlyOutput("likely_recover_boxplot")),
-                         tags$div(
-                           class = "patient-caption",
-                           tags$div(
-                             "We create a boxplot to  analyse the age of people who have died and of those who did not. The rhombus in the boxplot shows the mean(y) value of those who survived as 43.9 , while the mean(x) for those who have died as 65.5. So, this indeed shows that older people have lower chances of survival."
-                           )
-                         )
-                       ),
-                       tabPanel(
-                         "Unlikely To Recover",
-                         tags$div(class = "plot-wraper patient-plot",
-                                  plotlyOutput("unlikely_recover_boxplot")),
-                         tags$div(
-                           class = "patient-caption",
-                           tags$div(
-                             "We create a boxplot to  analyse the age of people who have died and of those who did not. The rhombus in the boxplot shows the mean(y) value of those who survived as 43.9 , while the mean(x) for those who have died as 65.5. So, this indeed shows that older people have lower chances of survival."
-                           )
-                         )
-                       )
-                     )
-                     
+                     )),
+                     br(),
+                     "We interestingly find that amount of perceived knowledge regarding the COVID-19 information in
+                                   the popular country list comes from Newspaper",
+                     br(),
+                     "websites which are estimated to be in the range of
+                                   [0.1, 0.16]. Whereas this range is more for non-popular country list is in the range of [0.17, 0.27]
+                                   ",
+                     br(),
+                     "and the trust score comes from the national government.",
+                     br(),
+                     "People believe in conspiracy theories
+                                   for a variety of reasons—to explain random events, to feel special or unique, or for a sense of social
+                                   belonging,",
+                     br(),
+                     " to name a few. It also seems interesting that in our analysis the measure of Conspiracy
+                                   belief in non-popular countries comes from Facebook and",
+                     br(),
+                     " it is estimated to be [0.14, 0.22]. And this
+                                   range is lower [0.8, 0.15] from the same source for popular countries.",
+                     br(),
+                     "From the data, the conspiracy
+                                   belief levels from W.H.O. do have a negative estimate for both popular and non-popular countries.",
+                     br(),
+                     br()
                    ),
                    tabPanel(
-                     "Post Onset Symptoms Analysis",
-                     tabsetPanel(
-                       tabPanel(
-                         "Days Till Recovery",
-                         tags$div(class = "plot-wraper patient-plot",
-                                  plotlyOutput("days_to_recovery_plot")),
-                         tags$div(
-                           class = "patient-caption",
-                           tags$div(
-                             "Covid-19 is a confusing illness , wrapped with uncertainty. There has not been sufficient scientific studies to tell precisely how long it takes for a person to recover. While some possible ranges have been identified. These seems to vary from person to person. According to WHO, recovery times tend to be about 2 weeks for those with mild disease and about 3-2 weeks for those with severe/critical disease."
-                           )
-                         )
-                       ),
-                       tabPanel(
-                         "Days Till Death",
-                         tags$div(class = "plot-wraper patient-plot",
-                                  plotlyOutput("days_to_death_plot")),
-                         tags$div(
-                           class = "patient-caption",
-                           tags$div(
-                             "Covid-19 is a confusing illness , wrapped with uncertainty. There has not been sufficient scientific studies to tell precisely how long it takes for a person to recover. While some possible ranges have been identified. These seems to vary from person to person. According to WHO, recovery times tend to be about 2 weeks for those with mild disease and about 3-2 weeks for those with severe/critical disease."
-                           )
-                         )
+                     "IRI Score",
+                     fluidRow(column(
+                       1,
+                       offset = 0,
+                       br(),
+                       
+                       tags$img(
+                         src = "IRI risk volume across countries.png",
+                         width = "900px",
+                         height = "450px"
                        )
-                     )
+                     )),
+                     br(),
+                     "This plot shows IRI vs Confirmed COVID-19 cases for Infodemics and Epidemics data aggregation by Country and at a border level
+                      categorized into ",
+                     br(),
+                     "the continent.",
+                     br(),
+                     "It can be inferred that the IRI volume is very high in `USA` with approximately 383,210 cases. Also, we have focused to show
+                     this critical impact on ",
+                     br(),
+                     "the top 5 continents around the globe. Moreover, it has to be strikingly noted that the IRI score is
+                     very high in Peru which is almost around 0.98 ",
+                     br(),
+                     "although the total infected cases are 11.",
+                     br(),
+                     br()
+                     
                    ),
-                   tabPanel("Chronic Disease Analysis",
+                   tabPanel("Comparisons",
+                            
                             tabsetPanel(
                               tabPanel(
-                                "Distribution",
-                                tags$div(class = "plot-wraper patient-plot",
-                                         plotlyOutput("chroic_disease_gender_plot")),
-                                tags$div(
-                                  class = "patient-caption",
-                                  tags$div(
-                                    "Everyone exposed to virus are at risk. However, some people are more vulnerable than others to become severely ill and more in need for medical facilities. According to \"Centers for Disease Control and Prevention\" , people of any age with certain chronic diseases are at higher risk for severe illness from covid-19."
-                                  )
-                                )
+                                "Governments",
+                                fluidRow(column(
+                                  1,
+                                  offset = 1,
+                                  br(),
+                                  
+                                  tags$img(
+                                    src = "neg-rel-gov-o3.png",
+                                    width = "800px",
+                                    height = "400px"
+                                  ),
+                                  br(),
+                                  br(),
+                                )),
+                                "It is seemingly evident that in early 2020 New Zealand was declared as a COVID-19 free country so we estimate the
+                             trust in its government is",
+                                br(),
+                                " remarkably higher in comparison to other countries of the world. On the contrary,
+                             it modeled a low trust score in global governments",
+                                br(),
+                                "At the same time trust score in Brazil's local government is extremely lower but it shows a high trust in
+                            global governments.",
+                                br(),
+                                "This shows a strong and negative correlation between trust in a particular country's
+                            government and in global government. The confidence band is an ",
+                                br(),
+                                "indicator that it is 95% confident that the true
+                            regression line lies in that gray zone."
+                                
                               ),
                               tabPanel(
-                                "Chronic Disease Frequency",
-                                tags$div(class = "plot-wraper patient-plot",
-                                         plotlyOutput("chronic_disease_freq_plot")),
-                                tags$div(
-                                  class = "patient-caption",
-                                  tags$div(
-                                    "Most of the people infected with the virus have mild to moderate disease, which includes non-pneumonia and pneumonia cases. Asymptomatic infection reported are majority of the relatively rare cases which are asymptomatic on the date of identification/report went on to develop disease[@who]."
-                                  )
-                                )
+                                "Scientist",
+                                fluidRow(column(
+                                  1,
+                                  offset = 1,
+                                  br(),
+                                  
+                                  tags$img(
+                                    src = "Pos_rel-scientist-o3.png",
+                                    width = "800px",
+                                    height = "400px"
+                                  ),
+                                  br(),
+                                  br(),
+                                ))
+                                ,
+                                
+                                "For the same set of 12 different countries, we do a comparative analysis by plotting the trust in the scientists
+                                    of their country vs. the trust in ",
+                                br(),
+                                "global scientists. From our data, it is evident that for `Italy` the
+                                    trust in
+                                    local government is as low as 5.78 whereas globally it is just 5.31. For `Brazil`",
+                                br(),
+                                " the local trust score
+                                    is nearly
+                                    8.4 whereas the global trust score around 8.6.",
+                                br(),
+                                "This shows a strong and positive correlation between trust in a particular country's scientists and in global
+                                    scientists. The confidence band shows",
+                                br(),
+                                " that it is 95% confident that the true regression line lies i
+                                n that gray zone."
+                                
                               )
                             ))
                  )
-               )),
+               ))
+      ,
       
       tabPanel(
         "Twitter Analysis",
@@ -348,7 +358,7 @@ ui <-
                    # Show a plot of the generated distribution
                    mainPanel(
                      tags$h4(class = "tweet-header",
-                             uiOutput("tweet_header"),),
+                             uiOutput("tweet_header"), ),
                      tags$div(class = "plot-wraper twitter-plot",
                               uiOutput("tweet_plot")),
                      tags$div(class = "tweet-summary",
