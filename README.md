@@ -8,6 +8,34 @@ The coronavirus COVID-19 pandemic is an unprecedented health crisis that has imp
 
 In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels, our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point, both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and portray some meaningful insights on global survey data.
 
+
+## DATASETS
+
+**1. COVIDISTRESS all global survey data**  
+(The COVIDiSTRESS global survey is an open science collaboration,
+created by researchers in over 40 countries to rapidly and organically
+collect data on human experiences of the Coronavirus epidemic 2020.)
+Dataset can be downloaded here:
+[COVIDiSTRESS global survey network  (2020, March 30). COVIDiSTRESS global survey. DOI 10.17605/OSF.IO/Z39US, Retrieved from osf.io/z39us]
+*https://osf.io/z39us/*
+
+These datasets mainly focus on the stress levels, sources of stress, and trust in institutions across the EU. Furthermore, it also includes factors such as loneliness, media use, personality, social provisions, and perceived sources of psychological relief.
+
+
+**2. Twitter Data**  
+We aim to work on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+
+Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
+
+
+**3. COVID19 Infodemics Observatory**   
+(The Role of Trust and Information during the COVID-19 Pandemic and Infodemic)
+Dataset can be downloaded here: [R. Gallotti, N. Castaldo, F. Valle, P. Sacco and M. De Domenico, COVID19 Infodemics Observatory (2020). DOI: 10.17605/OSF.IO/N6UPX]
+[Van Mulukom, V. (2021, May 15). The Role of Trust and Information during the COVID-19 Pandemic and Infodemic. https://doi.org/10.17605/OSF.IO/GFWBQ]
+*https://osf.io/n6upx/*, *https://osf.io/67zhg/*, *https://osf.io/rtacb/*, *https://osf.io/dh879/*, *https://osf.io/c37wq/*
+
+These datasets comprises of summary of infodemics data collected from across countries, the world risk index, population emotional state, and news reliability.
+
 Folder Structure :open_file_folder:
 ============================
 
