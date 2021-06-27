@@ -331,37 +331,192 @@ ui <-
       
       tabPanel(
         "Twitter Analysis",
-        fluidRow(class = "data-panel",
-                 sidebarLayout(
-                   sidebarPanel(h1(
-                     class = "radioSelect",
-                     radioButtons(
-                       "twittercharts",
-                       "Please select the chart below.",
-                       c(
-                         "Sentiment with Most Contributed Words" = "tweet_plot1",
-                         "Tweet Counts with Emotions" = "tweet_plot2",
-                         "English Word Cloud with Emotions" = "tweet_plot3",
-                         "Sentiment Change with Time(Hour)" = "tweet_plot4",
-                         "German Tweets Word Cloud" = "tweet_plot5"
-                       )
-                     ),
+        fluidRow(
+          class = "data-panel",
+          navlistPanel(
+            tabPanel("Word Cloud",
                      
-                     br(),
-                   )),
-                   
-                   # Show a plot of the generated distribution
-                   mainPanel(
-                     tags$h4(class = "tweet-header",
-                             uiOutput("tweet_header"),),
-                     tags$div(class = "plot-wraper twitter-plot",
-                              uiOutput("tweet_plot")),
-                     tags$div(class = "tweet-summary",
-                              uiOutput("tweet_summary")),
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "wordcloud_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "wordcloud_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Unique Words",
                      
-                   )
-                   
-                 ))
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "unique_world_list_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "unique_world_list_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Emotion Analysis",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "emotions_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "emotions_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Network Analysis",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "word_network_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "word_network_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Sentiment Analysis",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "sentiment_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "sentiment_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     ))
+            
+          )
+        )
       ),
       tabPanel("Final Analysis",
                fluidRow(

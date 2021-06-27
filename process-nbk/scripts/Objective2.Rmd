@@ -45,8 +45,6 @@ For the security purposes, we show the skeletal code to extract the tweets using
 
 ```{r connection, eval=FALSE}
 library(rtweet)
-library(dplyr)
-library(tidyr)
 library(twitteR)
 library(tidytext)
 
@@ -71,6 +69,9 @@ saveRDS(corona_tweets, "../data/tweets2021.rds")
 
 We can now load saved RDS file using the command below
 ```{r loadRDS}
+library(dplyr)
+library(tidyr)
+library(tidytext)
 tweets2021_raw <- readRDS("../data/tweets2021.rds")
 tweets2020_raw <- read.csv("../data/Covid-tweets_2020.csv")
 
@@ -324,7 +325,7 @@ tweet2021_wordlist %>%
   coord_flip() +
   labs(x = "Count",
        y = "Unique words",
-       title = "Count of unique words found in tweets in 2021")
+       title = "Count of unique words found in tweets in 2021 June")
 
 tweet2020_wordlist %>%
   count(word, sort = TRUE) %>%
@@ -336,7 +337,7 @@ tweet2020_wordlist %>%
   coord_flip() +
   labs(x = "Count",
        y = "Unique words",
-       title = "Count of unique words found in tweets in 2020")
+       title = "Count of unique words found in tweets in 2020 May")
 ```
 ```{r, eval=FALSE}
 # join sentiment classification to the tweet words
@@ -360,7 +361,7 @@ bing_word_counts %>%
   ggplot(aes(word, n, fill = sentiment)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~sentiment, scales = "free_y") +
-  labs(title = "Sentiment during 2021 June",
+  labs(title = "Sentiment with popular words during 2021 June",
        y = "Contribution to sentiment",
        x = NULL) +
   coord_flip()
@@ -373,7 +374,7 @@ bing_word_counts_2020 %>%
   ggplot(aes(word, n, fill = sentiment)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~sentiment, scales = "free_y") +
-  labs(title = "Sentiment during 2020 January",
+  labs(title = "Sentiment with popular words during 2020 May",
        y = "Contribution to sentiment",
        x = NULL) +
   coord_flip()
@@ -432,7 +433,7 @@ rownames(sentiment_scores) <- NULL
 library(ggplot2)
 ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
   theme(legend.position = "none") +
-  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19 in the year 2021")
+  xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2021 June")
 
 ```
 ```{r 2020_data_sent_analysis, eval=FALSE}
@@ -486,7 +487,7 @@ rownames(sentiment_scores) <- NULL
 library(ggplot2)
 ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
   theme(legend.position = "none") +
-  xlab("Sentiments") + ylab("scores") + ggtitle("Sentiments of people behind the tweets on COVID19 in the year 2021")
+  xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2020 May")
 
 ```
 ## Insights
@@ -536,7 +537,7 @@ covid_words_counts %>%
         # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
         geom_node_point(color = "darkslategray4", size = 3) +
         geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
-        labs(title = "Word Network: Tweets using the hashtag",
+        labs(title = "Word Network: Tweets using coronavirus hashtags",
              subtitle = "Year 2021 ",
              x = "", y = "")
 
@@ -586,7 +587,7 @@ covid_words_counts_2020 %>%
         # geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
         geom_node_point(color = "darkslategray4", size = 3) +
         geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
-        labs(title = "Word Network: Tweets using the hashtag",
+        labs(title = "Word Network: Tweets using coronavirus hashtags",
              subtitle = "Year 2020 ",
              x = "", y = "")
 
