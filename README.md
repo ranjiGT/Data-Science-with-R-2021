@@ -28,6 +28,9 @@ Folder Structure :open_file_folder:
     └── README.md
 
 
+### Project website (_Shiny app_)
+- https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 ### Project course website:
 - https://brain.cs.uni-magdeburg.de/kmd/DataSciR/index.html
+
