@@ -7,6 +7,7 @@ library(dplyr)
 library(tidyr)
 library(twitteR)
 library(tidytext)
+
 # whatever name you assigned to your created app
 appname <- "CovidDistress"
 #api key (example below is not a real key)
@@ -16,6 +17,7 @@ secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
 # create token named "twitter_token"
 access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
 access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+
 twitter_token <- create_token(
   app = appname,
   consumer_key = key,
@@ -29,7 +31,9 @@ twitter_token <- create_token(
 # Extract tweet with word corona
 # Here q takes query argument, we are extracting tweets with the words covid OR COVID-19, 1000 indicates top 1000 tweets
 corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", n=100000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+
 corona_tweets <- readRDS("D:/OneDrive/Documents/Documents/OvGU/SoSe 21/Data Science with R/Project/Data-Science-with-R-2021/process-nbk/data/tweets2021.rds")
+
 #Remove retweets from the extracted tweets
 corona_tweets_organic <- corona_tweets[corona_tweets$is_retweet==FALSE, ]
 
@@ -45,7 +49,9 @@ select(corona_tweets, hashtags) %>%
   unnest() %>% 
   mutate(hashtags = tolower(hashtags)) %>% 
   count(hashtags, sort=TRUE) %>% 
+
   filter(hashtags != "coronavirus") %>% 
+
   top_n(10)
 
 coronaDF <- corona_tweets['text']
