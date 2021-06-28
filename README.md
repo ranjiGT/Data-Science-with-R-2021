@@ -26,7 +26,7 @@ These datasets mainly focus on the stress levels, sources of stress, and trust i
 **2. Twitter Data**  
 We aim to work on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
 
-Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
+Here ![`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
 
 
 **3. COVID19 Infodemics Observatory**   
