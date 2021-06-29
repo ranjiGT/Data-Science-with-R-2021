@@ -33,7 +33,12 @@ Here [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9)
 (The Role of Trust and Information during the COVID-19 Pandemic and Infodemic)
 Dataset can be downloaded here: [R. Gallotti, N. Castaldo, F. Valle, P. Sacco and M. De Domenico, COVID19 Infodemics Observatory (2020). DOI: 10.17605/OSF.IO/N6UPX]
 [Van Mulukom, V. (2021, May 15). The Role of Trust and Information during the COVID-19 Pandemic and Infodemic. https://doi.org/10.17605/OSF.IO/GFWBQ]
-*https://osf.io/n6upx/*, *https://osf.io/67zhg/*, *https://osf.io/rtacb/*, *https://osf.io/dh879/*, *https://osf.io/c37wq/*
+
+- *https://osf.io/n6upx/*, 
+- *https://osf.io/67zhg/*, 
+- *https://osf.io/rtacb/*, 
+- *https://osf.io/dh879/*,
+- *https://osf.io/c37wq/*
 
 These datasets comprises of summary of infodemics data collected from across countries, the world risk index, population emotional state, and news reliability.
 
