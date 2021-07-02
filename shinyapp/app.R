@@ -2,18 +2,20 @@ library(shiny)
 library(shinythemes)
 library(ggplot2)
 library(plotly)
+library(GGally)
+library(dplyr)
+library(bib2df)
+library(DT)
 
+
+# Read Data Files
 mergedData <- read.csv("world_map.csv")
-world_map_stress_levels <-
-  plot_ly(
-    mergedData,
-    type = 'choropleth',
-    locations = mergedData$CODE,
-    z = mergedData$PSS10_avg,
-    text = mergedData$COUNTRY,
-    colorscale = "Portland"
-  ) %>%
-  layout(paper_bgcolor = 'transparent')
+bivariateData <- read.csv("bivariate.csv")
+data_scatterplot_gov <- read.csv("data_scatter_gov.csv")
+data_scatterplot_scient <- read.csv("data_scatter_scient.csv")
+sentiment_2021 <- read.csv("sentiment_scores_2021.csv")
+sentiment_2020 <- read.csv("sentiment_scores_2020.csv")
+
 
 
 ui <-
@@ -132,6 +134,21 @@ ui <-
                           over the desired country.",
             br(),
             "The countries with no colour are the countries which did not participate in the survery."
+            # ,
+            # br(),
+            # selectizeInput(
+            #   "continent",
+            #   choices = list(
+            #     "World",
+            #     "Asia",
+            #     "Europe",
+            #     "Africa",
+            #     "North America",
+            #     "South America",
+            #     "Oceania"
+            #   ),
+            #   label = "Select Continents"
+            # )
           ),
           tabPanel(
             "Sources of Distress",
@@ -162,11 +179,11 @@ ui <-
           tabPanel(
             "Bivariate Relationship",
             fluidRow(column(
-              1,
-              offset = 2,
+              11,
+              # offset = 2,
               br(),
               
-              tags$img(src = "bivariate_plot.png", width = "680px")
+              plotOutput("bivariate_graph", height = "600px"),
             )),
             fluidRow(
               br(),
@@ -180,6 +197,153 @@ ui <-
         )
       ),
       
+      tabPanel(
+        "Twitter Analysis",
+        fluidRow(
+          class = "data-panel",
+          navlistPanel(
+            tabPanel("Word Cloud",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "wordcloud_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "wordcloud_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Emotion Analysis",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    plotlyOutput("sentiment_2020", width = "800px", height = "400px"),
+                                    
+                                    
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    plotlyOutput("sentiment_2021", width = "800px", height = "400px"),
+                                    
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Sentiment With Words",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "sentiment_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "sentiment_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     )),
+            tabPanel("Network Analysis",
+                     
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "word_network_2020.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       tabPanel("2021",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    tags$img(
+                                      src = "word_network_2021.png",
+                                      width = "800px",
+                                      height = "400px"
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                ))
+                     ))
+          )
+        )
+      ),
       tabPanel("Infodemics",
                fluidRow(
                  class = "data-panel",
@@ -236,18 +400,34 @@ ui <-
                        )
                      )),
                      br(),
-                     "This plot shows IRI vs Confirmed COVID-19 cases for Infodemics and Epidemics data aggregation by Country and at a border level
-                      categorized into ",
+                     "This plot shows IRI vs Confirmed COVID-19 cases for Infodemics and Epidemics data aggregation by Country and at a border level",
                      br(),
-                     "the continent.",
+                     "categorized into the continent.",
                      br(),
                      "It can be inferred that the IRI volume is very high in `USA` with approximately 383,210 cases. Also, we have focused to show
-                     this critical impact on ",
+                     this",
                      br(),
-                     "the top 5 continents around the globe. Moreover, it has to be strikingly noted that the IRI score is
-                     very high in Peru which is almost around 0.98 ",
+                     " critical impact on the top 5 continents around the globe. Moreover, it has to be strikingly noted that the IRI score is
+                     very high in Peru" ,
                      br(),
-                     "although the total infected cases are 11.",
+                     "which is almost around 0.98 although the total infected cases are 11.",
+                     br(),
+                     br()
+                     
+                   ),
+                   tabPanel(
+                     "Cumulative IRI",
+                     fluidRow(column(
+                       10,
+                       offset = 0,
+                       br(),
+                       
+                       plotlyOutput("iri_red_plot", height = "500px")
+                       
+                     )),
+                     br(),
+                     "The sample sizes of the reported cases for the groups in the range of 3-7, 8-15 are reasonably symmetric indicative of less
+                     variability in the analysis but, for groups 1-2, 16-50, 51-9999, 10k+ are left-skewed signifies some level of variability.",
                      br(),
                      br()
                      
@@ -258,31 +438,18 @@ ui <-
                               tabPanel(
                                 "Governments",
                                 fluidRow(column(
-                                  1,
-                                  offset = 1,
+                                  11,
+                                  # offset = 1,
                                   br(),
                                   
-                                  tags$img(
-                                    src = "neg-rel-gov-o3.png",
-                                    width = "800px",
-                                    height = "400px"
-                                  ),
+                                  plotlyOutput("trust_gov_plot"),
+                                  
                                   br(),
                                   br(),
                                 )),
-                                "It is seemingly evident that in early 2020 New Zealand was declared as a COVID-19 free country so we estimate the
-                             trust in its government is",
-                                br(),
-                                " remarkably higher in comparison to other countries of the world. On the contrary,
-                             it modeled a low trust score in global governments",
-                                br(),
-                                "At the same time trust score in Brazil's local government is extremely lower but it shows a high trust in
-                            global governments.",
-                                br(),
+                                
                                 "This shows a strong and negative correlation between trust in a particular country's
-                            government and in global government. The confidence band is an ",
-                                br(),
-                                "indicator that it is 95% confident that the true
+                            government and in global government. The confidence band is an indicator that it is 95% confident that the true
                             regression line lies in that gray zone.",
                                 br(),
                                 br()
@@ -290,31 +457,18 @@ ui <-
                               tabPanel(
                                 "Scientist",
                                 fluidRow(column(
-                                  1,
-                                  offset = 1,
+                                  11,
+                                  # offset = 1,
                                   br(),
                                   
-                                  tags$img(
-                                    src = "Pos_rel-scientist-o3.png",
-                                    width = "800px",
-                                    height = "400px"
-                                  ),
+                                  plotlyOutput("trust_sci_plot"),
+                                  
+                                  
                                   br(),
                                   br(),
                                 ))
                                 ,
                                 
-                                "For the same set of 12 different countries, we do a comparative analysis by plotting the trust in the scientists
-                                    of their country vs. the trust in ",
-                                br(),
-                                "global scientists. From our data, it is evident that for `Italy` the
-                                    trust in
-                                    local government is as low as 5.78 whereas globally it is just 5.31. For `Brazil`",
-                                br(),
-                                " the local trust score
-                                    is nearly
-                                    8.4 whereas the global trust score around 8.6.",
-                                br(),
                                 "This shows a strong and positive correlation between trust in a particular country's scientists and in global
                                     scientists. The confidence band shows",
                                 br(),
@@ -326,198 +480,8 @@ ui <-
                               )
                             ))
                  )
-               ))
-      ,
+               )),
       
-      tabPanel(
-        "Twitter Analysis",
-        fluidRow(
-          class = "data-panel",
-          navlistPanel(
-            tabPanel("Word Cloud",
-                     
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "wordcloud_2020.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       tabPanel("2021",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "wordcloud_2021.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                ))
-                     )),
-            tabPanel("Unique Words",
-                     
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "unique_world_list_2020.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       tabPanel("2021",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "unique_world_list_2021.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                ))
-                     )),
-            tabPanel("Emotion Analysis",
-                     
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "emotions_2020.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       tabPanel("2021",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "emotions_2021.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                ))
-                     )),
-            tabPanel("Network Analysis",
-                     
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "word_network_2020.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       tabPanel("2021",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "word_network_2021.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                ))
-                     )),
-            tabPanel("Sentiment Analysis",
-                     
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "sentiment_2020.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       tabPanel("2021",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    tags$img(
-                                      src = "sentiment_2021.png",
-                                      width = "800px",
-                                      height = "400px"
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                ))
-                     ))
-            
-          )
-        )
-      ),
       tabPanel("Final Analysis",
                fluidRow(
                  class = "data-panel",
@@ -546,7 +510,7 @@ ui <-
                                 href = "",
                                 target = "_blank",
                                 tags$img(id = "r-logo", src =
-                                           "R-logo.png")
+                                           "R-studio.svg", width = "300px")
                               )
                               
                             ))),
@@ -561,7 +525,21 @@ ui <-
                                 href = "https://github.com/ranjiGT/Data-Science-with-R-2021",
                                 target = "_blank",
                                 tags$img(id = "git-logo", src =
-                                           "git-logo.png", width = "300px")
+                                           "github.svg", width = "300px")
+                              )
+                            ))),
+                   tabPanel("Screencast",
+                            fluidRow(column(
+                              1,
+                              offset = 4,
+                              br(),
+                              br(),
+                              br(),
+                              tags$a(
+                                href = "https://github.com/ranjiGT/Data-Science-with-R-2021",
+                                target = "_blank",
+                                tags$img(id = "yt-logo", src =
+                                           "YT.svg", width = "300px")
                               )
                             ))),
                    tabPanel(
@@ -601,7 +579,11 @@ ui <-
                      
                    ),
                    tabPanel("References",
-                            fluidRow())
+                            fluidRow(br(),
+                                     column(
+                                       11,
+                                       DT::dataTableOutput("bibTable")
+                                     )))
                  )
                ))
     )
@@ -611,13 +593,185 @@ server <- function(input, output) {
   set.seed(122)
   histdata <- rnorm(500)
   
-  output$plot1 <- renderPlot({
-    data <- histdata[seq_len(input$slider)]
-    hist(data)
+  # world_map_stress_levels
+  output$world_stress_map <- renderPlotly({
+    world_map_stress_levels <- function(continent) {
+      map <- plot_ly(
+        mergedData,
+        type = 'choropleth',
+        locations = mergedData$CODE,
+        z = mergedData$PSS10_avg,
+        text = mergedData$COUNTRY,
+        colorscale = "Portland"
+        
+      ) %>%
+        layout(paper_bgcolor = 'transparent')
+      
+      return(map)
+    }
+    
+    world_map_stress_levels(input$continent)
   })
   
-  output$world_stress_map <- renderPlotly({
-    world_map_stress_levels
+  # Bivariate Plot
+  output$bivariate_graph <- renderPlot({
+    bivariateData$X <- NULL
+    levels(bivariateData$Dem_gender)[levels(bivariateData$Dem_gender) == "Other/would rather not say"] = "Undisclosed"
+    
+    ggpairs(
+      bivariateData,
+      columnLabels = c(
+        "Perceived Stress",
+        "Loneliness",
+        "Perceived Support",
+        "Extraversion",
+        "Gender"
+      ),
+      mapping = ggplot2::aes(col = Dem_gender, alpha = .2),
+      upper = list(continuous = wrap("cor", size = 3)),
+      title = "Bivariate relationship of Perceived Stress, Social Support, Loneliness, and Extraversion"
+    ) +
+      theme(title = element_text(face = "bold")) + theme(plot.title = element_text(hjust = 0.5)) +
+      theme(text = element_text(size = 14))
+    
+  })
+  
+  
+  # Government Plot
+  output$trust_gov_plot <- renderPlotly({
+    ggplotly(
+      ggplot(data_scatterplot_gov, aes(x = govglob, y = govloc)) +
+        geom_point(col = "blue", alpha = 0.9) +
+        geom_text(label = data_scatterplot_gov$country) +
+        xlab("Trust in global governments") +
+        ylab("Trust in country's government") +
+        ggtitle(
+          "Plot for trust among citizens in Country's government for 12 different countries"
+        ) +
+        geom_smooth(method = "lm")
+    )
+    
+  })
+  
+  
+  # Scientist Plot
+  output$trust_sci_plot <- renderPlotly({
+    ggplotly(
+      ggplot(data_scatterplot_scient, aes(x = scientglob, y = scientloc)) +
+        geom_point(col = "blue", alpha = 0.5) +
+        geom_text(label = data_scatterplot_scient$country) +
+        xlab("Trust in scientists globally") +
+        ylab("Trust in country's scientists") +
+        ggtitle(
+          "Plot for trust among citizens in Country's scientists for 12 different countries"
+        ) +
+        geom_smooth(method = "lm")
+    )
+    
+  })
+  
+  output$sentiment_2020 <- renderPlotly({
+    library(ggplot2)
+    ggplot(data = sentiment_2020, aes(x = sentiment, y = Score)) + geom_bar(aes(fill =
+                                                                                  sentiment), stat = "identity") +
+      theme(legend.position = "none") +
+      xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2020 May")
+  })
+  
+  output$sentiment_2021 <- renderPlotly({
+    library(ggplot2)
+    ggplot(data = sentiment_2021, aes(x = sentiment, y = Score)) + geom_bar(aes(fill =
+                                                                                  sentiment), stat = "identity") +
+      theme(legend.position = "none") +
+      xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2021 June")
+  })
+  
+  
+  # IRI Reduction Box Plot
+  output$iri_red_plot <- renderPlotly({
+    INFODEMIC_REDUCED_FILE_PATH <-
+      file.path("infodemics_reduced.csv")
+    WORLD_RISK_INDEX_FILE_PATH <-
+      file.path("world_risk_index.csv")
+    dat.red <-
+      read.table(INFODEMIC_REDUCED_FILE_PATH,
+                 header = T,
+                 sep = ";")
+    dat.red$date <- as.Date(dat.red$date)
+    dat.iri.world <-
+      read.table(WORLD_RISK_INDEX_FILE_PATH,
+                 header = T,
+                 sep = ";")
+    
+    dat.corr2 <- data.frame()
+    dat.corr <-
+      dat.red[, c("date", "iso3", "EPI_CONFIRMED", "IRI_ALL")]
+    
+    for (cc in unique(dat.corr$iso3)) {
+      tmp <- dat.corr[which(dat.corr$iso3 == cc), ]
+      tmp <- tmp[order(tmp$date), ]
+      tmp$EPI_CONFIRMED_DAILY <- c(0, diff(tmp$EPI_CONFIRMED))
+      tmp$IRI_ALL_CUMMEAN <- dplyr::cummean(tmp$IRI_ALL)
+      dat.corr2 <- rbind(dat.corr2, tmp)
+    }
+    
+    dat.corr2 <- dat.corr2[!is.na(dat.corr2$IRI_ALL), ]
+    dat.corr2 <- dat.corr2[-which(dat.corr2$EPI_CONFIRMED == 0), ]
+    
+    bin <- rep(0, nrow(dat.corr2))
+    bin[which(dat.corr2$EPI_CONFIRMED <= 2)] <- 0
+    bin[which(3 <= dat.corr2$EPI_CONFIRMED &
+                dat.corr2$EPI_CONFIRMED < 8)] <- 1
+    bin[which(8 <= dat.corr2$EPI_CONFIRMED &
+                dat.corr2$EPI_CONFIRMED < 16)] <- 2
+    bin[which(16 <= dat.corr2$EPI_CONFIRMED &
+                dat.corr2$EPI_CONFIRMED < 51)] <- 3
+    bin[which(51 <= dat.corr2$EPI_CONFIRMED &
+                dat.corr2$EPI_CONFIRMED < 10001)] <- 4
+    bin[which(10001 <= dat.corr2$EPI_CONFIRMED &
+                dat.corr2$EPI_CONFIRMED < 81000)] <- 5
+    
+    dat.corr2$bin <- bin
+    
+    labels.min <-
+      dat.corr2 %>% group_by(bin) %>% summarise_at(vars(EPI_CONFIRMED), min)
+    labels.max <-
+      dat.corr2 %>% group_by(bin) %>% summarise_at(vars(EPI_CONFIRMED), max)
+    
+    lab <-
+      paste0(labels.min$EPI_CONFIRMED, '-', labels.max$EPI_CONFIRMED)
+    lab[5:6] <- c('51-9999', '10000+')
+    
+    
+    ggplotly(
+      ggplot(dat.corr2, aes(as.factor(bin), IRI_ALL_CUMMEAN)) +
+        theme_bw() +
+        theme(panel.grid = element_blank(),
+              legend.position = "none") +
+        geom_boxplot(
+          aes(fill = as.numeric(bin)),
+          size = 0.15,
+          outlier.color = "grey70",
+          color = "grey70",
+          notch = TRUE
+        ) +
+        xlab("Cumulative Number of Reported Cases") +
+        ylab("IRI Cumulative Mean") +
+        scale_fill_viridis_c() +
+        scale_x_discrete(labels = lab) +
+        ggtitle("Cumulative IRI vs. Epidemic per index confirmed")
+    )
+  })
+  
+  get_bib <- reactive({
+    df <-
+      bib2df("references.bib") %>% dplyr::select(TITLE, AUTHOR, YEAR, DOI, URL)
+    df$AUTHOR <- unlist(lapply(df$AUTHOR, paste, collapse = " "))
+    return(df)
+  })
+  output$bibTable <- DT::renderDataTable({
+    bib <- get_bib()
+    bib
   })
   
 }
