@@ -157,7 +157,7 @@ tweets2021_raw %>%
 # Wordcloud
 
 ## Unigrams
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 words <- tweets2021_raw %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
          text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
@@ -173,6 +173,9 @@ words <- tweets2021_raw %>%
 library(wordcloud) 
 words %>% 
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+
+```
+```{r, eval=TRUE}
 
 words_2020 <- tweets2020_raw %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
@@ -191,10 +194,9 @@ words_2020 %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 
 ```
-  
 
 ## Bigrams
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 words_bigrams <- tweets2021_raw %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
          text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
@@ -214,9 +216,13 @@ words_bigrams <- tweets2021_raw %>%
      !str_detect(word2, "@\\S+")) %>%
   mutate(word = paste(word1,word2))
 
+
 library(wordcloud) 
 words_bigrams %>% 
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+```{r, eval=TRUE}
 
 words_bigrams_2020 <- tweets2020_raw %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
@@ -242,7 +248,6 @@ words_bigrams_2020 %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 ```
 
-
 ## Insights
 
 **To be added by Madhuri**
@@ -256,7 +261,7 @@ include_graphics(img1_path)
 
 Understand people's sentiments
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # json libraries
 library(rjson)
 library(jsonlite)
@@ -282,7 +287,7 @@ library(tidyverse)
 ```
 
 Get a list of words
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 tweet2021_wordlist <- tweets2021_raw %>%
   dplyr::select(text) %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
@@ -312,7 +317,7 @@ tweet2020_wordlist <- tweets2020_raw %>%
 ```
 
 Plot the top 15 words
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 
 #Not sure if we should include this.. not very insightful
 tweet2021_wordlist %>%
@@ -326,6 +331,9 @@ tweet2021_wordlist %>%
   labs(x = "Count",
        y = "Unique words",
        title = "Count of unique words found in tweets in 2021 June")
+```
+
+```{r, eval=TRUE}
 
 tweet2020_wordlist %>%
   count(word, sort = TRUE) %>%
@@ -339,7 +347,8 @@ tweet2020_wordlist %>%
        y = "Unique words",
        title = "Count of unique words found in tweets in 2020 May")
 ```
-```{r, eval=FALSE}
+
+```{r, eval=TRUE}
 # join sentiment classification to the tweet words
 bing_word_counts <- tweet2021_wordlist %>%
   inner_join(get_sentiments("bing")) %>%
@@ -352,7 +361,7 @@ bing_word_counts_2020 <- tweet2020_wordlist %>%
   ungroup()
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 bing_word_counts %>%
   group_by(sentiment) %>%
   top_n(10) %>%
@@ -365,6 +374,10 @@ bing_word_counts %>%
        y = "Contribution to sentiment",
        x = NULL) +
   coord_flip()
+
+```
+
+```{r, eval=TRUE}
 
 bing_word_counts_2020 %>%
   group_by(sentiment) %>%
@@ -382,7 +395,7 @@ bing_word_counts_2020 %>%
 
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(syuzhet)
 #Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
 
@@ -429,6 +442,10 @@ names(sentiment_scores) <- "Score"
 sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
 rownames(sentiment_scores) <- NULL
 
+
+write.csv(sentiment_scores,'sentiment_scores_2021.csv')
+getwd()
+
 #References
 library(ggplot2)
 ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
@@ -436,7 +453,7 @@ ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=s
   xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2021 June")
 
 ```
-```{r 2020_data_sent_analysis, eval=FALSE}
+```{r 2020_data_sent_analysis, eval=TRUE}
 library(syuzhet)
 #Here tweets are categorized as positive or negative and then what are the words that have contributed most for their sentiment. From this chart, we can analyze, what are the words people have used frequently to express their positive or negative feelings.
 
@@ -483,6 +500,8 @@ names(sentiment_scores) <- "Score"
 sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
 rownames(sentiment_scores) <- NULL
 
+write.csv(sentiment_scores,'sentiment_scores_2020.csv')
+
 #References
 library(ggplot2)
 ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=sentiment),stat = "identity") +
@@ -493,7 +512,7 @@ ggplot(data = sentiment_scores, aes(x=sentiment, y=Score)) + geom_bar(aes(fill=s
 ## Insights
 
 # Network Analysis
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # Network Analysis
 
 # library(devtools)
@@ -542,7 +561,7 @@ covid_words_counts %>%
              x = "", y = "")
 
 ```
-```{r nw_analysis_2020, eval=FALSE}
+```{r nw_analysis_2020, eval=TRUE}
 # Network Analysis
 
 # library(devtools)

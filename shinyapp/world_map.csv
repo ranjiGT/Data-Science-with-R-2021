@@ -1,162 +1,168 @@
-Country,PSS10_avg,CODE
-Afghanistan,2.791176471,AFG
-Albania,3.036788618,ALB
-Algeria,2.993777778,DZA
-Andorra,2.3,AND
-Angola,2.671428571,AGO
-Antigua and Barbuda,2.9,ATG
-Argentina,2.741580696,ARG
-Armenia,2.4,ARM
-Australia,2.813909465,AUS
-Austria,2.576358364,AUT
-Azerbaijan,2.8625,AZE
-Bahrain,2.55,BHR
-Bangladesh,2.961677722,BGD
-Barbados,NA,BRB
-Belarus,2.850595238,BLR
-Belgium,2.6328432,BEL
-Belize,3,BLZ
-Benin,2.8,BEN
-Bhutan,3.5,BTN
-Bolivia,2.583333333,BOL
-Bosnia and Herzegovina,2.86259067,BIH
-Brazil,3.107380698,BRA
-Brunei,2.871967712,BRN
-Bulgaria,2.79781746,BGR
-Burkina Faso,3.8,BFA
-Cabo Verde,2.7,CPV
-Cambodia,2.666666667,KHM
-Cameroon,3.425,CMR
-Canada,2.764868337,CAN
-Chile,2.627659574,CHL
-China,2.609302326,CHN
-Colombia,2.610416667,COL
-Comoros,1.7,COM
-"Congo, Democratic Republic of the",2.2,COD
-"Congo, Republic of the",3.4,COG
-Costa Rica,3.066666667,CRI
-Croatia,2.916814665,HRV
-Cuba,2.75,CUB
-Cyprus,2.781333333,CYP
-Czech Republic,2.690594076,CZE
-Denmark,2.397116559,DNK
-Djibouti,2.775,DJI
-Dominica,2.6,DMA
-Dominican Republic,3,DOM
-Ecuador,2.573985891,ECU
-Egypt,2.603389831,EGY
-El Salvador,3.1,SLV
-Eritrea,3.5,ERI
-Estonia,2.584848485,EST
-Ethiopia,2.5,ETH
-Fiji,3.183333333,FJI
-Finland,2.454476703,FIN
-France,2.569148211,FRA
-Gabon,2.425,GAB
-Georgia,2.777020202,GEO
-Germany,2.630156038,DEU
-Ghana,2.733333333,GHA
-Greece,2.743162709,GRC
-Grenada,2.645959596,GRD
-Guatemala,2.912260536,GTM
-Guinea,2.8,GIN
-Guinea-Bissau,4,GNB
-Haiti,2.766666667,HTI
-Honduras,2.925,HND
-Hungary,2.735634589,HUN
-Iceland,2.512169312,ISL
-India,2.865116279,IND
-Indonesia,2.759961084,IDN
-Iran,2.728571429,IRN
-Iraq,2.7,IRQ
-Ireland,2.665757576,IRL
-Israel,2.738011696,ISR
-Italy,2.575898376,ITA
-Jamaica,3.0625,JAM
-Japan,3.016239511,JPN
-Jordan,2.714285714,JOR
-Kazakhstan,2.6,KAZ
-Kenya,2.95,KEN
-Kiribati,3.3,KIR
-"Korea, North",2.8,PRK
-"Korea, South",2.707644566,KOR
-Kosovo,2.90809628,KSV
-Kuwait,3.7,KWT
-Kyrgyzstan,2.758333333,KGZ
-Laos,2.02,LAO
-Latvia,2.591316527,LVA
-Lebanon,2.8,LBN
-Lesotho,2.641666667,LSO
-Liberia,2.5,LBR
-Libya,3.2,LBY
-Liechtenstein,2.56,LIE
-Lithuania,2.507528232,LTU
-Luxembourg,2.599122807,LUX
-Madagascar,2.3,MDG
-Malawi,NA,MWI
-Malaysia,2.722875817,MYS
-Maldives,4.5,MDV
-Mali,2.65,MLI
-Malta,2.375757576,MLT
-Mauritius,2.85,MUS
-Mexico,2.720698779,MEX
-"Micronesia, Federated States of",3.4,FSM
-Moldova,3.25,MDA
-Monaco,2.525,MCO
-Montenegro,2.711601307,MNE
-Morocco,2.457657658,MAR
-Namibia,3.6,NAM
-Nepal,2.391666667,NPL
-Netherlands,2.479205607,NLD
-New Zealand,2.455102041,NZL
-Nicaragua,3.014814815,NIC
-Niger,3.5,NER
-Nigeria,3.163157895,NGA
-Norway,2.58974359,NOR
-Oman,2.666666667,OMN
-Pakistan,2.881828704,PAK
-Panama,2.628571429,PAN
-Paraguay,3.25,PRY
-Peru,2.515037594,PER
-Philippines,2.848375612,PHL
-Poland,2.992961722,POL
-Portugal,2.860512028,PRT
-Qatar,2.59047619,QAT
-Romania,2.707017544,ROU
-Russia,2.612,RUS
-Rwanda,3.4,RWA
-Saint Lucia,3.857142857,LCA
-Saint Vincent and the Grenadines,NA,VCT
-San Marino,2.52,SMR
-Sao Tome and Principe,NA,STP
-Saudi Arabia,2.55,SAU
-Senegal,3.6,SEN
-Serbia,2.727192982,SRB
-Singapore,2.930555556,SGP
-Slovakia,2.797435897,SVK
-Slovenia,3.005769231,SVN
-Somalia,2.22,SOM
-South Africa,2.648204265,ZAF
-Spain,2.687804878,ESP
-Suriname,2.771428571,SUR
-Sweden,2.539221364,SWE
-Switzerland,2.37141062,CHE
-Syria,2.9,SYR
-Taiwan,2.593711494,TWN
-Tanzania,3.1,TZA
-Thailand,2.696581197,THA
-Trinidad and Tobago,2.95,TTO
-Tunisia,2.54,TUN
-Turkey,3.147140156,TUR
-Uganda,2.8,UGA
-Ukraine,2.802430556,UKR
-United Arab Emirates,2.665023474,ARE
-United Kingdom,2.724930368,GBR
-United States,2.742760572,USA
-Uruguay,2.733333333,URY
-Uzbekistan,1.5,UZB
-Vanuatu,NA,VUT
-Venezuela,2.842857143,VEN
-Vietnam,2.571865616,VNM
-Zambia,2,ZMB
-Zimbabwe,2.833333333,ZWE
+"","CODE","Country","PSS10_avg","Continent_Name","Continent_Code","Country_Name","Two_Letter_Country_Code","Country_Number"
+"1","AFG","Afghanistan",2.791176471,"Asia","AS","Afghanistan, Islamic Republic of","AF",4
+"2","AGO","Angola",2.671428571,"Africa","AF","Angola, Republic of","AO",24
+"3","ALB","Albania",3.036788618,"Europe","EU","Albania, Republic of","AL",8
+"4","AND","Andorra",2.3,"Europe","EU","Andorra, Principality of","AD",20
+"5","ARE","United Arab Emirates",2.665023474,"Asia","AS","United Arab Emirates","AE",784
+"6","ARG","Argentina",2.741580696,"South America","SA","Argentina, Argentine Republic","AR",32
+"7","ARM","Armenia",2.4,"Europe","EU","Armenia, Republic of","AM",51
+"8","ARM","Armenia",2.4,"Asia","AS","Armenia, Republic of","AM",51
+"9","ATG","Antigua and Barbuda",2.9,"North America",NA,"Antigua and Barbuda","AG",28
+"10","AUS","Australia",2.813909465,"Oceania","OC","Australia, Commonwealth of","AU",36
+"11","AUT","Austria",2.576358364,"Europe","EU","Austria, Republic of","AT",40
+"12","AZE","Azerbaijan",2.8625,"Europe","EU","Azerbaijan, Republic of","AZ",31
+"13","AZE","Azerbaijan",2.8625,"Asia","AS","Azerbaijan, Republic of","AZ",31
+"14","BEL","Belgium",2.6328432,"Europe","EU","Belgium, Kingdom of","BE",56
+"15","BEN","Benin",2.8,"Africa","AF","Benin, Republic of","BJ",204
+"16","BFA","Burkina Faso",3.8,"Africa","AF","Burkina Faso","BF",854
+"17","BGD","Bangladesh",2.961677722,"Asia","AS","Bangladesh, People's Republic of","BD",50
+"18","BGR","Bulgaria",2.79781746,"Europe","EU","Bulgaria, Republic of","BG",100
+"19","BHR","Bahrain",2.55,"Asia","AS","Bahrain, Kingdom of","BH",48
+"20","BIH","Bosnia and Herzegovina",2.86259067,"Europe","EU","Bosnia and Herzegovina","BA",70
+"21","BLR","Belarus",2.850595238,"Europe","EU","Belarus, Republic of","BY",112
+"22","BLZ","Belize",3,"North America",NA,"Belize","BZ",84
+"23","BOL","Bolivia",2.583333333,"South America","SA","Bolivia, Republic of","BO",68
+"24","BRA","Brazil",3.107380698,"South America","SA","Brazil, Federative Republic of","BR",76
+"25","BRB","Barbados",NA,"North America",NA,"Barbados","BB",52
+"26","BRN","Brunei",2.871967712,"Asia","AS","Brunei Darussalam","BN",96
+"27","BTN","Bhutan",3.5,"Asia","AS","Bhutan, Kingdom of","BT",64
+"28","CAN","Canada",2.764868337,"North America",NA,"Canada","CA",124
+"29","CHE","Switzerland",2.37141062,"Europe","EU","Switzerland, Swiss Confederation","CH",756
+"30","CHL","Chile",2.627659574,"South America","SA","Chile, Republic of","CL",152
+"31","CHN","China",2.609302326,"Asia","AS","China, People's Republic of","CN",156
+"32","CMR","Cameroon",3.425,"Africa","AF","Cameroon, Republic of","CM",120
+"33","COD","Congo, Democratic Republic of the",2.2,"Africa","AF","Congo, Democratic Republic of the","CD",180
+"34","COG","Congo, Republic of the",3.4,"Africa","AF","Congo, Republic of the","CG",178
+"35","COL","Colombia",2.610416667,"South America","SA","Colombia, Republic of","CO",170
+"36","COM","Comoros",1.7,"Africa","AF","Comoros, Union of the","KM",174
+"37","CPV","Cabo Verde",2.7,"Africa","AF","Cape Verde, Republic of","CV",132
+"38","CRI","Costa Rica",3.066666667,"North America",NA,"Costa Rica, Republic of","CR",188
+"39","CUB","Cuba",2.75,"North America",NA,"Cuba, Republic of","CU",192
+"40","CYP","Cyprus",2.781333333,"Asia","AS","Cyprus, Republic of","CY",196
+"41","CYP","Cyprus",2.781333333,"Europe","EU","Cyprus, Republic of","CY",196
+"42","CZE","Czech Republic",2.690594076,"Europe","EU","Czech Republic","CZ",203
+"43","DEU","Germany",2.630156038,"Europe","EU","Germany, Federal Republic of","DE",276
+"44","DJI","Djibouti",2.775,"Africa","AF","Djibouti, Republic of","DJ",262
+"45","DMA","Dominica",2.6,"North America",NA,"Dominica, Commonwealth of","DM",212
+"46","DNK","Denmark",2.397116559,"Europe","EU","Denmark, Kingdom of","DK",208
+"47","DOM","Dominican Republic",3,"North America",NA,"Dominican Republic","DO",214
+"48","DZA","Algeria",2.993777778,"Africa","AF","Algeria, People's Democratic Republic of","DZ",12
+"49","ECU","Ecuador",2.573985891,"South America","SA","Ecuador, Republic of","EC",218
+"50","EGY","Egypt",2.603389831,"Africa","AF","Egypt, Arab Republic of","EG",818
+"51","ERI","Eritrea",3.5,"Africa","AF","Eritrea, State of","ER",232
+"52","ESP","Spain",2.687804878,"Europe","EU","Spain, Kingdom of","ES",724
+"53","EST","Estonia",2.584848485,"Europe","EU","Estonia, Republic of","EE",233
+"54","ETH","Ethiopia",2.5,"Africa","AF","Ethiopia, Federal Democratic Republic of","ET",231
+"55","FIN","Finland",2.454476703,"Europe","EU","Finland, Republic of","FI",246
+"56","FJI","Fiji",3.183333333,"Oceania","OC","Fiji, Republic of the Fiji Islands","FJ",242
+"57","FRA","France",2.569148211,"Europe","EU","France, French Republic","FR",250
+"58","FSM","Micronesia, Federated States of",3.4,"Oceania","OC","Micronesia, Federated States of","FM",583
+"59","GAB","Gabon",2.425,"Africa","AF","Gabon, Gabonese Republic","GA",266
+"60","GBR","United Kingdom",2.724930368,"Europe","EU","United Kingdom of Great Britain & Northern Ireland","GB",826
+"61","GEO","Georgia",2.777020202,"Asia","AS","Georgia","GE",268
+"62","GEO","Georgia",2.777020202,"Europe","EU","Georgia","GE",268
+"63","GHA","Ghana",2.733333333,"Africa","AF","Ghana, Republic of","GH",288
+"64","GIN","Guinea",2.8,"Africa","AF","Guinea, Republic of","GN",324
+"65","GNB","Guinea-Bissau",4,"Africa","AF","Guinea-Bissau, Republic of","GW",624
+"66","GRC","Greece",2.743162709,"Europe","EU","Greece, Hellenic Republic","GR",300
+"67","GRD","Grenada",2.645959596,"North America",NA,"Grenada","GD",308
+"68","GTM","Guatemala",2.912260536,"North America",NA,"Guatemala, Republic of","GT",320
+"69","HND","Honduras",2.925,"North America",NA,"Honduras, Republic of","HN",340
+"70","HRV","Croatia",2.916814665,"Europe","EU","Croatia, Republic of","HR",191
+"71","HTI","Haiti",2.766666667,"North America",NA,"Haiti, Republic of","HT",332
+"72","HUN","Hungary",2.735634589,"Europe","EU","Hungary, Republic of","HU",348
+"73","IDN","Indonesia",2.759961084,"Asia","AS","Indonesia, Republic of","ID",360
+"74","IND","India",2.865116279,"Asia","AS","India, Republic of","IN",356
+"75","IRL","Ireland",2.665757576,"Europe","EU","Ireland","IE",372
+"76","IRN","Iran",2.728571429,"Asia","AS","Iran, Islamic Republic of","IR",364
+"77","IRQ","Iraq",2.7,"Asia","AS","Iraq, Republic of","IQ",368
+"78","ISL","Iceland",2.512169312,"Europe","EU","Iceland, Republic of","IS",352
+"79","ISR","Israel",2.738011696,"Asia","AS","Israel, State of","IL",376
+"80","ITA","Italy",2.575898376,"Europe","EU","Italy, Italian Republic","IT",380
+"81","JAM","Jamaica",3.0625,"North America",NA,"Jamaica","JM",388
+"82","JOR","Jordan",2.714285714,"Asia","AS","Jordan, Hashemite Kingdom of","JO",400
+"83","JPN","Japan",3.016239511,"Asia","AS","Japan","JP",392
+"84","KAZ","Kazakhstan",2.6,"Europe","EU","Kazakhstan, Republic of","KZ",398
+"85","KAZ","Kazakhstan",2.6,"Asia","AS","Kazakhstan, Republic of","KZ",398
+"86","KEN","Kenya",2.95,"Africa","AF","Kenya, Republic of","KE",404
+"87","KGZ","Kyrgyzstan",2.758333333,"Asia","AS","Kyrgyz Republic","KG",417
+"88","KHM","Cambodia",2.666666667,"Asia","AS","Cambodia, Kingdom of","KH",116
+"89","KIR","Kiribati",3.3,"Oceania","OC","Kiribati, Republic of","KI",296
+"90","KOR","Korea, South",2.707644566,"Asia","AS","Korea, Republic of","KR",410
+"91","KWT","Kuwait",3.7,"Asia","AS","Kuwait, State of","KW",414
+"92","LAO","Laos",2.02,"Asia","AS","Lao People's Democratic Republic","LA",418
+"93","LBN","Lebanon",2.8,"Asia","AS","Lebanon, Lebanese Republic","LB",422
+"94","LBR","Liberia",2.5,"Africa","AF","Liberia, Republic of","LR",430
+"95","LBY","Libya",3.2,"Africa","AF","Libyan Arab Jamahiriya","LY",434
+"96","LCA","Saint Lucia",3.857142857,"North America",NA,"Saint Lucia","LC",662
+"97","LIE","Liechtenstein",2.56,"Europe","EU","Liechtenstein, Principality of","LI",438
+"98","LSO","Lesotho",2.641666667,"Africa","AF","Lesotho, Kingdom of","LS",426
+"99","LTU","Lithuania",2.507528232,"Europe","EU","Lithuania, Republic of","LT",440
+"100","LUX","Luxembourg",2.599122807,"Europe","EU","Luxembourg, Grand Duchy of","LU",442
+"101","LVA","Latvia",2.591316527,"Europe","EU","Latvia, Republic of","LV",428
+"102","MAR","Morocco",2.457657658,"Africa","AF","Morocco, Kingdom of","MA",504
+"103","MCO","Monaco",2.525,"Europe","EU","Monaco, Principality of","MC",492
+"104","MDA","Moldova",3.25,"Europe","EU","Moldova, Republic of","MD",498
+"105","MDG","Madagascar",2.3,"Africa","AF","Madagascar, Republic of","MG",450
+"106","MDV","Maldives",4.5,"Asia","AS","Maldives, Republic of","MV",462
+"107","MEX","Mexico",2.720698779,"North America",NA,"Mexico, United Mexican States","MX",484
+"108","MLI","Mali",2.65,"Africa","AF","Mali, Republic of","ML",466
+"109","MLT","Malta",2.375757576,"Europe","EU","Malta, Republic of","MT",470
+"110","MNE","Montenegro",2.711601307,"Europe","EU","Montenegro, Republic of","ME",499
+"111","MUS","Mauritius",2.85,"Africa","AF","Mauritius, Republic of","MU",480
+"112","MWI","Malawi",NA,"Africa","AF","Malawi, Republic of","MW",454
+"113","MYS","Malaysia",2.722875817,"Asia","AS","Malaysia","MY",458
+"114","NAM","Namibia",3.6,"Africa","AF","Namibia, Republic of",NA,516
+"115","NER","Niger",3.5,"Africa","AF","Niger, Republic of","NE",562
+"116","NGA","Nigeria",3.163157895,"Africa","AF","Nigeria, Federal Republic of","NG",566
+"117","NIC","Nicaragua",3.014814815,"North America",NA,"Nicaragua, Republic of","NI",558
+"118","NLD","Netherlands",2.479205607,"Europe","EU","Netherlands, Kingdom of the","NL",528
+"119","NOR","Norway",2.58974359,"Europe","EU","Norway, Kingdom of","NO",578
+"120","NPL","Nepal",2.391666667,"Asia","AS","Nepal, State of","NP",524
+"121","NZL","New Zealand",2.455102041,"Oceania","OC","New Zealand","NZ",554
+"122","OMN","Oman",2.666666667,"Asia","AS","Oman, Sultanate of","OM",512
+"123","PAK","Pakistan",2.881828704,"Asia","AS","Pakistan, Islamic Republic of","PK",586
+"124","PAN","Panama",2.628571429,"North America",NA,"Panama, Republic of","PA",591
+"125","PER","Peru",2.515037594,"South America","SA","Peru, Republic of","PE",604
+"126","PHL","Philippines",2.848375612,"Asia","AS","Philippines, Republic of the","PH",608
+"127","POL","Poland",2.992961722,"Europe","EU","Poland, Republic of","PL",616
+"128","PRK","Korea, North",2.8,"Asia","AS","Korea, Democratic People's Republic of","KP",408
+"129","PRT","Portugal",2.860512028,"Europe","EU","Portugal, Portuguese Republic","PT",620
+"130","PRY","Paraguay",3.25,"South America","SA","Paraguay, Republic of","PY",600
+"131","QAT","Qatar",2.59047619,"Asia","AS","Qatar, State of","QA",634
+"132","ROU","Romania",2.707017544,"Europe","EU","Romania","RO",642
+"133","RUS","Russia",2.612,"Asia","AS","Russian Federation","RU",643
+"134","RUS","Russia",2.612,"Europe","EU","Russian Federation","RU",643
+"135","RWA","Rwanda",3.4,"Africa","AF","Rwanda, Republic of","RW",646
+"136","SAU","Saudi Arabia",2.55,"Asia","AS","Saudi Arabia, Kingdom of","SA",682
+"137","SEN","Senegal",3.6,"Africa","AF","Senegal, Republic of","SN",686
+"138","SGP","Singapore",2.930555556,"Asia","AS","Singapore, Republic of","SG",702
+"139","SLV","El Salvador",3.1,"North America",NA,"El Salvador, Republic of","SV",222
+"140","SMR","San Marino",2.52,"Europe","EU","San Marino, Republic of","SM",674
+"141","SOM","Somalia",2.22,"Africa","AF","Somalia, Somali Republic","SO",706
+"142","SRB","Serbia",2.727192982,"Europe","EU","Serbia, Republic of","RS",688
+"143","STP","Sao Tome and Principe",NA,"Africa","AF","Sao Tome and Principe, Democratic Republic of","ST",678
+"144","SUR","Suriname",2.771428571,"South America","SA","Suriname, Republic of","SR",740
+"145","SVK","Slovakia",2.797435897,"Europe","EU","Slovakia (Slovak Republic)","SK",703
+"146","SVN","Slovenia",3.005769231,"Europe","EU","Slovenia, Republic of","SI",705
+"147","SWE","Sweden",2.539221364,"Europe","EU","Sweden, Kingdom of","SE",752
+"148","SYR","Syria",2.9,"Asia","AS","Syrian Arab Republic","SY",760
+"149","THA","Thailand",2.696581197,"Asia","AS","Thailand, Kingdom of","TH",764
+"150","TTO","Trinidad and Tobago",2.95,"North America",NA,"Trinidad and Tobago, Republic of","TT",780
+"151","TUN","Tunisia",2.54,"Africa","AF","Tunisia, Tunisian Republic","TN",788
+"152","TUR","Turkey",3.147140156,"Asia","AS","Turkey, Republic of","TR",792
+"153","TUR","Turkey",3.147140156,"Europe","EU","Turkey, Republic of","TR",792
+"154","TWN","Taiwan",2.593711494,"Asia","AS","Taiwan","TW",158
+"155","TZA","Tanzania",3.1,"Africa","AF","Tanzania, United Republic of","TZ",834
+"156","UGA","Uganda",2.8,"Africa","AF","Uganda, Republic of","UG",800
+"157","UKR","Ukraine",2.802430556,"Europe","EU","Ukraine","UA",804
+"158","URY","Uruguay",2.733333333,"South America","SA","Uruguay, Eastern Republic of","UY",858
+"159","USA","United States",2.742760572,"North America",NA,"United States of America","US",840
+"160","UZB","Uzbekistan",1.5,"Asia","AS","Uzbekistan, Republic of","UZ",860
+"161","VCT","Saint Vincent and the Grenadines",NA,"North America",NA,"Saint Vincent and the Grenadines","VC",670
+"162","VEN","Venezuela",2.842857143,"South America","SA","Venezuela, Bolivarian Republic of","VE",862
+"163","VNM","Vietnam",2.571865616,"Asia","AS","Vietnam, Socialist Republic of","VN",704
+"164","VUT","Vanuatu",NA,"Oceania","OC","Vanuatu, Republic of","VU",548
+"165","ZAF","South Africa",2.648204265,"Africa","AF","South Africa, Republic of","ZA",710
+"166","ZMB","Zambia",2,"Africa","AF","Zambia, Republic of","ZM",894
+"167","ZWE","Zimbabwe",2.833333333,"Africa","AF","Zimbabwe, Republic of","ZW",716
