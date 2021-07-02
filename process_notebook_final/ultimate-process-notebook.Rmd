@@ -46,7 +46,7 @@ streamline platforms to look into from where people seek information and how the
 
 ### ***How many participants were part of this global survey despite this hard time?***
 
-The COVIDiSTRESS global survey is an international collaborative undertaking for data gathering on people’s experiences, behavior and attitudes during the COVID-19 pandemic. In particular, the survey focuses on psychological stress, compliance with behavioral guidelines to slow the spread of Coronavirus, and trust in governmental institutions and their preventive measures, but multiple further items and scales are included for descriptive statistics, further analysis and comparative mapping between participating countries. Data is being collected by committed researchers in **43+** countries. Data is collected through online means, mainly based on _social snowballing_, _viral spread_ and help from interested partners including _media_. We perform a basic descriptive statistics to analyze the trend of the survey and report the how across different countries the participants have coordinated to this task.
+The "*COVIDiSTRESS global survey*" is an international collaborative undertaking for data gathering on people’s experiences, behavior and attitudes during the COVID-19 pandemic. In particular, the survey focuses on psychological stress, compliance with behavioral guidelines to slow the spread of Coronavirus, and trust in governmental institutions and their preventive measures, but multiple further items and scales are included for descriptive statistics, further analysis and comparative mapping between participating countries. Data is being collected by committed researchers in **169** countries. Data is collected through online means, mainly based on _social snowballing_, _viral spread_ and help from interested partners including _media_. We perform a basic descriptive statistics to analyze the trend of the survey and report the how across different countries the participants have coordinated to this task.
 
 ### ***How was Twitter serving during this distress period?***
 
@@ -70,11 +70,11 @@ Dataset can be downloaded here:
 
 ### **Twitter Data**
 
-We aim to work on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+We worked on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
 
 Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
 
-Data scraping techniques we heavily part of this like removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
+After extracting tweets we performed certian preprocessing techniques such as removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
 
 ### **COVID-19 Infodemics Observatory**
 
@@ -92,16 +92,380 @@ These datasets comprises of summary of infodemics data collected from across cou
 
 ```{r setup, include=FALSE}
 chooseCRANmirror(graphics=FALSE, ind=1)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 source("libloader.R")
 ```
+
+## **Twitter Analysis**
+
+We have primarily two datasets - one of them contains tweets from the onset of the pandemic and the other are very recent tweets (**June 2021**). Our main objective here is to figure out how the sentiments have changed over the months.
+
+( _For the security purposes, we show the skeletal code to extract the tweets using dummy credentials. We would load the data via .rds file for our extracted tweets._ [@twitterTutorial] )
+
+```{r tw-con, echo=T, message=F, warning=F, eval=F}
+appname <- "CovidDistress"
+key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
+secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
+access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
+access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+twitter_token <- create_token(
+  app = appname,
+  consumer_key = key,
+  consumer_secret = secret,
+  access_token = access_token,
+  access_secret = access_secret,
+  set_renv = TRUE)
+corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", n=20000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+saveRDS(corona_tweets, "tweets2021.rds")
+```
+
+```{r tw-read-data, echo=T, message=F, warning=F, eval=T}
+tweets2021_raw <- readRDS("tweets2021.rds")
+tweets2020_raw <- read.csv("Covid-tweets_2020.csv")
+```
+
+There are `r nrow(tweets2021_raw)` tweets from the dataset which is more than what we intended. This is because we set **retryonratelimit** to TRUE. These tweets are dated from ***`r format(as.Date(min(tweets2021_raw$created_at)), "%B %d %Y")`*** to ***`r format(as.Date(max(tweets2021_raw$created_at)), "%B %d, %Y")`***
+
+
+( _Showing a sample row from the dataset_ )
+
+```{r echo=FALSE}
+gt::gt(tweets2021_raw[1,])
+```
+
+
+```{r tw-hashtag, eval=FALSE, echo=F, message=F, warning=F}
+tweets2021_vaccine<- search_tweets(q = "#vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_vaccine_and_covid19<- search_tweets(q = "#covid19 AND #vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job <- search_tweets(q = "#job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job_covid19 <- search_tweets(q = "#covid19 AND #job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_jobloss <- search_tweets(q = "#covid19 AND #jobloss", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+```
+
+To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns.
+
+```{r datacleaning, echo=FALSE, message=FALSE, results='hide'}
+colnames(tweets2021_raw)
+```
+
+For more useful insights for our task, we use only the columns "**text**", "**hashtags**" and "**location**" and we specifically clean up the columns text and hashtags.
+
+The extracted tweets are categorized based on countries and the count is shown below:
+
+```{r tw-counts-by-countries, echo=T, message=FALSE, warning=FALSE}
+tweets2021_raw %>% 
+  filter(!is.na(location) & location != "") %>% 
+  count(location, sort = TRUE) %>% 
+  top_n(10)
+tweets2020_raw %>% 
+  filter(!is.na(user_location) & user_location != "") %>% 
+  count(user_location, sort = TRUE) %>% 
+  top_n(10)
+```
+
+It is however important to note that Twitter API is based on _relevance_ and not _completeness._ <https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview>
+
+Below are the most occurring hashtags in the extracted tweets:
+
+```{r tw-tag-count, echo=T, message=FALSE, warning=FALSE}
+`%notin%` <- Negate(`%in%`)
+tweets2021_raw %>% 
+  unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(hashtag, "^#"),
+        hashtag %notin% c("#coronavirus","#COVID19", "#covid19","#Covid19", "#Coronavirus")) %>%
+  count(hashtag, sort = TRUE) %>%
+  top_n(10)
+```
+
+## **Word Cloud of popular tags from 2020 and 2021**
+
+### **Tags of 2021 consisting of a single item from a sequence - Unigrams**
+
+In Unigram we assume that the occurrence of each word is independent of its previous word.
+
+```{r tw-uni-21, echo=T, message=FALSE, warning=FALSE}
+words <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  count(word, sort = TRUE)
+words %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It can be seen that in **2021** the greater prominence is given to tweets with hashtags "**capacity**" that appear more frequently in the recent time period. From our research it was found that CAPACITY is a registry of patients with COVID-19 and has been established to answer questions on the role of cardiovascular disease in this pandemic.
+
+
+### **Tags of 2020 consisting of a single item from a sequence - Unigrams**
+
+```{r tw-uni-20, echo=T, message=FALSE, warning=FALSE}
+words_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  count(word, sort = TRUE)
+words_2020 %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It is pretty evident that "**coronavirus**" outweigh other tags in the year **2020** which was trending when the arrival of the pandemic was sensed which remarks the global sentiment to a large extent. 
+
+
+### **Tags of 2021 consisting of a two-word sequence - Bigrams**
+
+```{r tw-bi-21, eval=T, echo=T, message=FALSE, warning=FALSE}
+words_bigrams <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+words_bigrams %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It is evident that a conjunctive words such as "**min age**", "**covid 19 pune**" are more frequent and also two-word sequences like "**delta variant**", "**vaccines covishield**" also draws into an attention towards novelty which is more significant in recent times.
+
+
+### **Tags of 2020 consisting of a two-word sequence - Bigrams**
+
+```{r tw-bi-20, echo=T, message=FALSE, warning=FALSE, eval=T}
+
+words_bigrams_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+ 
+words_bigrams_2020 %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+In the latter 2020 when the outbreak was sensed "wuhan coronavirus", "coronavirus outbreak" was more to be noticeable in the twitter community.
+
+## **Sentiment Analysis**
+
+We perform some study on the subjective information in an expression by performing *Sentimental analysis* to assimilate the tone of the emotion as positive or negative.
+
+```{r, echo=F, message=FALSE, warning=FALSE, results='hide'}
+tweet2021_wordlist <- tweets2021_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+tweet2020_wordlist <- tweets2020_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+```
+
+
+```{r tw-senti-top-15, echo=T, message=FALSE, warning=FALSE, fig.width=12, fig.height=10}
+library(patchwork)
+
+p1 <- tweet2021_wordlist %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets in 2021 June")
+
+p2 <- tweet2020_wordlist %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets in 2020 May")
+
+p1 + p2
+```
+
+We are plotting the top **15** words that appeared in twitter in 2020 and 2021.
+
+
+### **Pie chart for NRC emotions and its proportion in 2021**
+
+```{r, 2021_data_sent_analysis, cache=TRUE, echo=F, message=FALSE, warning=FALSE, results='hide'}
+tweets2021DF <- tweets2021_raw['text']
+#Clean text data - remove emoticons and other symbols
+tweets2021DF$text <- iconv(tweets2021DF$text,'UTF-8','ASCII')
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+tweets2021DF_clean <- f_clean_tweets(tweets2021DF)
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2021DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2021DF_clean)
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+```
+
+
+```{r pie-1, echo=T, message=FALSE, warning=FALSE}
+
+df <- data.frame(
+  group = sentiment_scores$sentiment,
+  value = sentiment_scores$Score
+  )
+
+fig <- plot_ly(df, labels = sentiment_scores$sentiment, values = sentiment_scores$Score, type = 'pie')
+fig %>% layout(title = 'Emotions of people behind the tweets on COVID19 in 2021',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+
+
+### **Pie chart for NRC emotions and its proportion in 2020**
+
+```{r 2020_data_sent_analysis, echo=F, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
+
+tweets2020DF <- tweets2020_raw['text']
+#Clean text data - remove emoticons and other symbols
+tweets2020DF$text <- iconv(tweets2020DF$text,'UTF-8','ASCII')
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+tweets2020DF_clean <- f_clean_tweets(tweets2020DF)
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2020DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2020DF_clean)
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+
+```
+
+```{r pie-2, echo=F, message=FALSE, warning=FALSE}
+
+df <- data.frame(
+  group = sentiment_scores$sentiment,
+  value = sentiment_scores$Score
+  )
+
+fig <- plot_ly(df, labels = sentiment_scores$sentiment, values = sentiment_scores$Score, type = 'pie')
+fig %>% layout(title = 'Emotions of people behind the tweets on COVID19 in 2020',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+
+Based on a comparative analysis, we infer that in the year 2021 the most dominant sentiment across people was positive while it was negative in the year 2020.
 
 
 ## **IRI world evolution**
 
 First we analyze how the IRI took form across the world during the first quarter of 2020.
 
-```{r data-2, echo=TRUE, message=F, warning=F}
+```{r data-2, echo=F, message=F, warning=F}
 RESOURCES_DIR_PATH <- getwd()
 
 INFODEMIC_REDUCED_FILE_PATH <- file.path(RESOURCES_DIR_PATH, "infodemics_reduced.csv")
@@ -917,7 +1281,7 @@ The majority of respondents __(67.16%)__ were in full-time, part-time work or se
 
 The age of the respondents ranged from __18__ to __110__, with a median age of __38__.
 
-Individuals’ general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures
+Individual's general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures
 participants’ stress during the last week by using indicators of stress responses, for instance, perceived lack of control over events, pressure from mounting difficulties and feeling upset about unexpected changes. Scores are considered __moderate__ above __2.4__, and __high__ above __3.7__. Levels of stress were moderate or lower in many countries. Poland and Portugal reported the highest levels of stress in Europe, and Denmark and the Netherlands the lowest.
 
 Levels of stress remained fairly stable over the middle of April, with a negligible decrease between April 4th and April 13th. Overall levels of stress remained higher in women compared to men throughout the period under consideration.
@@ -929,7 +1293,13 @@ __contracting the new disease__ .
 
 Participants were asked how much they trusted six key institutions , in relation to the COVID-19 emergency (on a scale from 1 = not at all to 10 = completely). Specifically, participants were asked about their trust towards the __health care systems__ , the __World Health Organization (W.H.O.)__, the __national governments’ efforts to tackle the COVID-19__ , the __Police__ , the __civil service__ and the national __government__.
 
-Overall, it was reported only medium levels of trust, with the highest levels of trust for their countries’ healthcare system and the WHO. Trust towards the national government was relatively lower, compared to the other institutions examined.
+Participants were also asked questions related on **which things they worry about the most** during the pandemic. An interesting finding here was that people worry **most** about their *family* and *country* and **least** about *themselves*. 
+
+Overall, it was reported only medium levels of trust, with the highest levels of trust for their countrie's *healthcare system* and the *WHO*. Trust towards the national government was relatively lower, compared to the other institutions examined. People also prefer the information coming from friends or other people they know.
+
+The people were also asked question related to instruction that were given to them by Government and other international health organization to stop the spread of corona virus. Surprisingly, most of the choose the option that follow all the instructions given to them to help stop the corona virus spread.
+
+The bivariate relationship between extraversion, perceived Support, Perceived Stress, Loneliness is reported in the survey. Perceived stress tends to decrease with support and increases with loneliness. Overall, the level of stress remained higher in women compared to men throughout the period under consideration.
 
 
 ## ***Twitter***
@@ -979,6 +1349,10 @@ To our readers we therefore request to abide to the following in the near future
 </center>
 
 # **Glossary** {-}
+
+Extraversion
+
+: Extraversion indicates how outgoing and social a person is.
 
 Infodemic
 
