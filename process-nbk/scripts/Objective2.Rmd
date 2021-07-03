@@ -98,17 +98,6 @@ tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_
 ```
 
 
-**To be added**
-1. English Word Cloud (Old Vs New)
-2. Frequency Chart (Old Vs New)
-3. Postive and Negative Common Words (Old Vs New)
-4. Sentiment Analysis Bar graph (Old Vs New)
-5. A world map for seeing the tweets world wide (Old Vs New If Possible)
-6. German Word Cloud
-7. Sentiment Regarding Vaccine Word Cloud/Bar Graph
-8. Prefferred Vaccine Word Cloud/Bar Graph
-9. Mental Health Word Cloud/Bar Graph
-
 # Data Exploration
 
 To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns
@@ -546,8 +535,7 @@ head(covid_words_counts)
 library(igraph)
 library(ggraph)
 
-# plot climate change word network
-# (plotting graph edges is currently broken)
+
 covid_words_counts %>%
         filter(n >= 100) %>%
         graph_from_data_frame() %>%
