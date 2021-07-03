@@ -62,15 +62,15 @@ Folder Structure :open_file_folder:
     ├── LICENSE
     └── README.md
 
-## `Process Notebook`
+## `Process Notebook` :open_book:
 
-## `Screencast`
+## `Screencast` :arrow_forward:	
 
-## `Project website`
+## `Project website` :trackball:
 - https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
-To launch the app:
+To launch the app :point_up_2: :
 
 ```
 library(shiny)
