@@ -1,4 +1,7 @@
 library(shiny)
+library(shinyjs)
+library(shinyBS)
+library(shinyWidgets)
 library(shinythemes)
 library(ggplot2)
 library(plotly)
@@ -15,38 +18,48 @@ data_scatterplot_gov <- read.csv("data_scatter_gov.csv")
 data_scatterplot_scient <- read.csv("data_scatter_scient.csv")
 sentiment_2021 <- read.csv("sentiment_scores_2021.csv")
 sentiment_2020 <- read.csv("sentiment_scores_2020.csv")
-
+distress_source <- read.csv("distress_source.csv")
+coping_source <- read.csv("coping_source.csv")
 
 
 ui <-
   fluidPage(
     theme = shinytheme("flatly"),
-    fixedRow(
+    useShinyjs(),
+    fluidRow(
+      style = "background-color: #00081e",
       column(1, br(),
              tags$div(
-               tags$a(href = "https://www.inf.ovgu.de/",
+               tags$a(href = "https://github.com/ranjiGT/Data-Science-with-R-2021",
                       tags$div(
                         id = "logo-img",
                         tags$img(src = "logo.png", width = "170px")
-                      )),
+                      ))
              )),
       br(),
-      column(7, offset = 1, br(),
+      column(6, offset = 1, br(),
              tags$div(
                # tags$img(src = "Heading.PNG", width = "900px")
-               tags$h1("Psychological & Behavioural Distress of COVID-19 & Infodemics")
+               tags$h1(
+                 style = "color: #FFFFFF",
+                 "Psychological & Behavioural Distress of",
+                 br(),
+                 "COVID-19 & Infodemics",
+                 
+               )
              )),
-      column(1, offset = 1,
+      column(1,
+             tags$img(src = "corona.gif", width = "250px")),
+      column(2, offset = 1,
              tags$div(
                tags$a(href = "https://brain.cs.uni-magdeburg.de/kmd/DataSciR/",
                       tags$div(
                         id = "dsrlogo-img",
                         tags$img(src = "DScR.png", width = "145px")
-                      )),
+                      ))
              ))
       
     ),
-    br(),
     
     tabsetPanel(
       tabPanel("Overview",
@@ -54,22 +67,60 @@ ui <-
                  column(
                    7,
                    br(),
-                   tags$h4("Background And Motivation"),
-                   
-                   "The coronavirus COVID-19 pandemic is an unprecedented health crisis that has impacted the world to a large extent.
-                       According to WHO, mental disorders are one of the leading causes of disability worldwide, so considering that this pandemic
+                   br(),
+                   bsCollapse(
+                     id = "collapseExample",
+                     open = "Background And Motivation",
+                     bsCollapsePanel(
+                       "Background And Motivation",
+                       "The coronavirus COVID-19 pandemic is an unprecedented health crisis that has impacted the world to a large extent.",
+                       br(),
+                       br(),
+                       "According to WHO, mental disorders are one of the leading causes of disability worldwide, so considering that this pandemic
                        has caused further complications to mental ailment. The stress, anxiety, depression stemming from fear, isolation, and stigma
                        around COVID-19 affected all of us in one way or another. We could see that many people are losing their jobs and the elderly
                        are isolated from their usual support network. The issue is that the effects of the pandemic and mental health, maybe for
                        longer-lasting than the disease itself.",
-                   br(),
-                   br(),
-                   "In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels,
+                       br(),
+                       br(),
+                       "In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels,
                        our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point,
                        both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified
                        the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and
-                       portray some meaningful insights on global survey data."
-                   
+                       portray some meaningful insights on global survey data.",
+                       style = "primary"
+                     ),
+                     bsCollapsePanel(
+                       "Objectives",
+                       panel(
+                         style = "overflow-y:scroll; max-height: 280px; position:relative; align: centre",
+                         "1. Here we aim to analyze and visualize the survey dataset to come up with certain descriptive and diagnostic statistics
+                   including the number of countries that participated in the survey. We look forward to analyzing the various stress levels
+                   from each country, with a focus on visualizing the distress scale with the source of distress and the level of distress.
+                   Further, we plan to visualize the coping scale which consists of the source of coping and detailing what was the personal
+                   conscious effort, to solve personal and interpersonal problems, to master, minimize or tolerate stress and conflict. We also
+                   target to depict the visualization of the level of trust such as Country's Civil service, Country's Police, Country's Healthcare
+                   system, WHO, Government's measures against COVID which also play a crucial role. We extend to diagnose on areas such as compliance
+                   and the level of agreement, the concern level, and the key factor of media from where the respondents sought to agree to take the
+                   information from. The different relationship between perceived stress, social support, loneliness, and extroversion according to
+                   different age groups will also be set as our basis for analysis.",
+                         br(),
+                         br(),
+                         "2. We propose to know the impact of COVID-19 tackling infodemics and misinformation on Twitter. This is done by extracting recent
+                   popular tweets from a specific location across different countries. It will help us describe the false information that is spread
+                   with the sole purpose of causing confusion and harm. We target to extract hashtags like #covid19, #misinformation, #fakenews, #disinformation,
+                   #, etc., to get the related posts about it and analyze how the information processing and decision-making behaviors are compromised.
+                   We perform sentimental analysis on the tweets to understand the sentiments of people which is crucial during the time of this pandemic.",
+                         br(),
+                         br(),
+                         "3. Our final key interest is to perform a comparative analysis on `Infodemics`. That is to outline the interaction patterns of fake news
+                   information spreading across media. The news which is rolled out in different environments having different interaction settings and
+                   audiences are verified. We report the rumor amplification parameters for each of the social media platform due to COVID-19 to show how
+                   the misinformation is spread on different mainstream online platforms."
+                       ),
+                       style = "info"
+                     )
+                   )
                  ),
                  
                  column(
@@ -83,45 +134,21 @@ ui <-
                      allow = "accelerometer;
                                 autoplay; encrypted-media; gyroscope; picture-in-picture",
                      allowfullscreen = NA,
-                     width = "540px",
-                     height = "263px"
-                   )
-                 ),
-                 
-                 fluidRow(
-                   column(
-                     9,
-                     offset = 1,
-                     br(),
-                     
-                     tags$h4("Objectives"),
-                     
-                     "1. Here we aim to analyze and visualize the survey dataset to come up with certain descriptive and diagnostic statistics
-                   including the number of countries that participated in the survey. We look forward to analyzing the various stress levels
-                   from each country, with a focus on visualizing the distress scale with the source of distress and the level of distress.
-                   Further, we plan to visualize the coping scale which consists of the source of coping and detailing what was the personal
-                   conscious effort, to solve personal and interpersonal problems, to master, minimize or tolerate stress and conflict. We also
-                   target to depict the visualization of the level of trust such as Country's Civil service, Country's Police, Country's Healthcare
-                   system, WHO, Government's measures against COVID which also play a crucial role. We extend to diagnose on areas such as compliance
-                   and the level of agreement, the concern level, and the key factor of media from where the respondents sought to agree to take the
-                   information from. The different relationship between perceived stress, social support, loneliness, and extroversion according to
-                   different age groups will also be set as our basis for analysis.",
-                     br(),
-                     br(),
-                     "2. We propose to know the impact of COVID-19 tackling infodemics and misinformation on Twitter. This is done by extracting recent
-                   popular tweets from a specific location across different countries. It will help us describe the false information that is spread
-                   with the sole purpose of causing confusion and harm. We target to extract hashtags like #covid19, #misinformation, #fakenews, #disinformation,
-                   #, etc., to get the related posts about it and analyze how the information processing and decision-making behaviors are compromised.
-                   We perform sentimental analysis on the tweets to understand the sentiments of people which is crucial during the time of this pandemic.",
-                     br(),
-                     br(),
-                     "3. Our final key interest is to perform a comparative analysis on `Infodemics`. That is to outline the interaction patterns of fake news
-                   information spreading across media. The news which is rolled out in different environments having different interaction settings and
-                   audiences are verified. We report the rumor amplification parameters for each of the social media platform due to COVID-19 to show how
-                   the misinformation is spread on different mainstream online platforms."
-                     
-                     
-                   )
+                     width = "575px",
+                     height = "320px"
+                   ),
+                   br(),
+                   br(),
+                   column(1,
+                          offset = 2,
+                          br(),
+                          tags$div(
+                            tags$a(href = "https://www.inf.ovgu.de/",
+                                   tags$div(
+                                     id = "fin",
+                                     tags$img(src = "fin_transp.png", width = "350px")
+                                   ))
+                          ))
                  )
                )),
       tabPanel(
@@ -153,28 +180,28 @@ ui <-
           tabPanel(
             "Sources of Distress",
             fluidRow(column(
-              1,
-              offset = 3,
+              12,
               br(),
-              
-              tags$img(src = "Sources_of_Distress.png", width = "550px")
+              plotlyOutput("distress_source", height = "535px"),
             )),
             br(),
             "The above bar plot shows the level of stress for different sources. People are more stressed due to the fear of economy
-                          collapse and catching corona virus but having no religious activities have causes least stress to the people."
+                          collapse and catching corona virus but having no religious activities have causes least stress to the people.",
+            br(),
+            br()
           ),
           tabPanel(
             "Coping with Stress",
             fluidRow(column(
-              1,
-              offset = 3,
+              12,
               br(),
-              
-              tags$img(src = "coping_corona.png", width = "550px")
+              plotlyOutput("coping_source", height = "535px"),
             )),
             br(),
             "The above boxplot represents which methods people are using to cope with the Corona stress. According to this survey, people
-            prefer the long range interaction with family and friends and spend time doing some hobby to cope with the Corona stress."
+            prefer the long range interaction with family and friends and spend time doing some hobby to cope with the Corona stress.",
+            br(),
+            br()
           ),
           tabPanel(
             "Bivariate Relationship",
@@ -210,7 +237,7 @@ ui <-
                                   column(
                                     1,
                                     offset = 1,
-                                    br(),
+                                    # br(),
                                     
                                     tags$img(
                                       src = "wordcloud_2020.png",
@@ -487,11 +514,227 @@ ui <-
                  class = "data-panel",
                  navlistPanel(
                    tabPanel("Stress Analysis",
-                            fluidRow()),
+                            fluidRow(column(
+                              width = 12,
+                              br(),
+                              panel(
+                                style = "overflow-y:scroll; max-height: 400px; position:relative; align: centre",
+                                
+                                
+                                "The countries included in the analyses, and the respective sample size, are:",
+                                tags$b("Austria"),
+                                "(279)",
+                                tags$b("Belgium"),
+                                " (557)",
+                                tags$b("Bulgaria"),
+                                " (4,538)",
+                                tags$b("Croatia"),
+                                " (2,909)",
+                                tags$b("Cyprus"),
+                                " (34)",
+                                tags$b("Czech Republic"),
+                                "(1,344)",
+                                tags$b("Denmark"),
+                                " (10,327)",
+                                tags$b("Estonia"),
+                                " (34)",
+                                tags$b("Finland"),
+                                " (20,810)",
+                                tags$b("France") ,
+                                "(12,446)",
+                                tags$b("Germany"),
+                                " (1,271)",
+                                tags$b("Greece"),
+                                " (628)",
+                                tags$b("Hungary"),
+                                " (1,427)",
+                                tags$b("Ireland"),
+                                " (209)",
+                                tags$b("Italy"),
+                                " (1,370)",
+                                tags$b("Latvia"),
+                                " (22)",
+                                tags$b("Lithuania"),
+                                " (8,056)",
+                                tags$b("Luxembourg"),
+                                " (59)",
+                                tags$b("Malta"),
+                                " (21)",
+                                tags$b("Netherlands"),
+                                " (1256)",
+                                tags$b("Poland"),
+                                " (3,052)",
+                                tags$b("Portugal"),
+                                " (827)",
+                                tags$b("Romania"),
+                                " (189)",
+                                tags$b("Slovakia"),
+                                " (597)",
+                                tags$b("Slovenia"),
+                                " (21)",
+                                tags$b("Spain"),
+                                " (554)",
+                                tags$b("Sweden"),
+                                " (2,733).",
+                                br(),
+                                br(),
+                                "Respondents were",
+                                tags$b("74.18%"),
+                                " female, ",
+                                tags$b("24.63%"),
+                                " male. The remaining respondents answered 'other' or did not provide an answer.",
+                                br(),
+                                "The majority of respondents",
+                                tags$b("(67.16%)"),
+                                " were in full-time, part-time work or self-employed,",
+                                tags$b("16.06%"),
+                                " were either unemployed or
+                                retired,",
+                                tags$b("16.79%"),
+                                " were students.",
+                                br(),
+                                br(),
+                                "The age of the respondents ranged from ",
+                                tags$b("18"),
+                                " to ",
+                                tags$b("110"),
+                                ", with a median age of ",
+                                tags$b("38"),
+                                ".",
+                                br(),
+                                br(),
+                                "Individual's general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures
+                                participants' stress during the last week by using indicators of stress responses, for instance, perceived lack of control over events,
+                                pressure from mounting difficulties and feeling upset about unexpected changes. Scores are considered ",
+                                tags$b("moderate"),
+                                " above ",
+                                tags$b("2.4"),
+                                ",
+                                and ",
+                                tags$b("high"),
+                                " above ",
+                                tags$b("3.7"),
+                                ". Levels of stress were moderate or lower in many countries. Poland and Portugal reported the highest
+                                levels of stress in Europe, and Denmark and the Netherlands the lowest.",
+                                br(),
+                                br(),
+                                "Levels of stress remained fairly stable over the middle of April, with a negligible decrease between April 4th and
+                                April 13th. Overall levels of stress remained higher in women compared to men throughout the period under consideration.",
+                                br(),
+                                br(),
+                                "Participants were asked to indicate the extent to which a range of different
+                                factors represented a source of distress during the COVID-19 health crisis. Specifically, participants indicated their d
+                                isagreement or agreement with how much each factor from a list represented a source of distress",
+                                tags$i("( _1 = Strongly Disagree,
+                                6 = Strongly Agree_ )"),
+                                ". Results indicated that people were on average concerned with the ",
+                                tags$b("state of the national economy"),
+                                ".
+                                Economic considerations were followed closely by
+                                ",
+                                tags$b("health-related risks"),
+                                " , such as the risks of ",
+                                tags$b("being hospitalized"),
+                                " and of",
+                                tags$b("contracting the new disease"),
+                                " .",
+                                br(),
+                                br(),
+                                "Participants were asked how much they trusted six key institutions , in relation to the COVID-19 emergency
+                                (on a scale from 1 = not at all to 10 = completely). Specifically, participants were asked about their trust
+                                towards the ",
+                                tags$b("health care systems"),
+                                " , the ",
+                                tags$b("World Health Organization (W.H.O.)"),
+                                ", the ",
+                                tags$b("national governments' efforts to tackle the COVID-19"),
+                                " , the ",
+                                tags$b("Police"),
+                                " , the ",
+                                tags$b("civil service"),
+                                " and the national ",
+                                tags$b("government"),
+                                ".",
+                                br(),
+                                br(),
+                                "Overall, it was reported only medium levels of trust, with the highest levels of trust for their countrie's
+                                ",
+                                tags$b("healthcare system"),
+                                " and the ",
+                                tags$b("WHO"),
+                                ". Trust towards the national government was relatively lower,
+                                compared to the other institutions examined."
+                                
+                              )
+                            ))),
                    tabPanel("Infodemics",
-                            fluidRow()),
+                            fluidRow(column(
+                              width = 12,
+                              br(),
+                              
+                              panel(
+                                style = "overflow-y:scroll; max-height: 400px; position:relative; align: centre",
+                                
+                                "Just as we need to flatten the Covid-19 curve we must also tackle the infodemic curve. Just as with Covid-19 we must attack the curve on two fronts (suppress the contagion and increase our capacity to deal with the surge of information that is coming our way).",
+                                br(),
+                                "A comparative correlation for the trust in media with factors concerning the following were taken into account during our regression analysis:",
+                                br(),
+                                tags$div(tags$ul(
+                                  tags$li(
+                                    "Whether COVID-19 is a naturally occurring virus or an artificially made (e.g. lab created)? (`virus_natart`)"
+                                  )
+                                )),
+                                "From our analsyis for `virus_natart` and `media_underover` the true correlation is around",
+                                tags$b("13%"),
+                                " which means media has a very high role for overhyping over this question.",
+                                br(),
+                                tags$div(tags$ul(
+                                  tags$li(
+                                    "How is the media in general is reporting on the COVID-19 situation? Underplaying or Over-hyping or Just right. (`media_underover`)"
+                                  )
+                                )),
+                                "We compare our scores at two places one with `virus_natart` where they are overhyped over this news and for `feelinginformed_avg` they likely to be less informed since they share a negative correlation.",
+                                br(),
+                                tags$div(tags$ul(
+                                  tags$li(
+                                    "- How often a contradictory news is found and turned out to be fake news? (`fakenews`)"
+                                  )
+                                )),
+                                "Also, for `virus_natart` and `fakenews` with only just",
+                                tags$b("36%"),
+                                " it is difficult to verify the trueness of this question which is very uncertain.",
+                                br(),
+                                tags$div(tags$ul(
+                                  tags$li(
+                                    "How informed (`feelinginformed_avg`) are the citizens feeling about:"
+                                  ),
+                                  tags$ul(
+                                    tags$li("The risk of contracting COVID-19"),
+                                    tags$li("Symptoms of COVID-19"),
+                                    tags$li("How COVID-19 virus spreads?"),
+                                    tags$li("How to prevent COVID-19 from spreading?"),
+                                    tags$li("Treatment of COVID-19")
+                                  )
+                                )),
+                                
+                                "We have analyzed both of these with respect to `fakenews` and `media_underover` for the former a very low correlation is observed meaning atleast by slightly the average number of
+                                people are convinced by fake news over social media Whereas, for the latter a negative correlation to this observed meaning an average number of people are likely to be less informed
+                                by the media tacit.To our readers we therefore request to abide to the following in the near future to make sure perform the following:",
+                                tags$div(tags$ul(
+                                  tags$li("Fact check to alert yourself what is currently going around"),
+                                  tags$li("Stick to trusted sources"),
+                                  tags$li("Do not forward without checking the authenticity of messages"),
+                                  tags$li(
+                                    "Increase supply of data by engaging regularly and meaningfully on the platforms that people are already using"
+                                  )
+                                )),
+                              )
+                            ))),
                    tabPanel("Twitter Analysis",
-                            fluidRow())
+                            fluidRow(column(12,
+                                            br(
+                                              
+                                            ))))
                  )
                )),
       tabPanel("Resources",
@@ -686,6 +929,52 @@ server <- function(input, output) {
       xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2021 June")
   })
   
+  output$distress_source <- renderPlotly({
+    fig_pie <-
+      plot_ly(
+        distress_source,
+        labels = distress_source$Source,
+        values = distress_source$Value,
+        type = 'pie'
+      )
+    fig_pie %>% layout(
+      title = 'Sources of Distress during Corona',
+      xaxis = list(
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE
+      ),
+      yaxis = list(
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE
+      )
+    )
+  })
+  
+  output$coping_source <- renderPlotly({
+    fig_pie <-
+      plot_ly(
+        distress_source,
+        labels = coping_source$Source,
+        values = coping_source$Value,
+        type = 'pie'
+      )
+    fig_pie %>% layout(
+      title = 'How people usually cope with \nCorona Stress',
+      xaxis = list(
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE
+      ),
+      yaxis = list(
+        showgrid = FALSE,
+        zeroline = FALSE,
+        showticklabels = FALSE
+      )
+    )
+  })
+  
   
   # IRI Reduction Box Plot
   output$iri_red_plot <- renderPlotly({
@@ -708,15 +997,16 @@ server <- function(input, output) {
       dat.red[, c("date", "iso3", "EPI_CONFIRMED", "IRI_ALL")]
     
     for (cc in unique(dat.corr$iso3)) {
-      tmp <- dat.corr[which(dat.corr$iso3 == cc), ]
-      tmp <- tmp[order(tmp$date), ]
+      tmp <- dat.corr[which(dat.corr$iso3 == cc),]
+      tmp <- tmp[order(tmp$date),]
       tmp$EPI_CONFIRMED_DAILY <- c(0, diff(tmp$EPI_CONFIRMED))
       tmp$IRI_ALL_CUMMEAN <- dplyr::cummean(tmp$IRI_ALL)
       dat.corr2 <- rbind(dat.corr2, tmp)
     }
     
-    dat.corr2 <- dat.corr2[!is.na(dat.corr2$IRI_ALL), ]
-    dat.corr2 <- dat.corr2[-which(dat.corr2$EPI_CONFIRMED == 0), ]
+    dat.corr2 <- dat.corr2[!is.na(dat.corr2$IRI_ALL),]
+    dat.corr2 <-
+      dat.corr2[-which(dat.corr2$EPI_CONFIRMED == 0),]
     
     bin <- rep(0, nrow(dat.corr2))
     bin[which(dat.corr2$EPI_CONFIRMED <= 2)] <- 0
@@ -766,7 +1056,8 @@ server <- function(input, output) {
   get_bib <- reactive({
     df <-
       bib2df("references.bib") %>% dplyr::select(TITLE, AUTHOR, YEAR, DOI, URL)
-    df$AUTHOR <- unlist(lapply(df$AUTHOR, paste, collapse = " "))
+    df$AUTHOR <-
+      unlist(lapply(df$AUTHOR, paste, collapse = " "))
     return(df)
   })
   output$bibTable <- DT::renderDataTable({
