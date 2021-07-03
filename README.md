@@ -55,7 +55,8 @@ Folder Structure :open_file_folder:
     ├── process-nbk
             ├── data                    #Compiled files (.csv)
             ├── fig                         #Compiled images (.png, .jp(e)g)
-            └── scripts                         #Compiled codes(.R, .Rmd)
+            └── scripts                        #Compiled codes(.R, .Rmd)
+    ├── process_notebook_final                 # Final process notebook                                
     ├── project_proposal                    # Low-level design (LLD) documentation files                  
     ├── .gitignore
     ├── LICENSE
@@ -69,3 +70,9 @@ Folder Structure :open_file_folder:
 - https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
+To launch the app:
+
+```
+library(shiny)
+runApp("covid-distress-infodemics")
+```
