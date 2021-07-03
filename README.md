@@ -66,7 +66,7 @@ Folder Structure :open_file_folder:
 
 ## `Screencast`
 
-## `Project website` (_Shiny app_)
+## `Project website`
 - https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
