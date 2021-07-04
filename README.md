@@ -74,7 +74,7 @@ https://rpubs.com/ranjiraj9/covidistress
 https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
-To launch the app :point_up_2: :
+To launch the app from Rstudio :point_up_2: 
 
 ```
 library(shiny)
