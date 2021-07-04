@@ -134,7 +134,7 @@ ui <-
                    br(),
                    
                    tags$iframe(
-                     src = "https://www.youtube.com/embed/bJGFZ_1T4Us",
+                     src = "https://www.youtube.com/embed/b2b1hFEGxa8",
                      frameborder = "0",
                      allow = "accelerometer;
                                 autoplay; encrypted-media; gyroscope; picture-in-picture",
@@ -142,6 +142,7 @@ ui <-
                      width = "575px",
                      height = "320px"
                    ),
+                   
                    br(),
                    br(),
                    column(1,
@@ -984,8 +985,10 @@ ui <-
                               br(),
                               br(),
                               br(),
+                              
+                              
                               tags$a(
-                                href = "https://github.com/ranjiGT/Data-Science-with-R-2021",
+                                href = "https://www.youtube.com/watch?v=b2b1hFEGxa8",
                                 target = "_blank",
                                 tags$img(id = "yt-logo", src =
                                            "YT.svg", width = "300px")
