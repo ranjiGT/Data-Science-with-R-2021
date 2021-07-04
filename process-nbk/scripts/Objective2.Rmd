@@ -358,6 +358,7 @@ bing_word_counts %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(word, n, fill = sentiment)) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(limits=c(0, 2000)) +
   facet_wrap(~sentiment, scales = "free_y") +
   labs(title = "Sentiment with popular words during 2021 June",
        y = "Contribution to sentiment",
@@ -369,12 +370,14 @@ bing_word_counts %>%
 ```{r, eval=TRUE}
 
 bing_word_counts_2020 %>%
+  filter(word != "trump") %>%
   group_by(sentiment) %>%
   top_n(10) %>%
   ungroup() %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(word, n, fill = sentiment)) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(limits=c(0, 2000)) +
   facet_wrap(~sentiment, scales = "free_y") +
   labs(title = "Sentiment with popular words during 2020 May",
        y = "Contribution to sentiment",
