@@ -412,32 +412,52 @@ ui <-
               )
             ),
             tabPanel("Network Analysis",
-                     
-                     
-                     fluidRow(
-                       column(
-                         1,
-                         offset = 1,
-                         br(),
-                         fade_in(
-                           duration = "slow",
-                           tags$img(
-                             src = "wordNetwork_2021.png",
-                             width = "800px",
-                             height = "400px"
-                           )
-                         ),
-                         br(),
-                         br(),
-                       )
-                     ),
+                     tabsetPanel(
+                       tabPanel("2020",
+                                fluidRow(
+                                  column(
+                                    1,
+                                    offset = 1,
+                                    br(),
+                                    
+                                    fade_in(
+                                      duration = "slow",
+                                      tags$img(
+                                        src = "network2020.png",
+                                        width = "800px",
+                                        height = "400px"
+                                      )
+                                    ),
+                                    br(),
+                                    br(),
+                                  )
+                                )),
+                       
+                         tabPanel("2021",
+                                  fluidRow(
+                                    column(
+                                      1,
+                                      offset = 1,
+                                      br(),
+                                      
+                                      fade_in(
+                                        duration = "slow",
+                                        tags$img(
+                                          src = "network2021.png",
+                                          width = "800px",
+                                          height = "400px"
+                                        )
+                                      ),
+                                      br(),
+                                      br(),
+                                    )
+                                  ))),
+
                      
                      fluidRow(
                        column(
                          12,
-                         "We can vaccine a pattern here that with ",
-                         tags$b("virus"),
-                         ", words like ",
+                         "In 2020 we observe that there is not much awareness with the pandemic. In 2021 we can observe that words like ",
                          tags$b("doses"),
                          ", ",
                          tags$b("age"),
@@ -461,9 +481,7 @@ ui <-
                          " and ",
                          tags$b("Capacity"),
                          " have been the most commonly occurring words which tells us how important the number of doses and capacity
-                           in hospitals has been an issue throughout the world especially in ",
-                         tags$b("India"),
-                         ".",
+                           in hospitals has been an issue throughout the world.",
                          br(),
                          br()
                        )
