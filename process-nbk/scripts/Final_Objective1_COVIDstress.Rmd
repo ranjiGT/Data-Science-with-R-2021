@@ -1,0 +1,693 @@
+---
+title: "Covid Stress Data cleaning and Visualization"
+subtitle: Project covidistress
+Author: 'Author: Usama Ashfaq'
+output:
+  html_document:
+    toc: yes
+    df_print: paged
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+### Taken from the transparencies of
+### COVIDiSTRESS global survey network  (2020, March 30). COVIDiSTRESS global survey. DOI 10.17605/OSF.IO/Z39US, Retrieved from osf.io/z39us
+
+We will load the libraries to carry out the analyses and cleaning of the survey data which has been collected from all over the world and is available in the .csv file format. Lets start
+
+
+# Load libraries
+```{r, message = FALSE, warning=FALSE}
+library(pacman)
+
+p_load(qualtRics, tidyverse, stringr, multicon, psych)
+```
+
+Reading the COVIDSTRESS csv file. Put the file in the same working directory as R studio. The read_survey function from "qualtRics" keep the header and remove the first two non-data rows
+
+# 1.1 Load dataset
+```{r, warning=FALSE, message=FALSE}
+d <- read_survey("COVIDiSTRESS import April 6 2020 (choice values).csv")
+d
+```
+The `d` dataset contains `r nrow(d)` rows and `r ncol(d)` columns.
+
+## 1.2 Basic information about the completeness of the survey
+How many people do not give consent to participate?
+We will use only those records for which the user has marked Consent as "Yes". (Means that they have allowed their given data to be used for scientific research)
+
+```{r}
+d %>% 
+  filter(Consent == "No") %>% 
+  nrow()
+```
+644 people have marked Consent as "No". We will filter now only those records for which consent is "Yes" and use them for our futher analysis
+
+```{r}
+#Filter for cases with consent
+d <- filter(d, Consent == "Yes")
+```
+
+## 1.3 Survey completetion for those who give consent to the study
+How many participants get to the last survey page and have answered every question?
+
+```{r}
+sum(d$Finished) / nrow(d)
+```
+64.32 percent of the total people who have attended the survey have answered every question till the end of the survey. 
+
+What was the average percentage of completeness in the survey for each individual?
+
+```{r, cache=TRUE}
+participant_completeness_rate <- apply(X = d[,11:135], MARGIN = 1, FUN = function(x){
+  
+  sum(!is.na(x))/length(x)
+})
+
+describe(participant_completeness_rate)
+```
+
+On average 75 percent of the questions have been answered by all the participants.
+
+How many people have answered only one question?
+
+```{r}
+length(which(participant_completeness_rate < (2/125)))
+```
+
+Out of total 86751 participants only 8068 have answered only one question.
+
+What was the average completeness rate within each question?
+
+```{r}
+question_completeness_rate <- apply(X = d[,11:135], MARGIN = 2, FUN = function(x){
+  sum(!is.na(x))/length(x)
+})
+
+describe(question_completeness_rate)
+```
+
+The average rate of completeness for each individual question is also 75 percent.
+
+## 1.4 Visualization of the survey Trend
+
+How the trend of the survey looks like?
+
+```{r survey-trend, warning=FALSE, message=FALSE, echo=TRUE, fig.height=5, fig.width=7}
+library(ggthemes)
+library(plotly)
+df <- data.frame(seq_along(question_completeness_rate),
+                 question_completeness_rate)
+ggplotly(ggplot(df,
+                aes(x=seq_along(question_completeness_rate),
+                    y=question_completeness_rate)) +
+           geom_line() + theme_economist() +
+           ggtitle("Online survey trend of participants") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+    theme(plot.title = element_text(face = "bold")))
+```
+
+Overall the graph shows similar trend as other online survey.
+This plot is very crude but we can spot some certain issues with our survey. The general trend is similar to other online surveys however those strange drops need to be examined furhter. 
+
+1.The first two drops are the experimental questions 
+Dem$state: Open end questions. Most of the people choose not to write anything as expected.
+
+AD Gain,AD loss: If Program A is adopted, 200 people will be saved.   
+(half participant got 1 and half got 2). 
+
+2.The 3rd, 4th and 5th are open ended question.
+(Expl_Distress_txt)   
+(Expl_coping_txt ) 
+(Final_open)
+Open end questions. Most of the people choose not to write anything as expected.
+
+
+How many people have participated in the survey from each country?
+
+```{r}
+
+d %>% group_by(Country) %>% summarize(n()) %>% print(n=1000)
+```
+How many people participated in the survey according to different language they speak?
+
+```{r}
+
+d %>% group_by(UserLanguage) %>% summarize(n()) %>% print(n=1000)
+```
+
+# 2.0 Data cleaning
+
+Look at the data type. We need to recode character to factor  
+
+```{r}
+head(glimpse(d))
+```
+
+## 2.1 Recode some variables
+### 2.1.1 Recode education level (self & mom)
+
+We will remove "-" from the "Dem_edu" and "Dem_edu_mom" columns and adjust the response to a certain value to be used later for analysis and visualization.We will also group people answering "1" and "None" in the same group
+
+```{r, warning=FALSE}
+d$Dem_edu <- str_remove(d$Dem_edu, "- ")
+d$Dem_edu_mom <- str_remove(d$Dem_edu_mom, "- ")
+
+
+d$Dem_edu <- str_replace(d$Dem_edu, "None|^1", "None/Uninformative response")
+d$Dem_edu_mom <- str_replace(d$Dem_edu_mom, "None|^1", "None/Uninformative response")
+```
+
+### 2.1.2 Recode marital status 
+
+We will re-code the martial status because it is not consistent between different languages in "Qualtrics" import.
+
+"Qualtrics" is a powerful online survey tool that allows one to build surveys, distribute surveys and analyze responses from one convenient online location!
+
+```{r, warning=FALSE}
+
+library(dplyr)
+recode_if <- function(x, condition, ...) {
+  if_else(condition, recode(x, ...), x)
+}
+
+# Fix differences in scoring between english and other languages 
+d <- d %>%
+  mutate(Dem_maritalstatus = 
+           recode_if(Dem_maritalstatus, UserLanguage != "EN", 
+                     "Single" = "Other or would rather not say",
+                     "Married/cohabiting" = "Single",
+                     "Divorced/widowed"= "Married/cohabiting",
+                     "Other or would rather not say" = "Divorced/widowed"))
+```
+
+### 2.1.3 Convert character strings to factor
+
+For all demographics variables we will convert the strings to factor.
+
+```{r, warning=FALSE}
+#Demographic information
+d[,12:25] <- d[,12:25] %>% 
+  mutate_if(is.character, as.factor)
+```
+
+```{r}
+head(glimpse(d[, 12:25]))
+```
+
+### 2.1.4 Recode AD_Check, AD_gain and AD_loss
+
+We will recode the the AD_Check, AD_gain and AD_loss to shorten the response and turn the character to factor
+
+```{r, warning=FALSE}
+d <- d %>% 
+  mutate(AD_gain = factor(recode(AD_gain, 
+                          "· If Program A is adopted, 200 people will be saved." ="Program A",
+                   "· If Program B is adopted, there is 1/3 probability that 600 people will be saved, and 2/3 probability that no people will be saved" = "Program B")),
+         AD_loss = factor(recode(AD_loss, 
+                          "· If Program C is adopted 400 people will die." = "Program C",
+                          "· If Program D is adopted there is 1/3 probability that nobody will die, and 2/3 probability that 600 people will die." = "Program D")),
+         AD_check = factor(AD_check))
+```
+
+
+### 2.1.5 Convert scale responses to numeric 
+
+We will convert all the responses containing option of "Never", "Almost never","Sometimes", "Fairly often","Very often" to 1,2,3,4,5
+
+```{r, warning=FALSE}
+d <- d %>% mutate_at(
+  .vars = vars(contains("PSS10")),
+  .funs = recode, 
+  "Never" = 1, 
+  "Almost never" = 2,
+  "Sometimes" = 3, 
+  "Fairly often" = 4,
+  "Very often" = 5
+  )
+```
+
+```{r, message = FALSE, warning=FALSE}
+d <- d %>% mutate_at(
+  .vars = vars(matches("Corona_concerns|Compliance|BFF|Distress|SPS|Coping|Expl_media")),
+  .funs = recode, 
+  "Strongly disagree" = 1, 
+  "Disagree" = 2,
+  "Slightly disagree" = 3, 
+  "Slightly agree" = 4,
+  "Agree" = 5,
+  "Strongly agree" = 6
+)
+```
+### 2.1.6 Recoding Trust_countryrmeasure
+
+We will convert the strings to numeric responses.
+
+```{r, warning=FALSE}
+
+d <- d %>% mutate(
+  Trust_countrymeasure = recode(Trust_countrymeasure,
+  "Too little" = 0,
+  "1" = 1,
+  "2" = 2,
+  "3" = 3,
+  "4" = 4,
+  "Appropriate" = 5,
+  "6" = 6,
+  "7" = 7,
+  "8" = 8,
+  "9" = 9,
+  "Too much" = 10))
+```
+
+## 2.2 Create composite scores
+### 2.2.1 PSS10 and Loneliness
+
+Now, we will create the composite scores from the multiple choice question to be used for further analyses and visualization later in the notebook.
+
+```{r}
+
+PSS10set <- d[, grep("PSS10", names(d))]
+PSS10list <- list(PSS10_avg = c(1:3, -4, -5, 6, -7, -8, 9, 10),
+                  Lon_avg = c(11:13)) 
+PSS10score <- scoreTest(PSS10set, PSS10list, nomiss = 0.01, rel = F)
+d <- data.frame(d, PSS10score)
+```
+
+#### Reliability of the scale
+```{r}
+
+alpha(PSS10set[1:10], keys = c("Scale_PSS10_UCLA_4",
+                               "Scale_PSS10_UCLA_5",
+                               "Scale_PSS10_UCLA_7",
+                               "Scale_PSS10_UCLA_8"))
+```
+
+```{r}
+alpha(PSS10set[11:13])
+```
+Similarly, we will also create composite scorces for Compliance, BFF_15 scale, SPS10 scale and Corona Concern 
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+### 2.2.2 Compliance
+Compset <- d[, grep("Compliance", names(d))]
+Complist <- list(Compliance_avg = c(1:3, -4, 5, -6)) 
+
+#Not sure if buying large groceries is against the recommendations, I'd say yes?
+
+Compscore <- scoreTest(Compset, Complist, nomiss = 0.01, rel = F)
+d <- data.frame(d, Compscore)
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+##### Reliability of the scale
+alpha(Compset, keys = c("Compliance_4",
+                        "Compliance_6"))
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+### 2.2.3 BFF_15
+BFF15set <- d[, grep("BFF_15", names(d))]
+BFF15list <- list(neu = c(1, 2, -3), 
+                  ext = c(4, 5, -6),
+                  ope = c(7, 8, 9),
+                  agr = c(10, 11, -12),
+                  con = c(13, -14, 15)) 
+BFF15score <- scoreTest(BFF15set, BFF15list, nomiss = 0.01, rel = F)
+d <- data.frame(d, BFF15score)
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+#reliability of the scale
+alpha(BFF15set[1:3], keys = "BFF_15_3")
+alpha(BFF15set[4:6], keys = "BFF_15_6")
+alpha(BFF15set[7:9])
+alpha(BFF15set[10:12], keys = "BFF_15_12")
+alpha(BFF15set[13:15], keys = "BFF_15_14")
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+### 2.2.4 SPS10
+SPS10set <- d[, grep("SPS", names(d))]
+SPS10list <- list(SPS_avg = c(1:3, -4, 5, -6)) 
+SPS10score <- scoreTest(SPS10set, SPS10list, nomiss = 0.01, rel = F)
+d <- data.frame(d, SPS10score)
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+#reliability of the scale
+alpha(SPS10set)
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+### 2.2.5 Corona Concern
+corCset <- d[, grep("Corona_concerns", names(d))]
+corClist <- list(corC_avg = c(1:5)) 
+corCscore <- scoreTest(corCset, corClist, nomiss = 0.01, rel = F)
+d <- data.frame(d, corCscore)
+```
+
+
+```{r, echo=FALSE, warning=FALSE,results='hide'}
+##### Reliability
+
+alpha(corCset)
+```
+
+# 3.0 Data visualization
+## 3.1 Basic information by major countries
+
+We have picked those countries in which the Corona cases were high. You can use glimpse(d$Country) to see all the countries present in the data set and pick your own country which you want to visualize by editing the countries name in the code.
+
+
+```{r}
+dsub<-subset(d, Country %in% c("India", "Pakistan", "China", "Germany", "Russia", "Italy","France")) 
+
+#subset countries needed
+
+#load function to calculate means and SD
+data_summary <- function(data, varname, groupnames){
+  require(plyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("mean" = varname))
+  return(data_sum)
+}
+
+#create dataframe for the plot
+df_bar<- data_summary(dsub, varname="PSS10_avg", 
+                    groupnames="Country")
+
+head(df_bar) #check the stats
+```
+
+
+What is the distress level for highly affected countries due to corona?
+
+### 3.1.1 plot with basic layout. Customize at will
+
+```{r Countries_distress_score, warning=FALSE, message=FALSE, fig.height = 5, fig.width = 7}
+
+ggplotly(ggplot(df_bar, aes(x=fct_reorder(Country, PSS10_avg), y=PSS10_avg, width=.6,fill=Country))+
+  geom_bar(stat="identity",position=position_dodge()) +
+  ggtitle("Stress Levels of different countries")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme_bw()+theme(panel.grid = element_blank(), 
+        legend.position = "none")+
+  xlab("Country")+
+  ylab("Stress Level")+
+  ylim(0,5)+ theme(axis.text.x = element_text(face = "bold"))+ theme(legend.position = "none") +theme(plot.title = element_text(hjust = 0.5)))
+
+```
+
+Here we can see that Pakistan and India has highest Stress level due to Corona pandemic. France and Italy has the lowest Stress level among the countries we have selected. 
+
+### 3.1.2 World Map of Stress Levels in Countries affected with Corona
+
+```{r World_map, warning=FALSE, message=FALSE, echo=FALSE}
+dmap<-d
+
+data_summary <- function(data, varname, groupnames){
+  require(plyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("mean" = varname))
+  return(data_sum)
+}
+
+df_b_world<- data_summary(dmap, varname="PSS10_avg", 
+                    groupnames="Country")
+library(plotly)
+df_world <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv")
+mergedData <- merge(df_b_world,df_world,by.x=c("Country"),by.y=c("COUNTRY"))
+world_map_stress_levels <- plot_ly(mergedData, type='choropleth', locations=mergedData$CODE, z=mergedData$PSS10_avg, text=mergedData$COUNTRY, colorscale="Portland")
+world_map_stress_levels
+```
+The stress levels marked in red hue ( level = 4 ) are highly affected areas which are less in number and the blue hue ( level = 2 ) are less affected areas which are more common in most parts of the countries.
+
+### 3.1.3 Visualization of the distress scale
+
+What are the major sources of distress during corona?
+
+```{r distress-scale, warning=F, message=F, echo=TRUE}
+dis <- d %>% summarize_at(.vars = dplyr::vars(matches("Distress_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+         "Expl_Distress_1"="Income",
+         "Expl_Distress_2"="Work",
+         "Expl_Distress_3"="Children's education",
+         "Expl_Distress_4"="Job prospects",
+         "Expl_Distress_5"="Access to necessities (food etc.)",
+         "Expl_Distress_6"="No social activities",
+         "Expl_Distress_7"="No religious activities",
+         "Expl_Distress_8"="Behavior of adults I live with",
+         "Expl_Distress_9"="Behavior of children I live with",
+         "Expl_Distress_10"="National economy",
+         "Expl_Distress_11"="Civil services (police, sanitation...)",
+         "Expl_Distress_12"="Risk of catching coronavirus",
+         "Expl_Distress_13"="Risk of being hospitalized or dying",
+         "Expl_Distress_14"="Worry over friends and relatives who live far away",
+         "Expl_Distress_15"="Adapt work to digital platforms",
+         "Expl_Distress_16"="Adapt to social life on digital platforms",
+         "Expl_Distress_17"="Feeling ashamed for acting differently",
+         "Expl_Distress_18"="Loneliness",
+         "Expl_Distress_19"="Time I spend inside",
+         "Expl_Distress_20"="Time I spend in proximity to others",
+         "Expl_Distress_21"="       Not knowing about developments with COVID",
+         "Expl_Distress_22"="Not knowing how to stop COVID",
+         "Expl_Distress_23"="Not knowing how long the measures will last",
+         "Expl_Distress_24"="No travel outside my country")
+  ) %>%  
+ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="green4",)+scale_y_continuous(breaks = seq(1,8,1))+
+  coord_flip(ylim = c(1,5))+
+  theme_bw()+
+  xlab("Source of distress")+
+  ylab("Level of distress")+  theme(axis.text.y = element_text(face = "bold"))+  ggtitle("Sources of Distress during Corona")
+ggplotly(dis)
+```
+
+The above bar plot shows the comparison of different sources of stress during the corona pandemic. 
+People are more stressed due to the fear of economy collapse,catching corona virus and Risk of being dying. While not able to perform the religious activities have very less affect on people because they can offer their prayers in their home also.
+
+### 3.1.4 Visualization of the coping scale
+
+How people usually cope with the stress caused by corona?
+
+```{r coping-scale, warning=F, message=F, echo=F}
+cop <- d %>% summarize_at(.vars = dplyr::vars(matches("Coping_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Expl_Coping_1"="Information from the government",
+                                "Expl_Coping_2"="Face-to-face interactions friends/family",
+                                "Expl_Coping_3"="Phonecalls/long-range interactions friends/family",
+                                "Expl_Coping_4"="Face-to-face interactions colleagues",
+                                "Expl_Coping_5"="                  Phonecalls/long-range interactions colleagues",
+                                "Expl_Coping_6"="Social media",
+                                "Expl_Coping_7"="Video games (alone)",
+                                "Expl_Coping_8"="Video games (online)",
+                                "Expl_Coping_9"="Watching TV-shows or movies",
+                                "Expl_Coping_10"="Helping others",
+                                "Expl_Coping_11"="Preparing for the crisis",
+                                "Expl_Coping_12"="Following government's advice",
+                                "Expl_Coping_13"="My work/vocation",
+                                "Expl_Coping_14"="Hobby",
+                                "Expl_Coping_15"="God or Religion",
+                                "Expl_Coping_16"="Knowledge of actions take by government or civil service")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="lightblue")+
+  coord_flip(ylim = c(1,5))+
+  theme_bw()+
+  xlab("Source of coping")+
+  ylab("Level of coping") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("How people usually cope with Corona Stress")
+ggplotly(cop)
+```
+
+The above box plot represents the comparison of different methods people are adopting to cope with the corona stress. According to this survey, people release their stress by having phone calls with their loved ones, by spending time doing some hobby and by obtaining watching TV shows or movies.
+People are getting more addicted to social media and smartphones which will have a long lasting affect even after the corona pandemic 
+
+### 3.1.5 Visualization of trust
+
+What is the level of trust among people on different information sources?
+
+```{r trust-scale, warning=F, message=F, echo=F}
+trust <- d %>% summarize_at(.vars = dplyr::vars(matches("OECD")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "OECD_people_1"="Majority of people",
+                                "OECD_people_2"="Majority of people I know personally",
+                                "OECD_insititutions_1"="Country's Parliament/government",
+                                "OECD_insititutions_2"="Country's Police",
+                                "OECD_insititutions_3"="Country's Civil service",
+                                "OECD_insititutions_4"="Country's Healthcare system",
+                                "OECD_insititutions_5"="WHO",
+                                "OECD_insititutions_6"="   Government's measures against COVID")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="darkred")+
+  coord_flip(ylim = c(1,10))+
+  theme_bw()+
+  xlab("Source to be trusted on")+
+  ylab("Level of trust")+ theme(axis.text.y = element_text(face = "bold")) + ggtitle("Trust level on different information sources")
+ggplotly(trust)
+```
+
+The above bar plot represents people trust on different sources on information. Clearly the people trust the information coming from those people they know and WHO.
+An interesting finding here is that people mistrust their owns country parliament and government and turns least towards them for information related to Corona pandemic.
+
+### 3.1.6 Visualization of concern
+
+Which things people worry most about due to corona virus?
+
+```{r concern-scale, warning=F, message=F, echo=F}
+worry <- d %>% summarize_at(.vars = dplyr::vars(matches("concern")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Corona_concerns_1"="... Me Personally",
+                                "Corona_concerns_2"="... My Family",
+                                "Corona_concerns_3"="... My Close Friends",
+                                "Corona_concerns_4"="... My Country",
+                                "Corona_concerns_5"="   ... Other Countries")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="orange")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("Reason for worry")+
+  ylab("Level of worry")+ theme(axis.text.y = element_text(face = "bold")) + ggtitle("People worry the most about")
+ggplotly(worry)
+```
+
+The above bar plot shows that the people worry most about their family and their country during the corona pandemic. Here an interesting finding is that the people care the least about themselves as compared to their country, friends and family.
+
+### 3.1.7 Visualization of compliance
+
+Do the people obeys the instruction given to them to stop spread of corona?
+
+```{r compliance-scale, warning=F, message=F, echo=F}
+comp <- d %>% summarize_at(.vars = dplyr::vars(matches("Compliance_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Compliance_1"="I am well informed how I can stop\nthe spread of coronavirus",
+                                "Compliance_2"="I have done everything to reduce\nthe spread of coronavirus",
+                                "Compliance_3"="   I have done everything to stop keep\nthe phyisical distance",
+                                "Compliance_4"="I feel that keeping distance\nwould have a high personal cost",
+                                "Compliance_5"="I trust others follow guidelines\nto stop the spread of coronavirus",
+                                "Compliance_6"="I have bought large extra supplies")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="maroon")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("Compliance")+
+  ylab("Level of agreement") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("Obiedience level of instructions")
+ggplotly(comp)
+```
+
+The above above box plot represent that to which level the people are following the general health and other instructions given to them by the different organisation and their countries. This data can be biased also since people will tend to avoid leaving a negative impression
+
+### 3.1.8 Visualization of media
+
+What are the trusted sources of information people look up to during Corona?
+
+```{r information_sources, warning=F, message=F, echo=F}
+info<- d %>% summarize_at(.vars = dplyr::vars(matches("media_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Expl_media_1"="... the government",
+                                "Expl_media_2"="  ... independent news outlets in the coutnry",
+                                "Expl_media_3"="... news outlets outside the country",
+                                "Expl_media_4"="... friends and family",
+                                "Expl_media_5"="... social media",
+                                "Expl_media_6"="I have heard more positive than negative\nstories about people's behavior")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="blue")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("I have sought information from...")+
+  ylab("Level of agreement") + theme(text = element_text(size = 12))  + theme(axis.text.y = element_text(face = "bold")) + ggtitle("Agreement on different information resources")
+ggplotly(info)
+```
+
+The above box plot shows the people trust or level of agreement regarding different information sources. The people look the most for information regarding corona from the country and the independent news outlet in the country.
+
+### 3.1.9 Bivariate plots of relevant scales
+#### Basic summary statistics
+
+```{r,warning=FALSE,message=FALSE }
+
+Hmisc::describe(d[, 136:145])
+```
+
+#### Bivariate plots to visualize the relationship between Perceived Stress, Social Support, Loneliness, and extraversion, colored by gender
+
+What is the relationship between Perceived Stress, Social Support, Loneliness, and extraversion among different genders?
+
+```{r bivariate_realtionship_gender, fig.width = 12, fig.height = 12, warning=FALSE,message=FALSE}
+library(GGally)
+
+d1 <- d %>% 
+  select(PSS10_avg, Lon_avg, SPS_avg, ext, Dem_gender)%>% filter(Dem_gender=="Male" | Dem_gender=="Female")
+
+levels(d1$Dem_gender)[levels(d1$Dem_gender) == "Other/would rather not say"] = "Undisclosed"
+
+#d1$Dem_gender <- addNA(d1$Dem_gender)
+
+p <- ggpairs(d1, columnLabels = c("Perceived Stress", "Loneliness", "Perceived Support", "Extraversion", "Gender"),
+             mapping = ggplot2::aes(col = Dem_gender, alpha = .2),
+             upper = list(continuous = wrap("cor", size = 3)),
+             title = "Bivariate relationship of Perceived Stress, Social Support, Loneliness, and Extraversion")+ theme(title = element_text(face = "bold"))+theme(plot.title = element_text(hjust = 0.5))+theme(text = element_text(size = 14))
+
+print(p, progress = FALSE)
+```
+
+The above pairplot shows the bi-variate relationship of between, Extraversion, Perceived Support, Perceived Stress, Loneliness for two target groups – male and females. Our distribution is reflective that there are overlap in the distributions and seemingly visible that both the target groups are correlated to a certain extent.
+
+It is evident that in general female respondents are on a higher number as compared to males in participation. It is very evident that Loneliness is the root cause of stress which contributes to a major level. The medians of the boxplot for Perceived Support heavily overlap and they do not differ hence, there is a positive correlation (0.251) among the two groups.
+
+Loneliness tends to increase Perceived Stress in females and it is about 0.559 which is seen lesser in male respondents.
+
+During Extraversion the Perceived Support in males are higher (0.263) in comparison to females (0.2331).
+
+Extraversion reduces the perceived stress significantly in both cases and it is highly effective for females than male respondents.
+
+#### Bivariate plots to visualize the relationship between Perceived Stress, Social Support, Loneliness, and extraversion 
+
+What is the relationship between Perceived Stress, Social Support, Loneliness, and extraversion?
+
+```{r bivariate_realtionship, fig.height = 12, fig.width = 12, warning=FALSE, message=FALSE}
+p1 <- ggpairs(d1, columns = 1:4,
+             columnLabels = c("Perceived Stress", "Loneliness", "Perceived Support", "Extraversion"),
+             upper = list(continuous = wrap("cor", size = 3, colour = "Blue")),
+             lower=list(continuous=wrap("smooth", colour="Red")),
+             title = "Bivariate relationship of Perceived Stress, Social Support, Loneliness, and Extraversion") + theme(title = element_text(face = "bold"))+theme(plot.title = element_text(hjust = 0.5))+theme(text = element_text(size = 14))
+
+print(p1, progress = FALSE)
+```
+
+The above matrix of plots shows the bi-variate relationships of Gender, Extraversion, Perceived Support, Perceived Stress, Loneliness. The findings are similar as explained above just a different visualization.
+
+```{r, results='hide',warning=FALSE,message=FALSE}
+write.csv(d, file = "clean_world.csv")
+```
+
+
