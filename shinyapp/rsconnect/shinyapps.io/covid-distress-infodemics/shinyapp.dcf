@@ -5,9 +5,9 @@ account: covid-distress-infodemics
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4324778
-bundleId: 4783448
+bundleId: 4785485
 url: https://covid-distress-infodemics.shinyapps.io/shinyapp/
-when: 1625310001.90992
-lastSyncTime: 1625310001.90992
+when: 1625396473.6369
+lastSyncTime: 1625396473.6369
 asMultiple: FALSE
 asStatic: FALSE
