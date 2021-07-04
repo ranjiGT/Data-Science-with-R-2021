@@ -42,6 +42,8 @@ Dataset can be downloaded here: [R. Gallotti, N. Castaldo, F. Valle, P. Sacco an
 
 These datasets comprises of summary of infodemics data collected from across countries, the world risk index, population emotional state, and news reliability.
 
+( _Very large files to this repository has been added via git-lfs._ )
+
 Folder Structure :open_file_folder:
 ============================
 
