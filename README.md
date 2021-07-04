@@ -64,10 +64,12 @@ Folder Structure :open_file_folder:
 
 ## `Process Notebook` :open_book:
 
+https://rpubs.com/ranjiraj9/covidistress
+
 ## `Screencast` :arrow_forward:	
 
 ## `Project website` :trackball:
-- https://covid-distress-infodemics.shinyapps.io/shinyapp/
+https://covid-distress-infodemics.shinyapps.io/shinyapp/
 
 
 To launch the app :point_up_2: :
