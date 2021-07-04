@@ -1,0 +1,1918 @@
+---
+title: |
+  <center>R Process Notebook</center>
+   ![](logo.svg){width=300px style="display: block; margin:0 auto"}
+bibliography: references.bib
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    number_sections : true
+    toc_depth: 6
+    toc_float: true 
+    theme: yeti
+    highlight: breezedark
+---
+# **Psychological & Behavioral distress of COVID-19 & Infodemics** {-}
+
+**TEAM MEMBERS** ![](datascir.png){width=180px height=180px align=right}
+
+* Madhuri Sajith
+* Usama Ashfaq
+* Vishnu Jayanand
+* Sujith Nyarakkad Sudhakaran
+* Ranjiraj Rajendran Nair
+
+# **Overview and Motivation**
+
+The coronavirus COVID-19 pandemic is an unprecedented health crisis that has impacted the world to a large extent. According to WHO, mental disorders are one of the leading causes of disability worldwide, so considering that this pandemic has caused further complications to mental ailment. The stress, anxiety, depression stemming from fear, isolation, and stigma around COVID-19 affected all of us in one way or another. We could see that many people are losing their jobs and the elderly are isolated from their usual support network. The issue is that the effects of the pandemic and mental health, maybe for longer-lasting than the disease itself.    
+
+In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels, our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point, both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and portray some meaningful insights on global survey data.
+
+
+# **Related Work**
+
+The COVIDiSTRESS global survey was designed by an international group of social scientists [@COVIDiSTRESS2020report] from more than **fifty** universities to measure the psychological correlates and implications of the current crisis. The infodemic risk study has so far involved more than **150,000** individual respondents from over **50** different countries, sharing their experience of the human consequences of the crisis between **March** $30^{th}$, 2020 and **April** $20^{th}$, 2020. Also, for our global distress analysis the survey focuses on the **75,570** respondents from the **27** countries composing the European Union (EU) who answered the survey between **January** $15^{th}$, 2020 and **March** $20^{th}$, 2020.
+
+The survey was primarily done by independent researchers like [@IRIevolution2020] and [@vanMulukom2021] with a focus to map out all the factors, that might affect people's psychological well-being and their ability to make good decisions during the COVID-19 outbreak all over the world. Researchers from many countries are collaborating on this project even today, to help scientists and decision makers help and communicate. The study procedure mainly was carried out as series of questions in an online survey - mostly answering by clicking boxes to supply opinions or experiences.
+
+[@Vijay] made analysis on tweets in India during 2019-20 and calculated sentiment scores of the people during this timeline. They observed how the sentiment score was getting better with increasing time. Sethi et al.[@Goran] presented a paper in analyzing the tweets across six different countries like USA, UK, Spain, Italy, Sweden and Germany. The analysis is majorly focused on to understand what kind of  sentiment is shared between people across these six countries.
+
+
+# **Initial Questions**
+
+As from our motivation, we decided to split our task into 3 mainstream objectives: **Impact of distress level on global level**, **Twitter**, **Infodemics**. Commencing from a basic questionnaire analysis we dive deep into
+streamline platforms to look into from where people seek information and how they perceive and assimilate within themselves and share to others which affects their productivity to a large extent.
+
+### ***How many participants were part of this global survey despite this hard time?***
+
+The "*COVIDiSTRESS global survey*" is an international collaborative undertaking for data gathering on people’s experiences, behavior and attitudes during the COVID-19 pandemic. In particular, the survey focuses on psychological stress, compliance with behavioral guidelines to slow the spread of Coronavirus, and trust in governmental institutions and their preventive measures, but multiple further items and scales are included for descriptive statistics, further analysis and comparative mapping between participating countries. Data is being collected by committed researchers in **169** countries. Data is collected through online means, mainly based on _social snowballing_, _viral spread_ and help from interested partners including _media_. We perform a basic descriptive statistics to analyze the trend of the survey and report the how across different countries the participants have coordinated to this task.
+
+### ***How was Twitter serving during this distress period?***
+
+A 2018 study conducted by MIT researchers and published in Science discovered that false stories on Twitter diffused quicker and more widely than truths. The study analyzed millions of tweets and concluded that the novelty and the emotional reactions of Twitter users may be a contributing factor. With that in mind, pause a beat before clicking on the share button. Every social media post should be viewed with skepticism prior to conducting your own fact checking algorithm. Do facts and figures include referenced sources? If so, is the data reliable? Is the data clearly explained and are the limitations addressed? Beware of false equivalency – comparing apples with pears. A good example of this is the volume of graphs currently being shared that compare countries with vastly different population densities. We plan to put forth a comparative analysis of twitter during this pandemic for 2020 and 2021.
+
+### ***Whom should we trust and whom should we not during this pandemic?***
+
+We are the channels that spread the infodemic throughout our networks. If in any doubt of the validity of a message, even if forwarded from one person to another it is blindly passed on. These messages are designed to mimic inside information or a scoop on what is really happening that are implicitly given a fake seal of validity from a close contact. The government have been very upfront with sharing information as quick and reliably as possible. Its imperative that we do not get side tracked by word-of-mouth messages from loosely connected official sources. It takes less than a second to loose our concentration and hit the forward button giving the infodemic further fuel. Even if you think your network are big and strong enough to make up their own mind, there may be people more at risk to these types of malicious messages. Just as with the pandemic, less digitally fluent people find it hard to decipher such messages causing undue stress and harm. This motivates us to pose this clear and strong question to make a trust graph based on all popular communication channels to assess their Infodemic Risk Index (IRI) scores.
+
+# **Data**
+
+### **COVIDISTRESS all global survey data**
+
+
+(The COVIDiSTRESS global survey is an open science collaboration,
+created by researchers in over 40 countries to rapidly and organically
+collect data on human experiences of the Coronavirus epidemic 2020.)
+Dataset can be downloaded here:
+[@COVIDiSTRESS2020]
+<https://osf.io/z39us/>
+
+### **Twitter Data**
+
+We worked on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+
+Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
+
+After extracting tweets we performed certian preprocessing techniques such as removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
+
+### **COVID-19 Infodemics Observatory**
+
+(The Role of Trust and Information during the COVID-19 Pandemic and Infodemic)
+Dataset can be downloaded here: [R. Gallotti, N. Castaldo, F. Valle, P. Sacco and M. De Domenico, COVID19 Infodemics Observatory (2020). DOI: 10.17605/OSF.IO/N6UPX]
+[Van Mulukom, V. (2021, May 15). The Role of Trust and Information during the COVID-19 Pandemic and Infodemic. https://doi.org/10.17605/OSF.IO/GFWBQ]
+<https://osf.io/n6upx/>, <https://osf.io/67zhg/>, <https://osf.io/rtacb/>, <https://osf.io/dh879/>, <https://osf.io/c37wq/>
+
+These datasets comprises of summary of infodemics data collected from across countries, the world risk index, population emotional state, and news reliability.
+
+( _All the above listed datasets can be accessed via our Github repository linked at the footer of this notebook._ )
+
+# **Exploratory Data Analysis**
+
+
+```{r setup, include=FALSE}
+chooseCRANmirror(graphics=FALSE, ind=1)
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+source("libloader.R")
+```
+
+
+## **Global survey analysis**
+
+```{r survey-1, warning=FALSE, message=FALSE, echo=TRUE}
+d <- read_survey("COVIDiSTRESS import April 6 2020 (choice values).csv")
+d
+```
+Our survey dataset contains `r nrow(d)` rows and `r ncol(d)` columns with both `categorical` and `numerical` values.
+
+### Basic information about the survey
+
+How many people do not give consent to participate?
+
+We will use only those records for which the user has marked Consent as "Yes".
+
+
+```{r survery-eda-1, warning=FALSE, message=FALSE, echo=F}
+#Filter for cases with consent
+d <- filter(d, Consent == "Yes")
+```
+
+What was the average percentage of completeness in the survey for each individual?
+
+```{r survey-2, warning=FALSE, message=FALSE, echo=TRUE}
+library(psych)
+
+participant_completeness_rate <- apply(X = d[,11:135], MARGIN = 1, FUN = function(x){
+  
+  sum(!is.na(x))/length(x)
+})
+
+show(describe(participant_completeness_rate))
+```
+On average 75% of the questions have been answered by all the participants.
+
+What was the average completeness rate within each question?
+
+```{r survey-3, warning=FALSE, message=FALSE, echo=TRUE}
+question_completeness_rate <- apply(X = d[,11:135], MARGIN = 2, FUN = function(x){
+  sum(!is.na(x))/length(x)
+})
+
+show(describe(question_completeness_rate))
+```
+
+The average rate of completeness for each individual question is also 75%.
+
+### Decoding the survey trend
+
+We perform some basic statistics over the survey data that we have to see the trend in the participation by the respondents to the questions they had.
+
+```{r survey-trend, warning=FALSE, message=FALSE, echo=TRUE, fig.height=5, fig.width=7}
+library(ggthemes)
+df <- data.frame(seq_along(question_completeness_rate),
+                 question_completeness_rate)
+ggplotly(ggplot(df,
+                aes(x=seq_along(question_completeness_rate),
+                    y=question_completeness_rate)) +
+           geom_line() + theme_economist() +
+           ggtitle("Online survey trend of participants") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+    theme(plot.title = element_text(face = "bold")))
+
+```
+
+This plot is very crude but we can spot some certain drops with the collected survey data. The first two drops are the experimental questions with *open end questions*. Most of the people choose not to write anything as expected.
+
+How many people have participated in the survey from each country?
+
+```{r participant, warning=FALSE, message=FALSE, echo=T}
+d %>% group_by(Country) %>% dplyr::summarize(n()) %>% print(n=10)
+```
+
+How many people participated in the survey according to different language they speak?
+
+```{r resp-country, warning=FALSE, message=FALSE, echo=T}
+d %>% group_by(UserLanguage) %>% dplyr::summarize(n()) %>% print(n=10)
+```
+
+
+```{r sur-preproc-1, warning=FALSE, message=FALSE, echo=F}
+d$Dem_edu <- str_remove(d$Dem_edu, "- ")
+d$Dem_edu_mom <- str_remove(d$Dem_edu_mom, "- ")
+
+
+d$Dem_edu <- str_replace(d$Dem_edu, "None|^1", "None/Uninformative response")
+d$Dem_edu_mom <- str_replace(d$Dem_edu_mom, "None|^1", "None/Uninformative response")
+```
+
+```{r sur-preproc-2, warning=FALSE, message=FALSE, echo=F}
+
+recode_if <- function(x, condition, ...) {
+  if_else(condition, recode(x, ...), x)
+}
+
+# Fix differences in scoring between english and other languages 
+d <- d %>%
+  mutate(Dem_maritalstatus = 
+           recode_if(Dem_maritalstatus, UserLanguage != "EN", 
+                     "Single" = "Other or would rather not say",
+                     "Married/cohabiting" = "Single",
+                     "Divorced/widowed"= "Married/cohabiting",
+                     "Other or would rather not say" = "Divorced/widowed"))
+```
+
+```{r demo-info, warning=FALSE, warning=FALSE, message=FALSE, echo=F}
+#Demographic information
+d[,12:25] <- d[,12:25] %>% 
+  mutate_if(is.character, as.factor)
+```
+
+```{r adc-recode, warning=FALSE, message=FALSE, echo=F}
+d <- d %>% 
+  mutate(AD_gain = factor(recode(AD_gain, 
+                          "· If Program A is adopted, 200 people will be saved." ="Program A",
+                   "· If Program B is adopted, there is 1/3 probability that 600 people will be saved, and 2/3 probability that no people will be saved" = "Program B")),
+         AD_loss = factor(recode(AD_loss, 
+                          "· If Program C is adopted 400 people will die." = "Program C",
+                          "· If Program D is adopted there is 1/3 probability that nobody will die, and 2/3 probability that 600 people will die." = "Program D")),
+         AD_check = factor(AD_check))
+```
+
+```{r pss10, warning=FALSE, message=FALSE, echo=F}
+d <- d %>% mutate_at(
+  .vars = vars(contains("PSS10")),
+  .funs = recode, 
+  "Never" = 1, 
+  "Almost never" = 2,
+  "Sometimes" = 3, 
+  "Fairly often" = 4,
+  "Very often" = 5
+  )
+```
+
+```{r complaince, message = FALSE, warning=FALSE, echo=FALSE}
+d <- d %>% mutate_at(
+  .vars = vars(matches("Corona_concerns|Compliance|BFF|Distress|SPS|Coping|Expl_media")),
+  .funs = recode, 
+  "Strongly disagree" = 1, 
+  "Disagree" = 2,
+  "Slightly disagree" = 3, 
+  "Slightly agree" = 4,
+  "Agree" = 5,
+  "Strongly agree" = 6
+)
+```
+
+```{r trust, warning=FALSE, echo=FALSE, message=FALSE}
+
+d <- d %>% mutate(
+  Trust_countrymeasure = recode(Trust_countrymeasure,
+  "Too little" = 0,
+  "1" = 1,
+  "2" = 2,
+  "3" = 3,
+  "4" = 4,
+  "Appropriate" = 5,
+  "6" = 6,
+  "7" = 7,
+  "8" = 8,
+  "9" = 9,
+  "Too much" = 10))
+```
+
+```{r converrt-pss10, echo=FALSE, warning=FALSE, message=FALSE}
+
+PSS10set <- d[, grep("PSS10", names(d))]
+PSS10list <- list(PSS10_avg = c(1:3, -4, -5, 6, -7, -8, 9, 10),
+                  Lon_avg = c(11:13)) 
+PSS10score <- scoreTest(PSS10set, PSS10list, nomiss = 0.01, rel = F)
+d <- data.frame(d, PSS10score)
+```
+
+```{r rel-1, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+
+alpha(PSS10set[1:10], keys = c("Scale_PSS10_UCLA_4",
+                               "Scale_PSS10_UCLA_5",
+                               "Scale_PSS10_UCLA_7",
+                               "Scale_PSS10_UCLA_8"))
+```
+
+```{r rel-2, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+alpha(PSS10set[11:13])
+```
+
+```{r rel-3, echo=FALSE, warning=FALSE, results='hide'}
+### 2.2.3 BFF_15
+BFF15set <- d[, grep("BFF_15", names(d))]
+BFF15list <- list(neu = c(1, 2, -3), 
+                  ext = c(4, 5, -6),
+                  ope = c(7, 8, 9),
+                  agr = c(10, 11, -12),
+                  con = c(13, -14, 15)) 
+BFF15score <- scoreTest(BFF15set, BFF15list, nomiss = 0.01, rel = F)
+d <- data.frame(d, BFF15score)
+```
+
+
+```{r rel-4, echo=FALSE, warning=FALSE, results='hide'}
+#reliability of the scale
+alpha(BFF15set[1:3], keys = "BFF_15_3")
+alpha(BFF15set[4:6], keys = "BFF_15_6")
+alpha(BFF15set[7:9])
+alpha(BFF15set[10:12], keys = "BFF_15_12")
+alpha(BFF15set[13:15], keys = "BFF_15_14")
+```
+
+
+```{r rel-5, echo=FALSE, warning=FALSE, results='hide'}
+### 2.2.4 SPS10
+SPS10set <- d[, grep("SPS", names(d))]
+SPS10list <- list(SPS_avg = c(1:3, -4, 5, -6)) 
+SPS10score <- scoreTest(SPS10set, SPS10list, nomiss = 0.01, rel = F)
+d <- data.frame(d, SPS10score)
+```
+
+
+```{r rel-6, echo=FALSE, warning=FALSE,results='hide'}
+#reliability of the scale
+alpha(SPS10set)
+```
+
+
+```{r rel-7, echo=FALSE, warning=FALSE,results='hide'}
+### 2.2.5 Corona Concern
+corCset <- d[, grep("Corona_concerns", names(d))]
+corClist <- list(corC_avg = c(1:5)) 
+corCscore <- scoreTest(corCset, corClist, nomiss = 0.01, rel = F)
+d <- data.frame(d, corCscore)
+```
+
+
+```{r rel-8, echo=FALSE, warning=FALSE,results='hide'}
+##### Reliability
+alpha(corCset)
+```
+
+```{r rel-9, echo=T, warning=FALSE, message=FALSE}
+
+dsub <- subset(d, Country %in% c("India", "Pakistan", "China", "Germany", "Russia", "Italy","France"))
+
+#load function to calculate means and SD
+data_summary <- function(data, varname, groupnames){
+  require(plyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- plyr::rename(data_sum, c("mean" = varname))
+  return(data_sum)
+}
+
+#create dataframe for the plot
+df_bar<- data_summary(dsub, varname="PSS10_avg", 
+                    groupnames="Country")
+
+head(df_bar)
+```
+
+We have picked those countries in which the Corona cases were high.
+
+```{r rel-10, warning=FALSE, message=FALSE, fig.height = 5, fig.width = 7}
+
+ggplotly(ggplot(df_bar, aes(x=fct_reorder(Country, PSS10_avg), y=PSS10_avg, width=.6,fill=Country))+
+  geom_bar(stat="identity",position=position_dodge()) +
+  ggtitle("Stress Levels of different countries")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme_bw()+theme(panel.grid = element_blank(), 
+        legend.position = "none")+
+  xlab("Country")+
+  ylab("Stress Level")+
+  ylim(0,5)+ theme(axis.text.x = element_text(face = "bold"))+ theme(legend.position = "none") +theme(plot.title = element_text(hjust = 0.5)))
+```
+
+
+Here we can see that Pakistan and India has highest Stress level due to Corona pandemic. France and Italy has the lowest stress levels among the countries we have selected.
+
+### World Map of stress levels in countries affected with Corona
+
+```{r geo-map, warning=FALSE}
+dmap<-d
+
+data_summary <- function(data, varname, groupnames){
+  require(plyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- plyr::rename(data_sum, c("mean" = varname))
+  return(data_sum)
+}
+
+df_b_world<- data_summary(dmap, varname="PSS10_avg", 
+                    groupnames="Country")
+
+df_world <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv")
+mergedData <- merge(df_b_world,df_world,by.x=c("Country"),by.y=c("COUNTRY"))
+world_map_stress_levels <- plot_ly(mergedData, type='choropleth', locations=mergedData$CODE, z=mergedData$PSS10_avg, text=mergedData$COUNTRY, colorscale="Portland")
+world_map_stress_levels %>% layout(title="Stress map for different countries indicated by stress levels")
+```
+
+
+The stress levels marked in red hue ( _level = 4_ ) are highly affected areas which are less and the blue hue ( _level = 2_ ) are more indicating less which are more common in most parts of the countries.
+
+
+### Distress scale
+
+What are the major sources of distress during corona?
+
+```{r distress-scale, warning=F, message=F, echo=TRUE}
+dis <- d %>% summarize_at(.vars = dplyr::vars(matches("Distress_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+         "Expl_Distress_1"="Income",
+         "Expl_Distress_2"="Work",
+         "Expl_Distress_3"="Children's education",
+         "Expl_Distress_4"="Job prospects",
+         "Expl_Distress_5"="Access to necessities (food etc.)",
+         "Expl_Distress_6"="No social activities",
+         "Expl_Distress_7"="No religious activities",
+         "Expl_Distress_8"="Behavior of adults I live with",
+         "Expl_Distress_9"="Behavior of children I live with",
+         "Expl_Distress_10"="National economy",
+         "Expl_Distress_11"="Civil services (police, sanitation...)",
+         "Expl_Distress_12"="Risk of catching coronavirus",
+         "Expl_Distress_13"="Risk of being hospitalized or dying",
+         "Expl_Distress_14"="Worry over friends and relatives who live far away",
+         "Expl_Distress_15"="Adapt work to digital platforms",
+         "Expl_Distress_16"="Adapt to social life on digital platforms",
+         "Expl_Distress_17"="Feeling ashamed for acting differently",
+         "Expl_Distress_18"="Loneliness",
+         "Expl_Distress_19"="Time I spend inside",
+         "Expl_Distress_20"="Time I spend in proximity to others",
+         "Expl_Distress_21"="Not knowing about developments with COVID",
+         "Expl_Distress_22"="Not knowing how to stop COVID",
+         "Expl_Distress_23"="Not knowing how long the measures will last",
+         "Expl_Distress_24"="No travel outside my country")
+  ) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="green4",)+scale_y_continuous(breaks = seq(1,8,1))+
+  coord_flip(ylim = c(1,5))+
+  theme_bw()+
+  xlab("Source of distress")+
+  ylab("Level of distress")+  theme(axis.text.y = element_text(face = "bold"))+  ggtitle("Sources of Distress during Corona")
+
+ggplotly(dis)
+```
+
+The above bar plot shows the comparison of different sources of stress during the corona pandemic. People are more stressed due to the fear of economy collapse, catching corona virus and Risk of being dying. While not able to perform the religious activities have very less affect on people because they can offer their prayers in their home also.
+
+### Coping scale
+
+How people usually cope with the stress caused by corona?
+
+```{r coping-scale, warning=F, message=F, echo=F}
+cop <- d %>% summarize_at(.vars = dplyr::vars(matches("Coping_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Expl_Coping_1"="Information from the government",
+                                "Expl_Coping_2"="Face-to-face interactions friends/family",
+                                "Expl_Coping_3"="Phonecalls/long-range interactions friends/family",
+                                "Expl_Coping_4"="Face-to-face interactions colleagues",
+                                "Expl_Coping_5"="Phonecalls/long-range interactions colleagues",
+                                "Expl_Coping_6"="Social media",
+                                "Expl_Coping_7"="Video games (alone)",
+                                "Expl_Coping_8"="Video games (online)",
+                                "Expl_Coping_9"="Watching TV-shows or movies",
+                                "Expl_Coping_10"="Helping others",
+                                "Expl_Coping_11"="Preparing for the crisis",
+                                "Expl_Coping_12"="Following government's advice",
+                                "Expl_Coping_13"="My work/vocation",
+                                "Expl_Coping_14"="Hobby",
+                                "Expl_Coping_15"="God or Religion",
+                                "Expl_Coping_16"="Knowledge of actions take by government or civil service")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="lightblue")+
+  coord_flip(ylim = c(1,5))+
+  theme_bw()+
+  xlab("Source of coping")+
+  ylab("Level of coping") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("How people usually cope with \nCorona Stress")
+
+ggplotly(cop)
+```
+
+This highlights the comparison of different methods people are adopting to cope with the corona stress. According to this survey, people release their stress by having phone calls with their loved ones, by spending time doing some hobby and by obtaining watching TV shows or movies. People are getting more addicted to social media and smartphones which will have a long-term affect even after the corona pandemic.
+
+
+### Trust scale
+
+What is the level of trust among people on different information sources?
+
+```{r trust-scale, warning=F, message=F, echo=F}
+trust <- d %>% summarize_at(.vars = dplyr::vars(matches("OECD")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "OECD_people_1"="Majority of people",
+                                "OECD_people_2"="Majority of people I know personally",
+                                "OECD_insititutions_1"="Country's Parliament/government",
+                                "OECD_insititutions_2"="Country's Police",
+                                "OECD_insititutions_3"="Country's Civil service",
+                                "OECD_insititutions_4"="Country's Healthcare system",
+                                "OECD_insititutions_5"="WHO",
+                                "OECD_insititutions_6"="Government's measures against COVID")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="darkred")+
+  coord_flip(ylim = c(1,10))+
+  theme_bw()+
+  xlab("Source to be trusted on")+
+  ylab("Level of trust")+ theme(axis.text.y = element_text(face = "bold")) + ggtitle("Trust level on different information sources")
+
+ggplotly(trust)
+``` 
+
+
+Represents people's trust on different sources on information. Clearly the people trust the information coming from themselves (wisdom) and WHO. An interesting finding here is that people mistrust their owns country parliament and government and turns least towards them for information related to Corona pandemic.
+
+
+### Concern scale
+
+Which things people concern the most about when they hear about corona virus?
+
+```{r concern-scale, warning=F, message=F, echo=F}
+worry <- d %>% summarize_at(.vars = dplyr::vars(matches("concern")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Corona_concerns_1"="... Me Personally",
+                                "Corona_concerns_2"="... My Family",
+                                "Corona_concerns_3"="... My Close Friends",
+                                "Corona_concerns_4"="... My Country",
+                                "Corona_concerns_5"="... Other Countries")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="orange")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("Reason for worry")+
+  ylab("Level of worry")+ theme(axis.text.y = element_text(face = "bold")) + ggtitle("People worry the most about")
+
+ggplotly(worry)
+```
+
+People worry most about their family and their country during the corona pandemic. Here an interesting finding is that the people care the least about themselves as compared to their country, friends and family.
+
+### Compliance scale
+
+Do the people obeys the instruction given to them to stop spread of corona?
+
+```{r compliance-scale, warning=F, message=F, echo=F}
+ comp <- d %>% summarize_at(.vars = dplyr::vars(matches("Compliance_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Compliance_1"="I am well informed how I can stop\nthe spread of coronavirus",
+                                "Compliance_2"="I have done everything to reduce\nthe spread of coronavirus",
+                                "Compliance_3"="I have done everything to stop keep\nthe phyisical distance",
+                                "Compliance_4"="I feel that keeping distance\nwould have a high personal cost",
+                                "Compliance_5"="I trust others follow guidelines\nto stop the spread of coronavirus",
+                                "Compliance_6"="I have bought large extra supplies")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="maroon")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("Compliance")+
+  ylab("Level of agreement") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("Obiedience level of instructions")
+
+ggplotly(comp)
+```
+
+People are following the general health and other instructions given to them by the different organization and their countries. This data can be biased also since people will tend to avoid leaving a negative impression.
+
+### Media scale
+
+What are the trusted sources of information people look up to during Corona?
+
+```{r media-scale, warning=F, message=F, echo=F}
+med <- d %>% summarize_at(.vars = dplyr::vars(matches("media_\\d")), .funs = mean, na.rm= T) %>% 
+  pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
+  mutate(Source = dplyr::recode(Source,
+                                "Expl_media_1"="... the government",
+                                "Expl_media_2"="... independent news outlets in the coutnry",
+                                "Expl_media_3"="... news outlets outside the country",
+                                "Expl_media_4"="... friends and family",
+                                "Expl_media_5"="... social media",
+                                "Expl_media_6"="I have heard more positive than negative\nstories about people's behavior")) %>% 
+  ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
+  geom_bar(stat = "identity", position = position_dodge(), color="black", fill="cyan")+
+  coord_flip(ylim = c(1,6))+
+  scale_y_continuous(breaks = seq(1,6,1))+
+  theme_bw()+
+  xlab("Information sources")+
+  ylab("Level of agreement") + theme(text = element_text(size = 12))  + theme(axis.text.y = element_text(face = "bold")) + 
+  ggtitle("Level of agreement on different information resources")
+
+ggplotly(med)
+```
+
+People look the most for information regarding corona from the country and the independent news outlet in the country.
+
+
+### Bivariate analysis of relevant scales
+
+Viewing the relationship between `Perceived Stress`, `Social Support`, `Loneliness`, and `extraversion`.
+
+
+```{r bivar-2, fig.width = 12, fig.height = 12, warning=FALSE,message=FALSE}
+library(GGally)
+
+d1 <- d %>% 
+  select(PSS10_avg, 
+         Lon_avg, SPS_avg, 
+         ext, Dem_gender) %>% 
+  filter(Dem_gender=="Male" | Dem_gender=="Female")
+
+levels(d1$Dem_gender)[levels(d1$Dem_gender) == "Other/would rather not say"] = "Undisclosed"
+
+p <- ggpairs(d1, columnLabels = c("Perceived Stress", "Loneliness",
+                                  "Perceived Support", "Extraversion", 
+                                  "Gender"),
+             mapping = ggplot2::aes(col = Dem_gender, alpha = .2),
+             upper = list(continuous = wrap("cor", size = 3)),
+             title = "Bivariate relationship of Perceived Stress, Social Support, Loneliness, and Extraversion")+ 
+  theme(title = element_text(face = "bold")) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(text = element_text(size = 14))
+
+print(p, progress = FALSE)
+```
+
+The above pairplot shows the bi-variate relationship of between, `Extraversion`, `Perceived Support`, `Perceived Stress`, `Loneliness` for two target groups -- **male** and **females**. Our distribution is reflective that there are overlap in the distributions and seemingly visible that both the target groups are correlated to a certain extent.
+
+It is evident that in general female respondents are on a higher number as compared to males in participation. It is very evident that Loneliness is the root cause of stress which contributes to a major level. The medians of the boxplot for `Perceived Support` heavily overlap and they do not differ hence, there is a positive correlation (0.251) among the two groups.
+
+-  `Loneliness` tends to increase `Perceived Stress` in females and it is about 0.559 which is seen lesser in male respondents.
+
+-  During `Extraversion` the `Perceived Support` in males are higher (0.263) in comparison to females (0.2331).
+
+-  `Extraversion` reduces the perceived stress significantly in both the cases and it is highly effective for females than male respondents. 
+
+
+## **Twitter Analysis**
+
+We have primarily two datasets - one of them contains tweets from the onset of the pandemic and the other are very recent tweets (**June 2021**). Our main objective here is to figure out how the sentiments have changed over the months.
+
+( _For the security purposes, we show the skeletal code to extract the tweets using dummy credentials. We would load the data via .rds file for our extracted tweets._ [@twitterTutorial] )
+
+```{r tw-con, echo=T, message=F, warning=F, eval=F}
+appname <- "CovidDistress"
+key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
+secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
+access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
+access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+twitter_token <- create_token(
+  app = appname,
+  consumer_key = key,
+  consumer_secret = secret,
+  access_token = access_token,
+  access_secret = access_secret,
+  set_renv = TRUE)
+corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus", 
+                               n=20000, include_rts=FALSE, lang="en"
+                               , retryonratelimit = TRUE)
+saveRDS(corona_tweets, "tweets2021.rds")
+```
+
+```{r tw-read-data, echo=T, message=F, warning=F, eval=T}
+tweets2021_raw <- readRDS("tweets2021.rds")
+tweets2020_raw <- read.csv("Covid-tweets_2020.csv")
+```
+
+There are `r nrow(tweets2021_raw)` tweets from the dataset which is more than what we intended. This is because we set **retryonratelimit** to TRUE. These tweets are dated from ***`r format(as.Date(min(tweets2021_raw$created_at)), "%B %d %Y")`*** to ***`r format(as.Date(max(tweets2021_raw$created_at)), "%B %d, %Y")`***
+
+
+( _Showing a sample row from the dataset_ )
+
+```{r tw-gt, echo=FALSE, message=F, warning=F}
+gt::gt(tweets2021_raw[1,])
+```
+
+
+```{r tw-hashtag, eval=FALSE, echo=F, message=F, warning=F}
+tweets2021_vaccine<- search_tweets(q = "#vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_vaccine_and_covid19<- search_tweets(q = "#covid19 AND #vaccine", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job <- search_tweets(q = "#job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_job_covid19 <- search_tweets(q = "#covid19 AND #job", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_jobloss <- search_tweets(q = "#covid19 AND #jobloss", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+tweets2021_donate <- search_tweets(q = "#covid19 AND #donate", n=10000, include_rts=FALSE, lang="en", retryonratelimit = TRUE)
+```
+
+To explore the data and extract insights in the most efficient way, we decided to clean up the data. We use only the relevant columns.
+
+```{r datacleaning, echo=FALSE, message=FALSE, results='hide'}
+colnames(tweets2021_raw)
+```
+
+For more useful insights for our task, we use only the columns "**text**", "**hashtags**" and "**location**" and we specifically clean up the columns text and hashtags.
+
+The extracted tweets are categorized based on countries and the count is shown below:
+
+```{r tw-counts-by-countries, echo=T, message=FALSE, warning=FALSE}
+tweets2021_raw %>% 
+  filter(!is.na(location) & location != "") %>% 
+  dplyr::count(location, sort = TRUE) %>% 
+  top_n(10)
+tweets2020_raw %>% 
+  filter(!is.na(user_location) & user_location != "") %>% 
+  dplyr::count(user_location, sort = TRUE) %>% 
+  top_n(10)
+```
+
+It is however important to note that Twitter API is based on _relevance_ and not _completeness._ <https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/overview>
+
+Below are the most occurring hashtags in the extracted tweets:
+
+```{r tw-tag-count, echo=T, message=FALSE, warning=FALSE}
+`%notin%` <- Negate(`%in%`)
+tweets2021_raw %>% 
+  unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(hashtag, "^#"),
+        hashtag %notin% c("#coronavirus","#COVID19", "#covid19","#Covid19", "#Coronavirus")) %>%
+  dplyr::count(hashtag, sort = TRUE) %>%
+  top_n(10)
+```
+
+### **Word Cloud of popular tags from 2020 and 2021**
+
+#### **Tags of 2021 consisting of a single item from a sequence - Unigrams**
+
+In Unigram we assume that the occurrence of each word is independent of its previous word.
+
+```{r tw-uni-21, echo=T, message=FALSE, warning=FALSE}
+words <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  dplyr::count(word, sort = TRUE)
+words %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It can be seen that in **2021** the greater prominence is given to tweets with hashtags "**capacity**" that appear more frequently in the recent time period. From our research it was found that CAPACITY is a registry of patients with COVID-19 and has been established to answer questions on the role of cardiovascular disease in this pandemic.
+
+
+#### **Tags of 2020 consisting of a single item from a sequence - Unigrams**
+
+```{r tw-uni-20, echo=F, message=FALSE, warning=FALSE}
+words_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+")) %>%
+  dplyr::count(word, sort = TRUE)
+words_2020 %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It is pretty evident that "**coronavirus**" outweigh other tags in the year **2020** which was trending when the arrival of the pandemic was sensed which remarks the global sentiment to a large extent. 
+
+
+#### **Tags of 2021 consisting of a two-word sequence - Bigrams**
+
+```{r tw-bi-21, echo=T, message=FALSE, warning=FALSE}
+words_bigrams <- tweets2021_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  dplyr::count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+words_bigrams %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+It is evident that a conjunctive words such as "**min age**", "**covid 19 pune**" are more frequent and also two-word sequences like "**delta variant**", "**vaccines covishield**" also draws into an attention towards novelty which is more significant in recent times.
+
+
+#### **Tags of 2020 consisting of a two-word sequence - Bigrams**
+
+```{r tw-bi-20, echo=F, message=FALSE, warning=FALSE}
+
+words_bigrams_2020 <- tweets2020_raw %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "ngrams", n=2) %>%
+  dplyr::count(word, sort = TRUE) %>%
+  separate(word, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word,
+     !word1 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word1, "[a-z]"),
+     !str_detect(word1, "^#"),         
+     !str_detect(word1, "@\\S+")) %>%
+  filter(!word2 %in% stop_words$word,
+     !word2 %in% str_remove_all(stop_words$word, "'"),
+     str_detect(word2, "[a-z]"),
+     !str_detect(word2, "^#"),         
+     !str_detect(word2, "@\\S+")) %>%
+  mutate(word = paste(word1,word2))
+ 
+words_bigrams_2020 %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+```
+
+In the latter 2020 when the outbreak was sensed "wuhan coronavirus", "coronavirus outbreak" was more to be noticeable in the twitter community.
+
+### **Sentiment Analysis**
+
+We perform some study on the subjective information in an expression by performing *Sentimental analysis* to assimilate the tone of the emotion as positive or negative.
+
+```{r, echo=F, message=FALSE, warning=FALSE, results='hide'}
+tweet2021_wordlist <- tweets2021_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+tweet2020_wordlist <- tweets2020_raw %>%
+  dplyr::select(text) %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]"),
+         text = str_remove_all(text, "[0-9]")) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  # anti_join(numbers) %>%
+  anti_join(get_stopwords(language = "spa")) %>%
+  filter(!word %in% c("rt", "t.co")) %>%
+  filter(!word %in% c("https", "19", "â" , "fe0f"))
+```
+
+
+```{r tw-senti-top-15, echo=T, message=FALSE, warning=FALSE, fig.width=15}
+library(patchwork)
+
+p1 <- tweet2021_wordlist %>%
+  dplyr::count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words"
+       )
+
+fig1 <- ggplotly(p1)
+
+p2 <- tweet2020_wordlist %>%
+  dplyr::count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(x = "Count",
+       y = "Unique words",
+       title = "Count of unique words found in tweets in 2021 and 2020 respectively")
+
+fig2 <- ggplotly(p2)
+
+subplot(fig1, fig2)
+```
+
+We are plotting the top **15** words that appeared in twitter in 2020 and 2021.
+
+
+#### **Pie chart for NRC emotions and its proportion in 2021 and 2020**
+
+```{r, 2021_data_sent_analysis, cache=TRUE, echo=F, message=FALSE, warning=FALSE, results='hide'}
+tweets2021DF <- tweets2021_raw['text']
+#Clean text data - remove emoticons and other symbols
+tweets2021DF$text <- iconv(tweets2021DF$text,'UTF-8','ASCII')
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+tweets2021DF_clean <- f_clean_tweets(tweets2021DF)
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2021DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2021DF_clean)
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+```
+
+
+```{r pie-1, echo=T, message=FALSE, warning=FALSE}
+
+df <- data.frame(
+  group = sentiment_scores$sentiment,
+  value = sentiment_scores$Score
+  )
+
+fig <- plot_ly(df, labels = sentiment_scores$sentiment, values = sentiment_scores$Score, type = 'pie')
+fig %>% layout(title = 'Emotions of people behind the tweets on COVID19 in 2021',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+
+
+```{r 2020_data_sent_analysis, echo=F, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
+
+tweets2020DF <- tweets2020_raw['text']
+#Clean text data - remove emoticons and other symbols
+tweets2020DF$text <- iconv(tweets2020DF$text,'UTF-8','ASCII')
+f_clean_tweets <- function (tweets) {
+  
+  #Remove twitter mentions
+  clean_tweets <- gsub("@[[:alpha:]]*","", tweets$text)
+  # remove retweet entities
+  clean_tweets = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', clean_tweets)
+  # remove at people
+  clean_tweets = gsub('@\\w+', '', clean_tweets)
+  # remove punctuation
+  clean_tweets = gsub('[[:punct:]]', '', clean_tweets)
+  # remove numbers
+  clean_tweets = gsub('[[:digit:]]', '', clean_tweets)
+  # remove html links
+  clean_tweets = gsub('http\\w+', '', clean_tweets)
+  
+  # remove unnecessary spaces
+  clean_tweets = gsub('[ \t]{2,}', '', clean_tweets)
+  clean_tweets = gsub('^\\s+|\\s+$', '', clean_tweets)
+  # remove emojis or special characters
+  clean_tweets = gsub('<.*>', '', enc2native(clean_tweets))
+  
+  clean_tweets = tolower(clean_tweets)
+  
+  clean_tweets
+}
+tweets2020DF_clean <- f_clean_tweets(tweets2020DF)
+#Get nrc emotions
+sentiment <- get_nrc_sentiment(tweets2020DF_clean)
+sentiment_nonemotions <- get_sentiment(tweets2020DF_clean)
+sentiment_scores <- data.frame(colSums(sentiment[,]))
+names(sentiment_scores) <- "Score"
+sentiment_scores <- cbind("sentiment"=rownames(sentiment_scores),sentiment_scores)
+rownames(sentiment_scores) <- NULL
+
+```
+
+```{r pie-2, echo=F, message=FALSE, warning=FALSE}
+
+df <- data.frame(
+  group = sentiment_scores$sentiment,
+  value = sentiment_scores$Score
+  )
+
+fig <- plot_ly(df, labels = sentiment_scores$sentiment, values = sentiment_scores$Score, type = 'pie')
+fig %>% layout(title = 'Emotions of people behind the tweets on COVID19 in 2020',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+
+Based on a comparative analysis, we infer that in the year 2021 the most dominant sentiment across people was positive while it was negative in the year 2020.
+
+
+## **Infodemic Risk Index (IRI) Analysis**
+
+First we analyze how the IRI took form across the world during the first quarter of 2020.
+
+```{r data-2, echo=F, message=F, warning=F}
+RESOURCES_DIR_PATH <- getwd()
+
+INFODEMIC_REDUCED_FILE_PATH <- file.path(RESOURCES_DIR_PATH, "infodemics_reduced.csv")
+WORLD_RISK_INDEX_FILE_PATH <- file.path(RESOURCES_DIR_PATH, "world_risk_index.csv")
+
+```
+
+```{r inf-red, echo=TRUE, message=F, warning=F}
+dat.red <- read.table(INFODEMIC_REDUCED_FILE_PATH, header = T, sep = ";" )
+dat.red$date <- as.Date(dat.red$date)
+dat.red
+```
+This dataset has the `iso3` country code and the volume of the infodemic score spread across continents which we find is very vital for extracting specific insights to get an idea of how the IRI has evolved across the timeline.
+
+```{r world-risk, echo=TRUE, message=F, warning=F}
+dat.iri.world <- read.table(WORLD_RISK_INDEX_FILE_PATH, header = T, sep = ";")
+dat.iri.world
+```
+
+This dataset has the world risk index for each day in 2020. We extract these data and use for our analysis which will be shown in a timeline with a focus on the risk index.
+
+
+### **IRI analysis by countries**
+
+Here we plan to see how the behavior of IRI has evolved across the timeline and its change in wavelength to see how periodically the cycle repeats.  
+
+
+```{r ita, echo=T, message=F, warning=F}
+COUNTRY <- "ITA"
+#COUNTRY <- c("ITA","VEN")
+dat.red.country.tmp <- dat.red[
+  which(dat.red$iso3 == COUNTRY), 
+  c("date", "IRI_UNVERIFIED", "IRI_VERIFIED")
+]
+
+dat.red.country <- data.frame(
+  date = dat.red.country.tmp$date, 
+  Unverified = (dat.red.country.tmp$IRI_UNVERIFIED),
+  Verified = (dat.red.country.tmp$IRI_VERIFIED)
+)
+
+tmp.cum.mean <- dplyr::cummean(rowSums(dat.red.country[order(dat.red.country$date), 2:3]))
+
+dat.red.country <- melt(dat.red.country, id.vars = "date")
+
+dat.red.country.epi <- data.frame(
+  date = dat.red[which(dat.red$iso3 == COUNTRY), ]$date, 
+  epi.new = c(0, diff(dat.red[which(dat.red$iso3 == COUNTRY), ]$EPI_CONFIRMED)) 
+)
+
+dat.red.country.epi[which(dat.red.country.epi$epi.new == 0), ]$epi.new <- NA
+
+dat.red.country.cummean <- data.frame(
+  date = dat.red[which(dat.red$iso3 == COUNTRY), ]$date, 
+  Cum.Mean = tmp.cum.mean
+)
+
+  ggplot() + 
+  theme_bw() + 
+  theme(panel.grid = element_blank()) + 
+  geom_point(data = dat.red.country.epi, 
+             aes(date, size = epi.new), 
+             y = 0.9, alpha = 0.5, 
+             color = "tomato") + 
+  geom_histogram(data = dat.red.country, 
+                 aes(date, value, fill = variable), 
+                 stat = "identity", 
+                 type = "stacked", 
+                 position = position_stack(reverse = TRUE)) + 
+  scale_fill_manual(name = "", 
+                    values = c('#4DBBD5FF', '#3C5488FF')) + 
+  ylab("IRI") + 
+  xlab("Timeline")  +
+  ylim(c(0, 1)) + 
+  guides(size = guide_legend(title = "New Cases")) + 
+  geom_text(data = dat.red.country.epi, 
+            aes(x = date, label = epi.new), 
+            angle = 90, 
+            y = 0.97, 
+            size = 2, 
+            color = "grey30") + 
+  geom_line(data = dat.red.country.cummean, 
+            aes(date, Cum.Mean), 
+            linetype = "dashed", 
+            color = "grey30")+
+    ggtitle("IRI scores in Italy")
+```
+
+It is very important to note that in the early 2020 there are extremely very large volume of new cases that caused outbreak of this havoc starting from March and it increases by __500__ cases per day. Also it is salient that a large number of potential unverified cases is noticeable during the entire timeline.
+
+
+```{r ven, echo=F, message=F, warning=F}
+COUNTRY <- "VEN"
+dat.red.country.tmp <- dat.red[
+  which(dat.red$iso3 == COUNTRY), 
+  c("date", "IRI_UNVERIFIED", "IRI_VERIFIED")
+]
+
+dat.red.country <- data.frame(
+  date = dat.red.country.tmp$date, 
+  Unverified = (dat.red.country.tmp$IRI_UNVERIFIED),
+  Verified = (dat.red.country.tmp$IRI_VERIFIED)
+)
+
+tmp.cum.mean <- dplyr::cummean(rowSums(dat.red.country[order(dat.red.country$date), 2:3]))
+
+dat.red.country <- melt(dat.red.country, id.vars = "date")
+
+dat.red.country.epi <- data.frame(
+  date = dat.red[which(dat.red$iso3 == COUNTRY), ]$date, 
+  epi.new = c(0, diff(dat.red[which(dat.red$iso3 == COUNTRY), ]$EPI_CONFIRMED)) 
+)
+
+dat.red.country.epi[which(dat.red.country.epi$epi.new == 0), ]$epi.new <- NA
+
+dat.red.country.cummean <- data.frame(
+  date = dat.red[which(dat.red$iso3 == COUNTRY), ]$date, 
+  Cum.Mean = tmp.cum.mean
+)
+
+ggplot() + 
+  theme_bw() + 
+  theme(panel.grid = element_blank()) + 
+  geom_point(data = dat.red.country.epi, 
+             aes(date, size = epi.new), 
+             y = 0.9, alpha = 0.5, 
+             color = "tomato") + 
+  geom_histogram(data = dat.red.country, 
+                 aes(date, value, fill = variable), 
+                 stat = "identity", 
+                 type = "stacked", 
+                 position = position_stack(reverse = TRUE)) + 
+  scale_fill_manual(name = "", 
+                    values = c('#4DBBD5FF', '#3C5488FF')) + 
+  ylab("IRI") + 
+  xlab("Timeline")  +
+  ylim(c(0, 1)) + 
+  guides(size = guide_legend(title = "New Cases")) + 
+  geom_text(data = dat.red.country.epi, 
+            aes(x = date, label = epi.new), 
+            angle = 90, 
+            y = 0.97, 
+            size = 2, 
+            color = "grey30") + 
+  geom_line(data = dat.red.country.cummean, 
+            aes(date, Cum.Mean), 
+            linetype = "dashed", 
+            color = "grey30")+
+    ggtitle("IRI scores in Venezuela ")
+```
+
+It is surprising to see the absence of new cases in Venezuela but the cumulative mean is very high for all the months and is **0.87** on 17-02-2020.
+
+### **IRI effect**
+
+For the first quarter of 2020 from mid of January to mid of March we analyze its effects across different countries.
+
+```{r iri-across-20, echo=T, message=F, warning=F}
+library(RColorBrewer)
+
+col <- brewer.pal(9, "YlGnBu") 
+
+idxs.sub <- which(dat.red$TWI_VOLUME > 2000 & dat.red$EPI_CONFIRMED > 100)
+country.sub <- as.character(unique(dat.red[idxs.sub, ]$iso3))
+dat.red.sub <- dat.red[which(dat.red$iso3 %in% country.sub), 
+                       c('date' ,'iso3', 'IRI_ALL')]
+
+ggplotly(ggplot(dat.red.sub, aes(x = date, 
+                                 y = reorder(iso3, IRI_ALL), 
+                                 fill = IRI_ALL)) + 
+  geom_tile() +
+  theme_bw() +
+  scale_fill_gradientn(colors = col, limits = c(0, 1), name = "IRI") +
+  theme(panel.background = element_blank(), 
+        panel.grid.major = element_blank(), legend.position = 'top') +
+  ylab('Country') +
+  xlab('Timeline') +
+  geom_hline(yintercept = c(seq(1.5, 21, 1)), color = 'grey70') +
+  scale_x_date(expand = c(0, 0))+ggtitle("IRI scores across 20 different countries"))
+```
+
+It can be seen that in countries like `Iran`the IRI score very pretty high as compared to few other European countries from second half of January to first half of March 2020.
+
+
+### **IRI reduction**
+
+We assess and compare the cumulative number of reported cases which are grouped into 6 different bins for all countries. 
+
+```{r iri-boxplot, echo=T, message=F, warning=F,fig.width=8, fig.height=5}
+dat.corr2 <- data.frame()
+dat.corr <- dat.red[, c("date", "iso3", "EPI_CONFIRMED", "IRI_ALL")]
+
+for(cc in unique(dat.corr$iso3)){
+  tmp <- dat.corr[which(dat.corr$iso3 == cc), ]
+  tmp <- tmp[order(tmp$date), ]
+  tmp$EPI_CONFIRMED_DAILY <- c(0, diff(tmp$EPI_CONFIRMED))
+  tmp$IRI_ALL_CUMMEAN <- dplyr::cummean(tmp$IRI_ALL)
+  dat.corr2 <- rbind(dat.corr2, tmp)
+}
+
+dat.corr2 <- dat.corr2[! is.na(dat.corr2$IRI_ALL), ]
+dat.corr2 <- dat.corr2[- which(dat.corr2$EPI_CONFIRMED == 0), ]
+
+bin <- rep(0, nrow(dat.corr2))
+bin[which(dat.corr2$EPI_CONFIRMED <= 2 )] <- 0
+bin[which(3 <= dat.corr2$EPI_CONFIRMED & dat.corr2$EPI_CONFIRMED < 8)] <- 1
+bin[which(8 <= dat.corr2$EPI_CONFIRMED & dat.corr2$EPI_CONFIRMED < 16)] <- 2
+bin[which(16 <= dat.corr2$EPI_CONFIRMED & dat.corr2$EPI_CONFIRMED < 51)] <- 3
+bin[which(51 <= dat.corr2$EPI_CONFIRMED & dat.corr2$EPI_CONFIRMED < 10001)] <- 4
+bin[which(10001 <= dat.corr2$EPI_CONFIRMED & dat.corr2$EPI_CONFIRMED < 81000)] <- 5
+
+dat.corr2$bin <- bin
+
+labels.min <- dat.corr2 %>% group_by(bin) %>% summarise_at(vars(EPI_CONFIRMED), min)
+labels.max <- dat.corr2 %>% group_by(bin) %>% summarise_at(vars(EPI_CONFIRMED), max)
+
+ lab <- paste0(labels.min$EPI_CONFIRMED, '-', labels.max$EPI_CONFIRMED)
+  lab[5:6] <- c('51-9999', '10000+')
+ggplotly(ggplot(dat.corr2, aes(as.factor(bin), IRI_ALL_CUMMEAN)) +
+ theme_bw() +
+theme(panel.grid = element_blank(),
+     legend.position = "none") +
+geom_boxplot(aes(fill = as.numeric(bin)),
+             size = 0.15,
+             outlier.color = "grey70",
+              color = "grey70", notch = TRUE) +
+xlab("Cumulative Number of Reported Cases") +
+ylab("IRI Cumulative Mean") +
+scale_fill_viridis_c() +
+scale_x_discrete(labels = lab) +
+ggtitle("Cumulative IRI vs. Epidemic per index confirmed"))
+```
+
+
+The sample sizes of the reported cases for the groups in the range of 3-7, 8-15 are reasonably symmetric indicative of less variability in the analysis but, for groups 1-2, 16-50, 51-9999, 10k+ are left-skewed signifies some level of variability.
+
+The medians of all the 6 groups are different benchmarking there is a **significant difference** between all the groups relative to the cumulative IRI taken into consideration. 
+
+Also to be noted that for case group 1-2 there are seemingly more outliers than the other 4 case groups but not for the case group 10k+. In addition, for case group 51-9999 the `two` outlier points above it's upper fence appear overlapping and resembles an outlier cluster. 
+
+### **IRI score across continents**
+
+This plot shows IRI vs confirmed COVID-19 cases for Infodemics and Epidemics data aggregation by Country and at a border level categorized into continent.
+
+```{r iri-across-continent-plot, echo=T, message=F, warning=F, fig.width=12, fig.height=6}
+
+x0 <- aggregate(TWI_VOLUME ~ iso3, dat.red, mean)
+colnames(x0) <- c("Country", "Message.Volume") 
+x1 <- aggregate( EPI_CONFIRMED ~ iso3, dat.red, max)
+colnames(x1) <- c("Country", "Infected")
+x2a <- aggregate( IRI_UNVERIFIED ~ iso3, dat.red, mean)
+colnames(x2a) <- c("Country", "Risk Unverified")
+x2b <- aggregate( IRI_VERIFIED ~ iso3, dat.red, mean)
+colnames(x2b) <- c("Country", "Risk Verified")
+
+tab <- merge(x0, x1, by = "Country")
+tab <- merge(tab, x2a, by = "Country")
+tab <- merge(tab, x2b, by = "Country")
+
+tab$Info.Risk <- tab[, "Risk Verified"] + tab[, "Risk Unverified"]
+tab$Continent <- countrycode(tab$Country, 'iso3c', 'continent')
+
+tab <- tab[order(tab$Info.Risk),]
+tab <- tab[! is.na(tab$Continent), ]
+rownames(tab) <- NULL
+
+Infect.thres <- 0
+idxs <- which(tab$Infected > Infect.thres & ! tab$Country %in% c("CHN", "TWN", "IRN"))
+
+ggplot(tab[idxs, ], aes(Info.Risk, Infected, color = Continent, size = Message.Volume))  + 
+  theme_bw() + 
+  theme(panel.grid = element_blank()) + 
+  stat_smooth(method = 'lm', 
+              linetype = "solid", 
+              color = "red", 
+              alpha = 0.2, 
+              size = 0.25, 
+              se = T) + 
+  geom_point(alpha = 0.7) + 
+  scale_color_npg() + 
+  geom_text_repel(aes(label = Country), 
+                  show.legend = F, 
+                  seed = 786) + 
+  scale_y_log10() + 
+  geom_vline(xintercept = median(tab$Info.Risk[idxs], na.rm = T), 
+             linetype = "dashed", 
+             color = "#dadada") + 
+  geom_hline(yintercept = median(tab$Infected[idxs], na.rm = T), 
+             linetype = "dashed", 
+             color = "#dadada") + 
+  xlab("IRI")  + 
+  ylab("Confirmed COVID19 Cases") +  
+  stat_smooth(linetype = "dashed", 
+              color = "black", 
+              alpha = 0.2, 
+              size = 0.35, 
+              se = F ) + 
+  labs(size = 'Volume')+
+  ggtitle("Showing confirmed COVID-19 cases across countries and the IRI score")
+
+```
+
+
+It can be inferred that the IRI volume is very high in `USA` with approximately 383,210 cases. Also, we have focused to show this critical impact at top 5 continents around the globe. Moreover it has to be noted that the IRI score is very high Peru which is almost around 0.98 although the total infected cases are 11. 
+
+## **Trust in media sources**
+
+The most common media sources where people sought to get the information from we show the trust level for these.
+
+```{r data-load, echo=TRUE, message=F, warning=F}
+data_12 <- read.spss("DATA_COVID19_TrustInformation.sav",
+                     use.value.labels = FALSE,
+                     to.data.frame = TRUE)
+names(data_12) <- tolower(names(data_12))
+data_12
+```
+This dataset has some of the significant data pertaining to the trust levels collected on a survey form as all categorical values. We plan to exploit this to do some regression analysis and draw conclusion for the trust in media and local authorities.
+
+
+```{r prepo-1, echo=F, message=F, warning=F}
+data_12 <- 
+  data_12 %>% 
+  mutate(avoidactions_avgZ = (avoid_avg - mean(avoid_avg, na.rm=T))/sd(avoid_avg, na.rm=T))%>% 
+  mutate(safetyprecautions_avgZ = (safetyprecautions_avg - mean(safetyprecautions_avg, na.rm=T))/sd(safetyprecautions_avg, na.rm=T))%>% 
+  mutate(otheravoid_avgZ = (otheravoid_avg - mean(otheravoid_avg, na.rm=T))/sd(otheravoid_avg, na.rm=T))
+
+data_12 <- 
+  data_12 %>% 
+  mutate(actselfZ = (actions_selfcare - mean(actions_selfcare, na.rm=T))/sd(actions_selfcare, na.rm=T))%>% 
+  mutate(actnegZ = (actions_negout - mean(actions_negout, na.rm=T))/sd(actions_negout, na.rm=T))%>% 
+  mutate(actdistZ = (actions_distance - mean(actions_distance, na.rm=T))/sd(actions_distance, na.rm=T))%>% 
+  mutate(actmaskZ = (actions_masking - mean(actions_masking, na.rm=T))/sd(actions_masking, na.rm=T))
+
+data_12 <- 
+  data_12 %>% 
+  mutate(risk2Z = (risk2_avg - mean(risk2_avg, na.rm=T))/sd(risk2_avg, na.rm=T))%>%
+  mutate(concernZ = (concerned_quant - mean(concerned_quant, na.rm=T))/sd(concerned_quant, na.rm=T))%>% 
+  mutate(feelinginformedZ = (feelinginformed_avg - mean(feelinginformed_avg, na.rm=T))/sd(feelinginformed_avg, na.rm=T))%>% 
+  mutate(conspiracyZ = (virus_natart - mean(virus_natart, na.rm=T))/sd(virus_natart, na.rm=T))%>% 
+  mutate(threatglobalZ = (severe_globalsociety - mean(severe_globalsociety, na.rm=T))/sd(severe_globalsociety, na.rm=T))
+
+data_12 <- 
+  data_12 %>% 
+  mutate(trustgov_localZ = (trustgov_country - mean(trustgov_country, na.rm=T))/sd(trustgov_country, na.rm=T))%>% 
+  mutate(trustgov_globalZ = (trustgov_global - mean(trustgov_global, na.rm=T))/sd(trustgov_global, na.rm=T))%>% 
+  mutate(trustscient_localZ = (trustscient_country - mean(trustscient_country, na.rm=T))/sd(trustscient_country, na.rm=T))%>% 
+  mutate(trustscient_globalZ = (trustscient_global - mean(trustscient_global, na.rm=T))/sd(trustscient_global, na.rm=T))%>% 
+  mutate(trustpers_localZ = (trustpers_country - mean(trustpers_country, na.rm=T))/sd(trustpers_country, na.rm=T))%>% 
+  mutate(trustpers_globalZ = (trustpers_global - mean(trustpers_global, na.rm=T))/sd(trustpers_global, na.rm=T))%>% 
+  mutate(trustscientistsZ = (trust_scientists - mean(trust_scientists, na.rm=T))/sd(trust_scientists, na.rm=T))%>% 
+  mutate(trust_peopleZ = (trust_people - mean(trust_people, na.rm=T))/sd(trust_people, na.rm=T))%>% 
+  mutate(trustgov_nonZ = (trustgovnon - mean(trustgovnon, na.rm=T))/sd(trustgovnon, na.rm=T))%>% 
+  mutate(trustgov_popZ = (trustgovpop - mean(trustgovpop, na.rm=T))/sd(trustgovpop, na.rm=T))
+
+data_12 <- 
+  data_12 %>%
+  mutate(fakenewsZ = (fakenews - mean(fakenews, na.rm=T))/sd(fakenews, na.rm=T))%>% 
+  mutate(media_underoverZ = (media_underover - mean(media_underover, na.rm=T))/sd(media_underover, na.rm=T))%>% 
+  mutate(trust_whoZ = (trust_who - mean(trust_who, na.rm=T))/sd(trust_who, na.rm=T))%>%
+  mutate(trust_nhsZ = (trust_nhs - mean(trust_nhs, na.rm=T))/sd(trust_nhs, na.rm=T))%>%
+  mutate(trust_govZ = (trust_gov - mean(trust_gov, na.rm=T))/sd(trust_gov, na.rm=T))%>%
+  mutate(trust_institZ = (trust_institwebsites - mean(trust_institwebsites, na.rm=T))/sd(trust_institwebsites, na.rm=T))%>%
+  mutate(trust_newspaperZ = (trust_newspaper - mean(trust_newspaper, na.rm=T))/sd(trust_newspaper, na.rm=T))%>%
+  mutate(trust_fbZ = (trust_fb - mean(trust_fb, na.rm=T))/sd(trust_fb, na.rm=T))%>%
+  mutate(trust_twZ = (trust_tw - mean(trust_tw, na.rm=T))/sd(trust_tw, na.rm=T))%>%
+  mutate(trust_igZ = (trust_ig - mean(trust_ig, na.rm=T))/sd(trust_ig, na.rm=T))%>%
+  mutate(trust_mapsZ = (trust_maps - mean(trust_maps, na.rm=T))/sd(trust_maps, na.rm=T))%>%
+  mutate(trust_googleZ = (trust_google - mean(trust_google, na.rm=T))/sd(trust_google, na.rm=T))
+
+
+data_non <- data_12[data_12$populistcountry==0,]
+data_pop <- data_12[data_12$populistcountry==1,]
+```
+
+
+```{r prepo-2, echo=F, message=F, warning=F}
+demo_gender <- factor(data_12$demo_gender)
+data <- data_12[data_12$demo_gender!=3,] 
+```
+
+
+```{r prepo-3, echo=F, message=F, warning=F}
+data_usa <- data[data$countryres==187,]
+data_uk <-data[data$countryres==185,]
+data_ita <-data[data$countryres==84,]
+data_bra <-data[data$countryres==24,]
+data_aus <-data[data$countryres==9,]
+data_nld <-data[data$countryres==122,]
+data_por <-data[data$countryres==138,]
+data_ger <-data[data$countryres==65,]
+data_fra <-data[data$countryres==61,]
+data_fin <-data[data$countryres==60,]
+data_cro <-data[data$countryres==42,]
+data_nz <-data[data$countryres==123,]
+```
+
+
+```{r mean-transform-1, echo=F, message=F, warning=F}
+govloc.mean_usa <-  mean(data_usa$trustgov_country,na.rm = TRUE)
+govloc.mean_uk <-  mean(data_uk$trustgov_country,na.rm = TRUE)
+govloc.mean_ita <-  mean(data_ita$trustgov_country,na.rm = TRUE)
+govloc.mean_bra <-  mean(data_bra$trustgov_country,na.rm = TRUE)
+govloc.mean_aus <-  mean(data_aus$trustgov_country,na.rm = TRUE)
+govloc.mean_nld <-  mean(data_nld$trustgov_country,na.rm = TRUE)
+govloc.mean_por <-  mean(data_por$trustgov_country,na.rm = TRUE)
+govloc.mean_ger <-  mean(data_ger$trustgov_country,na.rm = TRUE)
+govloc.mean_fra <-  mean(data_fra$trustgov_country,na.rm = TRUE)
+govloc.mean_fin <-  mean(data_fin$trustgov_country,na.rm = TRUE)
+govloc.mean_cro <-  mean(data_cro$trustgov_country,na.rm = TRUE)
+govloc.mean_nz <-  mean(data_nz$trustgov_country,na.rm = TRUE)
+```
+
+
+```{r mean-transform-2, echo=F, message=F, warning=F}
+govglob.mean_usa <-  mean(data_usa$trustgov_global,na.rm = TRUE)
+govglob.mean_uk <-  mean(data_uk$trustgov_global,na.rm = TRUE)
+govglob.mean_ita <-  mean(data_ita$trustgov_global,na.rm = TRUE)
+govglob.mean_bra <-  mean(data_bra$trustgov_global,na.rm = TRUE)
+govglob.mean_aus <-  mean(data_aus$trustgov_global,na.rm = TRUE)
+govglob.mean_nld <-  mean(data_nld$trustgov_global,na.rm = TRUE)
+govglob.mean_por <-  mean(data_por$trustgov_global,na.rm = TRUE)
+govglob.mean_ger <-  mean(data_ger$trustgov_global,na.rm = TRUE)
+govglob.mean_fra <-  mean(data_fra$trustgov_global,na.rm = TRUE)
+govglob.mean_fin <-  mean(data_fin$trustgov_global,na.rm = TRUE)
+govglob.mean_cro <-  mean(data_cro$trustgov_global,na.rm = TRUE)
+govglob.mean_nz <-  mean(data_nz$trustgov_global,na.rm = TRUE)
+```
+
+
+```{r mean-transform-3, echo=F, message=F, warning=F}
+scientloc.mean_usa <-  mean(data_usa$trustscient_country,na.rm = TRUE)
+scientloc.mean_uk <-  mean(data_uk$trustscient_country,na.rm = TRUE)
+scientloc.mean_ita <-  mean(data_ita$trustscient_country,na.rm = TRUE)
+scientloc.mean_bra <-  mean(data_bra$trustscient_country,na.rm = TRUE)
+scientloc.mean_aus <-  mean(data_aus$trustscient_country,na.rm = TRUE)
+scientloc.mean_nld <-  mean(data_nld$trustscient_country,na.rm = TRUE)
+scientloc.mean_por <-  mean(data_por$trustscient_country,na.rm = TRUE)
+scientloc.mean_ger <-  mean(data_ger$trustscient_country,na.rm = TRUE)
+scientloc.mean_fra <-  mean(data_fra$trustscient_country,na.rm = TRUE)
+scientloc.mean_fin <-  mean(data_fin$trustscient_country,na.rm = TRUE)
+scientloc.mean_cro <-  mean(data_cro$trustscient_country,na.rm = TRUE)
+scientloc.mean_nz <-  mean(data_nz$trustscient_country,na.rm = TRUE)
+```
+
+
+```{r mean-transform-4, echo=F, message=F, warning=F}
+scientglob.mean_usa <-  mean(data_usa$trustscient_global,na.rm = TRUE)
+scientglob.mean_uk <-  mean(data_uk$trustscient_global,na.rm = TRUE)
+scientglob.mean_ita <-  mean(data_ita$trustscient_global,na.rm = TRUE)
+scientglob.mean_bra <-  mean(data_bra$trustscient_global,na.rm = TRUE)
+scientglob.mean_aus <-  mean(data_aus$trustscient_global,na.rm = TRUE)
+scientglob.mean_nld <-  mean(data_nld$trustscient_global,na.rm = TRUE)
+scientglob.mean_por <-  mean(data_por$trustscient_global,na.rm = TRUE)
+scientglob.mean_ger <-  mean(data_ger$trustscient_global,na.rm = TRUE)
+```
+
+```{r mean-transform-5, echo=F, message=F, warning=F}
+scientglob.mean_fra <-  mean(data_fra$trustscient_global,na.rm = TRUE)
+scientglob.mean_fin <-  mean(data_fin$trustscient_global,na.rm = TRUE)
+scientglob.mean_cro <-  mean(data_cro$trustscient_global,na.rm = TRUE)
+scientglob.mean_nz <-  mean(data_nz$trustscient_global,na.rm = TRUE)
+```
+
+### **Trust analysis in local governments vs. global governments**
+
+```{r splot-gov-preproc, echo=F, message=F, warning=F}
+column1gov <- c("Australia","Brazil","Croatia",
+                "Finland","France","Germany",
+                "Italy","Netherlands", "New Zealand",
+                "Portugal","United Kingdom","United States")
+column2gov <- c(govloc.mean_aus,govloc.mean_bra,govloc.mean_cro,govloc.mean_fin,
+                govloc.mean_fra,govloc.mean_ger,govloc.mean_ita,govloc.mean_nld, govloc.mean_nz, govloc.mean_por,govloc.mean_uk,govloc.mean_usa)
+
+column3gov <- c(govglob.mean_aus,govglob.mean_bra,govglob.mean_cro,
+                govglob.mean_fin,govglob.mean_fra,govglob.mean_ger,
+                govglob.mean_ita,govglob.mean_nld, govglob.mean_nz, govglob.mean_por,govglob.mean_uk,govglob.mean_usa)
+
+data_scatter_gov <- cbind(column1gov,column2gov,column3gov)
+colnames(data_scatter_gov) <- c("country", "govloc", "govglob")
+
+write.csv(data_scatter_gov,'data_scatter_gov.csv')
+data_scatterplot_gov <- read.csv("data_scatter_gov.csv")
+```
+
+
+```{r splot-gov-trust, echo=TRUE, message=F, warning=F}
+
+ggplotly(ggplot(data_scatterplot_gov, aes(x=govglob, y=govloc)) +
+  geom_point(col="blue", alpha = 0.9) + 
+  geom_text(label=data_scatterplot_gov$country)+
+  xlab("Trust in global governments")+
+  ylab("Trust in country's government")+
+  ggtitle("Plot for trust among citizens in Country's government for 12 different countries")+
+  geom_smooth(method = "lm"))
+```
+
+
+It is very much evident that in early 2020 _New Zealand_ was declared as a COVID-19 free country so we estimate the trust in its government is remarkably higher in comparison to other countries of the world. On the contrary, it modeled a low trust score in global governments. 
+ 
+At the same time trust score in Brazil's local government is extremely lower but it shows a high trust in global governments. 
+
+Thus shows a __strong__ and __negative__ correlation among the trust in a particular country's government and in global government.
+
+### **Trust analysis in local scientists vs. global scientists**
+
+```{r scien-preproc,  echo=F, message=F, warning=F}
+column1scient <- c("Australia","Brazil","Croatia",
+                   "Finland","France","Germany",
+                   "Italy","Netherlands", "New Zealand",
+                   "Portugal","United Kingdom","United States")
+
+column2scient <- c(scientloc.mean_aus,scientloc.mean_bra,scientloc.mean_cro,
+                   scientloc.mean_fin,scientloc.mean_fra,scientloc.mean_ger,
+                   scientloc.mean_ita,scientloc.mean_nld, scientloc.mean_nz,
+                   scientloc.mean_por,scientloc.mean_uk,scientloc.mean_usa)
+
+column3scient <- c(scientglob.mean_aus,scientglob.mean_bra,scientglob.mean_cro,
+                   scientglob.mean_fin,scientglob.mean_fra,scientglob.mean_ger,
+                   scientglob.mean_ita,scientglob.mean_nld, scientglob.mean_nz,
+                   scientglob.mean_por,scientglob.mean_uk,scientglob.mean_usa)
+
+data_scatter_scient <- cbind(column1scient,column2scient,column3scient)
+colnames(data_scatter_scient) <- c("country", "scientloc", "scientglob")
+
+write.csv(data_scatter_scient,'data_scatter_scient.csv')
+data_scatterplot_scient <- read.csv("data_scatter_scient.csv")
+```
+
+
+```{r splot-scient-trust, echo=TRUE, message=F, warning=F}
+
+ggplotly(ggplot(data_scatterplot_scient, aes(x=scientglob, y=scientloc)) +
+  geom_point(col="blue", alpha = 0.5) + 
+  geom_text(label=data_scatterplot_scient$country)+
+  xlab("Trust in scientists globally")+
+  ylab("Trust in country's scientists")+ 
+  ggtitle("Plot for trust among citizens in Country's scientists for 12 different countries")+
+  geom_smooth(method = "lm"))
+
+```
+
+
+For the same set of 12 different countries, we do a comparative analysis by plotting the trust in the scientists of their country vs. the trust in global scientist. From our data it is evident that for `Italy` the trust in local government are as low as 5.78 whereas globally it is just 5.31. For `Brazil` the local trust score is nearly 8.4 whereas the global trust score around 8.6. 
+
+This shows a __strong__ and __positive__ correlation among the trust in a particular country's scientists and in global scientists.
+
+### **Regression analysis (Trust scores for local authorities)**
+
+We perform this analysis and create 4 different models where we separate countries into popular country list and non-popular country list based on the **conspiracy beliefs** and **perceived knowledge** on mainstream online media and well known newspaper websites. We performed regression analysis using the `lme4` and `lavaan` library for modeling mixed effects as in our predictor variables causes more than one random variability in the data.
+
+```{r lmer-fit-1, echo=F, message=F, warning=F, results='hide'}
+library(lme4)
+library(lmerTest)
+
+full_conspir_non = lmer(conspiracyZ ~ trustgov_localZ + trustgov_globalZ + trustscient_localZ + trustscient_globalZ + factor(demo_gender) + demo_age + demo_education + demo_income + (1 | countryres),
+                        data = data_non)
+summary(full_conspir_non)
+confint(full_conspir_non)
+r2(full_conspir_non)
+icc(full_conspir_non)
+AIC(full_conspir_non)
+BIC(full_conspir_non)
+```
+
+```{r lmer-fit-2, echo=F, message=F, warning=F, results='hide'}
+full_conspir_pop = lmer(conspiracyZ ~ trustgov_localZ + trustgov_globalZ + trustscient_localZ + trustscient_globalZ +  factor(demo_gender) + demo_age + demo_education + demo_income + (1 | countryres),
+                        data = data_pop)
+summary(full_conspir_pop)
+confint(full_conspir_pop)
+r2(full_conspir_pop)
+icc(full_conspir_pop)
+AIC(full_conspir_pop)
+BIC(full_conspir_pop)
+```
+
+```{r lmer-fit-3, echo=F, message=F, warning=F, results='hide'}
+full_percknowl_non = lmer(feelinginformedZ ~ trustgov_localZ + trustgov_globalZ + trustscient_localZ + trustscient_globalZ  + factor(demo_gender) + demo_age + demo_education + demo_income + (1 | countryres),
+                          data = data_non)
+summary(full_percknowl_non)
+confint(full_percknowl_non)
+r2(full_percknowl_non)
+icc(full_percknowl_non)
+AIC(full_percknowl_non)
+BIC(full_percknowl_non)
+```
+
+```{r lmer-fit-4, echo=F, message=F, warning=F, results='hide'}
+full_percknowl_pop = lmer(feelinginformedZ ~ trustgov_localZ + trustgov_globalZ + trustscient_localZ + trustscient_globalZ  + factor(demo_gender) + demo_age + demo_education + demo_income + (1 | countryres),
+                          data = data_pop)
+summary(full_percknowl_pop)
+confint(full_percknowl_pop)
+r2(full_percknowl_pop)
+icc(full_percknowl_pop)
+AIC(full_percknowl_pop)
+BIC(full_percknowl_pop)
+```
+
+```{r get-params-ready, echo=F, message=F, warning=F}
+trustgov_localZ <- data_non$trustgov_localZ
+feelinginformedZ<- data_non$feelinginformedZ
+conspiracyZ<- data_non$conspiracyZ
+safetyprecautions_avgZ<- data_non$safetyprecautions_avgZ
+otheravoid_avgZ<- data_non$otheravoid_avgZ
+```
+
+```{r gov-1, echo=F, message=F, warning=F}
+trustgov_localZ <- data_pop$trustgov_localZ
+feelinginformedZ<- data_pop$feelinginformedZ
+conspiracyZ<- data_pop$conspiracyZ
+safetyprecautions_avgZ<- data_pop$safetyprecautions_avgZ
+otheravoid_avgZ<- data_pop$otheravoid_avgZ
+```
+
+```{r gov-2, echo=F, message=F, warning=F, results='hide'}
+meddata_gov<-data.frame(cbind(trustgov_localZ, feelinginformedZ, conspiracyZ, safetyprecautions_avgZ, otheravoid_avgZ))
+meddata_gov
+```
+
+```{r gov-model, echo=TRUE, message=F, warning=F}
+library(lavaan)
+
+myModel_gov <- '
+feelinginformedZ ~ a1*trustgov_localZ
+conspiracyZ ~ a2*trustgov_localZ
+safetyprecautions_avgZ ~ b1*feelinginformedZ + b3*conspiracyZ + c1*trustgov_localZ
+otheravoid_avgZ ~ b2*feelinginformedZ + b4*conspiracyZ + c2*trustgov_localZ
+## indirects
+indirect1 := a1 * b1
+indirect2 := a2 * b3
+indirect3 := a1 * b2
+indirect4 := a2 * b4
+## contrasts
+con1 := (a1*b1) - (a2*b3)
+con2 := (a1*b2) - (a2*b4)
+## covariates
+feelinginformedZ ~~ conspiracyZ
+safetyprecautions_avgZ ~~ otheravoid_avgZ
+'
+```
+
+
+```{r fit-1, echo=F, message=F, warning=F, results='hide'}
+fit <- sem(myModel_gov, data=meddata_gov, se = "bootstrap", bootstrap = 5000) 
+summary(fit, fit.measures=TRUE, standardize=TRUE, rsquare=TRUE)
+parameterEstimates(fit, boot.ci.type="bca.simple")
+```
+
+
+```{r sci-1, echo=F, message=F, warning=F}
+trustscientistsZ <- data_12$trustscientistsZ
+feelinginformedZ<- data_12$feelinginformedZ
+conspiracyZ<- data_12$conspiracyZ
+safetyprecautions_avgZ<- data_12$safetyprecautions_avgZ
+otheravoid_avgZ<- data_12$otheravoid_avgZ
+```
+
+```{r sci-2, echo=F, message=F, warning=F, results='hide'}
+meddata_sci<-data.frame(cbind(trustscientistsZ, feelinginformedZ, conspiracyZ, safetyprecautions_avgZ, otheravoid_avgZ))
+meddata_sci
+```
+
+```{r scien-model, echo=T, message=F, warning=F}
+library(lavaan)
+
+myModel_sci <- '
+feelinginformedZ ~ a1*trustscientistsZ
+conspiracyZ ~ a2*trustscientistsZ
+safetyprecautions_avgZ ~ b1*feelinginformedZ + b3*conspiracyZ + c1*trustscientistsZ
+otheravoid_avgZ ~ b2*feelinginformedZ + b4*conspiracyZ + c2*trustscientistsZ
+## indirects
+indirect1 := a1 * b1
+indirect2 := a2 * b3
+indirect3 := a1 * b2
+indirect4 := a2 * b4
+## contrasts
+con1 := (a1*b1) - (a2*b3)
+con2 := (a1*b2) - (a2*b4)
+## covariates
+feelinginformedZ ~~ conspiracyZ
+safetyprecautions_avgZ ~~ otheravoid_avgZ
+'
+```
+
+
+```{r fit-2, echo=T, message=F, warning=F}
+fit <- sem(myModel_sci, data=meddata_sci, se = "bootstrap", bootstrap = 5000)
+summary(fit, fit.measures=TRUE, standardize=TRUE, rsquare=TRUE)
+parameterEstimates(fit, boot.ci.type="bca.simple")
+```
+
+
+We use Structural Equation Models (SEM) to fit our models. We do this for 5000 bootstrap samples and use the adjusted bootstrap percentile (BCa) interval for correcting the bias and skewness in the distribution of bootstrap estimates. Followed that we calculated the correlation of trust in media using Pearson's product-moment correlation. We use certain metrics like Inter-class Correlation Coefficient (ICC), AIC and BIC to check the model complexity. We perform this by taking the grouping factor as the residential country `countryres`. 
+
+Based on the grouping factor as `countryres` we categorize them as popular country list `populist` and non-popular country list `non-populist`. On these we analyze for the conspiracy belief and the perceived knowledge from each of the (online) information media sources. Followed by that, we perform a multiple regression test and plot the regression summaries. The information sources that we consider are `WHO`, `Facebook`, `Twitter`, `Instagram`, `National Health Institutes`, `National government` and  `Newspaper websites`.  
+
+
+### **Regression Analysis (trust scores in media)**
+
+```{r reg-1, echo=F, message=F, warning=F, results='hide'}
+table_socmed_conspir_non = lmer(conspiracyZ ~ trust_fbZ + trust_igZ + trust_govZ  + trust_twZ + trust_nhsZ + trust_newspaperZ + trust_whoZ+ (1 | countryres), 
+                                data = data_non)
+summary(table_socmed_conspir_non)
+confint(table_socmed_conspir_non)
+r2(table_socmed_conspir_non)
+icc(table_socmed_conspir_non)
+AIC(table_socmed_conspir_non)
+BIC(table_socmed_conspir_non)
+```
+
+
+```{r reg-2, echo=F, message=F, warning=F, results='hide'}
+table_socmed_conspir_pop = lmer(conspiracyZ ~ trust_fbZ + trust_igZ + trust_govZ  + trust_twZ + trust_nhsZ + trust_newspaperZ + trust_whoZ+ (1 | countryres), 
+                                data = data_pop)
+summary(table_socmed_conspir_pop)
+confint(table_socmed_conspir_pop)
+r2(table_socmed_conspir_pop)
+icc(table_socmed_conspir_pop)
+AIC(table_socmed_conspir_pop)
+BIC(table_socmed_conspir_pop)
+```
+
+```{r reg-3, echo=F, message=F, warning=F , results='hide'}
+
+table_socmed_knowl_non = lmer(feelinginformedZ ~ trust_fbZ + trust_igZ + trust_govZ  + trust_twZ + trust_nhsZ + trust_newspaperZ + trust_whoZ+ (1 | countryres), 
+                              data = data_non)
+summary(table_socmed_knowl_non)
+confint(table_socmed_knowl_non)
+r2(table_socmed_knowl_non)
+icc(table_socmed_knowl_non)
+AIC(table_socmed_knowl_non)
+BIC(table_socmed_knowl_non)
+```
+
+```{r reg-4, echo=T, message=F, warning=F}
+library(lme4)
+library(lmerTest)
+
+table_socmed_knowl_pop = lmer(feelinginformedZ ~ trust_fbZ + trust_igZ + trust_govZ  + trust_twZ + trust_nhsZ + trust_newspaperZ + trust_whoZ+ (1 | countryres), 
+                              data = data_pop)
+summary(table_socmed_knowl_pop)
+confint(table_socmed_knowl_pop)
+r2(table_socmed_knowl_pop)
+icc(table_socmed_knowl_pop)
+AIC(table_socmed_knowl_pop)
+BIC(table_socmed_knowl_pop)
+```
+
+We observe that every 1 unit increase in the trust in **Newspaper websites** (`trust_newspaperZ`) is associated with a __0.13__ increase in trust of people being informed (`feelinginformedZ`) given _all other factors held constant_ for popular countries as compared to other media sources that they participate for.
+
+Our fitted model shows that it is a very highly complex model by realizing the AIC and BIC scores. Also, from our mixed effect model from the **Adjusted ICC** value it can be said that around __6.1%__ proportion of variation in the model is explained by the grouping factor `countryres`. We also look at the **Conditional** $R^2$ which explains around __9.2%__ of both the fixed and random effects in our model.
+
+### **Trust graph**
+
+We depict a so-called ***"trust graph"*** from the above regression analysis to compare how people interact with the modern online social media and we show the trust levels based on _Conspiracy beliefs_ and _Perceived knowledge_.
+
+```{r trust-information-sources, echo=TRUE, message=F, warning=F, fig.width=15, fig.height=8, cache=TRUE}
+
+multiregressiontest <- plot_summs(table_socmed_conspir_non, 
+                                  table_socmed_conspir_pop, 
+                                  table_socmed_knowl_non, 
+                                  table_socmed_knowl_pop, 
+                                  omit.coefs = c("(Intercept)", 
+                                                 "Intercept"),
+                                  model.names = c("Conspiracy belief (non-populist)",
+                                                  "Conspiracy belief (populist)",
+                                                  "Perceived Knowledge(non-populist)",
+                                                  "Perceived Knowledge (populist)"
+                                                  ))
+
+
+multi_plot_con <- multiregressiontest  + theme_apa() 
+
+multi_plot_con + 
+  theme(legend.position="top") + 
+  scale_y_discrete(labels=c("World Health Organisation",
+                                                                           "Newspaper websites",
+                                                                           "National health institutions",
+                                                                           "Twitter", 
+                                                                           "National government", 
+                                                                           "Instagram", 
+                                                                           "Facebook"
+))+
+  xlab("Estimate")+
+  ylab("Information sources")+
+  ggtitle("Trust in information sources during the COVID-19 among citizens")
+```
+
+
+We interestingly find that amount of perceived knowledge regarding the COVID-19 information in popular country list comes from __Newspaper websites__ which is estimated to be in the range of [0.1, 0.16]. Whereas this range is more for non-popular country list is in the rage of [0.17, 0.27] and the trust score comes from the __National government__. 
+
+People believe in conspiracy theories for a variety of reasons—to explain random events, to feel special or unique, or for a sense of social belonging, to name a few. It is also seemingly interesting that in our analysis the measure of Conspiracy belief in non-popular countries come from __Facebook__ and it is estimated to be [0.14, 0.22]. And this range is lower [0.8, 0.15] from the same source for popular countries. 
+
+From the data the conspiracy belief levels from __W.H.O.__ does have a negative estimate for both popular and non-popular countries. 
+
+
+# **Final Analysis**
+
+## ***Global survey***
+
+The countries included in the analyses, and the respective sample size, are: __Austria__ (197), __Belgium__ (388), __Bulgaria__ (59), __Croatia__ (1,730),
+__Cyprus__ (27), __Czech Republic__ (1,035), __Denmark__ (7,239), __Estonia__ (25), __Finland__ (10,557), __France__ (10,686), __Germany__ (788), __Greece__ (409), __Hungary__ (1,050), __Ireland__ (122), __Italy__ (819), __Latvia__ (18), __Lithuania__ (7,734), __Luxembourg__ (40), __Malta__ (11), __Netherlands__ (360), __Poland__ (2,874), __Portugal__ (556), __Romania__ (82), __Slovakia__ (41), __Slovenia__ (14), __Spain__ (455), __Sweden__ (288), __Pakistan__ (317), __India__ (50), __China__ (55), __Russia__ (55).
+
+
+Only **86,751** respondents gave consent to participate in the survey. We therefore used only those records for which the user has marked "Consent" as "Yes". ( _Means that they have allowed their given data to be used for scientific research_ )
+
+
+**64.32%**  of the total people who have attended the survey have answered every question till the end of the survey. Out of total 86,751 participants only **8,068** have answered only `one` question.
+
+
+The majority of respondents __(67.16%)__ were in full-time, part-time work or self-employed, __16.06%__ were either unemployed or retired, __16.79%__ were students.
+
+The age of the respondents ranged from __18__ to __110__, with a median age of __38__.
+
+Individual's general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures
+participants’ stress during the last week by using indicators of stress responses, for instance, perceived lack of control over events, pressure from mounting difficulties and feeling upset about unexpected changes. Scores are considered __moderate__ above __2.4__, and __high__ above __3.7__. Levels of stress were moderate or lower in many countries. Poland and Portugal reported the highest levels of stress in Europe, and Denmark and the Netherlands the lowest.
+
+Levels of stress remained fairly stable over the middle of April, with a negligible decrease between April 4th and April 13th. Overall levels of stress remained higher in women compared to men throughout the period under consideration.
+
+Participants were asked to indicate the extent to which a range of different
+factors represented a source of distress during the COVID-19 health crisis. Specifically, participants indicated their disagreement or agreement with how much each factor from a list represented a source of distress ( _1 = Strongly Disagree, 6 = Strongly Agree_ ). Results indicated that people were on average concerned with the __state of the national economy__. Economic considerations were followed closely by
+__health-related risks__ , such as the risks of __being hospitalized__ and of
+__contracting the new disease__ .
+
+Participants were asked how much they trusted six key institutions , in relation to the COVID-19 emergency (on a scale from 1 = not at all to 10 = completely). Specifically, participants were asked about their trust towards the __health care systems__ , the __World Health Organization (W.H.O.)__, the __national governments’ efforts to tackle the COVID-19__ , the __Police__ , the __civil service__ and the national __government__.
+
+Participants were also asked questions related on **which things they worry about the most** during the pandemic. An interesting finding here was that people worry **most** about their *family* and *country* and **least** about *themselves*. 
+
+Overall, it was reported only medium levels of trust, with the highest levels of trust for their country's *healthcare system* and the *WHO*. Trust towards the national government was relatively lower, compared to the other institutions examined. People also prefer the information coming from friends or other people they know.
+
+The people were also asked question related to instruction that were given to them by Government and other international health organization to stop the spread of corona virus. Surprisingly, most of the choose the option that follow all the instructions given to them to help stop the corona virus spread.
+
+The bivariate relationship between `Extraversion`, `Perceived Support`, `Perceived Stress`, `Loneliness` is reported in the survey. It is evident that in general female respondents are on a higher number as compared to males in participation. It is very evident that `Loneliness` is the root cause of stress which contributes to a major level. The medians of the boxplot for `Perceived Support` heavily overlap and they do not differ which signifes there is a positive correlation (0.251) among the two groups.
+
+
+## ***Twitter***
+
+## ***Infodemics - We need to flatten this curve***
+
+Just as we need to flatten the Covid-19 curve we must also tackle the infodemic curve. Just as with Covid-19 we must attack the curve on two fronts (suppress the contagion and increase our capacity to deal with the surge of information that is coming our way).
+
+A comparative correlation for the trust in media with factors concerning the following were taken into account during our regression analysis:
+
+- Whether COVID-19 is a naturally occurring virus or an artificially made (e.g. lab created)? (`virus_natart`)
+
+From our analsyis for `virus_natart` and `media_underover` the true correlation is around __13%__ which means media has a very high role for overhyping over this question.
+
+- How is the media in general is reporting on the COVID-19 situation? Underplaying or Over-hyping or Just right. (`media_underover`)
+
+We compare our scores at two places one with `virus_natart` where they are overhyped over this news and for `feelinginformed_avg` they likely to be less informed since they share a negative correlation.
+
+- How often a contradictory news is found and turned out to be fake news? (`fakenews`)
+
+Also, for `virus_natart` and `fakenews` with only just __3.6%__ it is difficult to verify the trueness of this question which is very uncertain.
+
+- How informed (`feelinginformed_avg`) are the citizens feeling about:
+
+	- The risk of contracting COVID-19
+	- Symptoms of COVID-19
+	- How COVID-19 virus spreads?
+	- How to prevent COVID-19 from spreading?
+	- Treatment of COVID-19
+ 
+We have analyzed both of these with respect to `fakenews` and `media_underover` for the former a very low correlation is observed meaning atleast by slightly the average number of people are convinced by fake news over social media Whereas, for the latter a negative correlation to this observed meaning an average number of people are likely to be less informed by the media tacit.
+
+To our readers we therefore request to abide to the following in the near future to make sure perform the following:
+
+- Fact check to alert yourself what is currently going around,
+- Stick to trusted sources,
+- Do not forward without checking the authenticity of messages,
+- Increase supply of data by engaging regularly and meaningfully on the platforms that people are already using.
+
+
+<center>
+
+
+[`r fa("github", fill = "black")`](https://github.com/ranjiGT/Data-Science-with-R-2021) [`r fa("youtube", fill = "red")`](https://www.youtube.com/)[`r fa("globe", fill = "blue")`](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
+
+
+</center>
+
+# **Glossary** {-}
+
+Extraversion
+
+: Extraversion indicates how outgoing and social a person is.
+
+Infodemic
+
+:   Infodemic is a portmanteau of "information" and "epidemic" that typically refers to a rapid and far-reaching spread of both accurate and inaccurate information about something, such as a disease. As facts, rumors, and fears mix and disperse, it becomes difficult to learn essential information about an issue.
+
+IRI
+
+:   Infodemic Risk Index; likelihood that a user receives messages pointing to potentially misleading sources. This index quantifies if and how user are exposed to circulating information.
+
+Snowball sampling
+
+:   A non-probability sampling technique where existing study subjects recruit future subjects from among their acquaintances. Thus the sample group is said to grow like a rolling snowball. As the sample builds up, enough data are gathered to be useful for research.
+
+Viral spread
+
+: Sharing something via email or social media that spreads quickly to millions of people online. 
+
+# **References**
