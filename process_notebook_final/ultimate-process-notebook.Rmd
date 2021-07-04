@@ -70,11 +70,16 @@ Dataset can be downloaded here:
 
 ### **Twitter Data**
 
-We worked on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+For the year 2021, we worked on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
 
 Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
 
-After extracting tweets we performed certian preprocessing techniques such as removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
+
+For the year 2020, we found an academic dataset of twitter id's which were collected for the purpose of research of coronavirus.The dataset can be downloaded here:<https://zenodo.org/record/3831406#.YOGah-j7Q6b/>  
+
+These id's were then used to extract tweets using an open source application called `hydrator`(<https://github.com/DocNow/hydrator/>). The extracted tweets were then filtered by the one's in English language and within a particular time frame.
+
+After extracting tweets from both years, we performed certain pre-processing techniques such as removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
 
 ### **COVID-19 Infodemics Observatory**
 
@@ -1848,6 +1853,14 @@ The bivariate relationship between `Extraversion`, `Perceived Support`, `Perceiv
 
 
 ## ***Twitter***
+
+We make use of __35,725__ tweets dated from June 17, 2021 to June 19, 2021 and about __15000__ tweets in English from last year June for our analysis. From our analysis from unigram and bigram tag clouds of 2020, we find that most of the tweets consisted of hashtags with __#coronavirus__ , __#el coronavirus__ followed by __#china__ , __#wuhan__ . Whereas in 2021 the Twitter community seems to post their opinions and views on __#capacity__ , __#vaccines__ , __#coivd19__ , __#cowin covid19__ , __#dose2 capacity__ , __#dose1 capacity__ , __#delta variant__ which shows their inclination towards awareness about the cure rather than panic to an extent.
+
+From the sentimental analysis perspective to capture the tone of the emotions, we targeted the top 15 words where the community expressed their choice of words whenever they posted something on the Twitter page. We report that instead of mentioning the __coronavirus__ community rather resorted to the acronym __covid__ to signify the ease of posting and associating related tweets.
+
+From network analysis we see that __Dose__ and __Capacity__ have been the most commonly occurring words which tells us how important the number of doses and capacity in hospitals has been an issue throughout the world especially in India. We can see a pattern that __lockdown__ , __restrictions__ , __vaccine__ , __testing__ are the most commonly occurring words together which indicates that they have become a part of daily life.
+
+Also from our NRC and based on a comparative analysis, we could see that there is a significant rise in the __positive__ sentiment of the people. The positive sentiment registered by the people in the year 2021 is __24.4%__ while compared with the positive sentiment of __15%__ in the year 2020. Similarly, negative sentiment declined by __6%__ in the year 2021 compared to the year 2020.
 
 ## ***Infodemics - We need to flatten this curve***
 
