@@ -68,6 +68,8 @@ Folder Structure :open_file_folder:
 
 https://rpubs.com/ranjiraj9/covidistress
 
+( _Click the button_ `Hide Toolbars` _at bottom right for better view_ )
+
 ## `Screencast` :arrow_forward:	
 
 [![screencast](https://img.youtube.com/vi/b2b1hFEGxa8/maxresdefault.jpg)](https://youtu.be/b2b1hFEGxa8)
