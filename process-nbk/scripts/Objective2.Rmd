@@ -344,10 +344,14 @@ bing_word_counts <- tweet2021_wordlist %>%
   count(word, sentiment, sort = TRUE) %>%
   ungroup()
 
+write.csv(bing_word_counts,"word_sentiment_2021.csv")
+
 bing_word_counts_2020 <- tweet2020_wordlist %>%
   inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
   ungroup()
+
+write.csv(bing_word_counts_2020,"word_sentiment_2020.csv")
 ```
 
 ```{r, eval=TRUE}

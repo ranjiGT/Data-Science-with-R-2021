@@ -1,6 +1,3 @@
-
-
-
 library(shiny)
 library(shinyjs)
 library(shinyBS)
@@ -16,14 +13,15 @@ library(vov)
 
 
 # Read Data Files
-mergedData <- read.csv("world_map.csv")
-bivariateData <- read.csv("bivariate.csv")
-data_scatterplot_gov <- read.csv("data_scatter_gov.csv")
-data_scatterplot_scient <- read.csv("data_scatter_scient.csv")
-sentiment_2021 <- read.csv("sentiment_scores_2021.csv")
-sentiment_2020 <- read.csv("sentiment_scores_2020.csv")
-distress_source <- read.csv("distress_source.csv")
-coping_source <- read.csv("coping_source.csv")
+mergedData <- read.csv("data/world_map.csv")
+data_scatterplot_gov <- read.csv("data/data_scatter_gov.csv")
+data_scatterplot_scient <- read.csv("data/data_scatter_scient.csv")
+sentiment_2021 <- read.csv("data/sentiment_scores_2021.csv")
+sentiment_2020 <- read.csv("data/sentiment_scores_2020.csv")
+distress_source <- read.csv("data/distress_source.csv")
+coping_source <- read.csv("data/coping_source.csv")
+word_sentiment_2021 <- read.csv("data/word_sentiment_2021.csv")
+word_sentiment_2020 <- read.csv("data/word_sentiment_2020.csv")
 
 
 ui <-
@@ -218,13 +216,17 @@ ui <-
               among the two groups.",
               tags$div(tags$ul(
                 tags$li(
-                  tags$b("Loneliness"),"tends to increase `Perceived Stress` in females and it is about 0.559 which is seen lesser in male respondents."
+                  tags$b("Loneliness"),
+                  "tends to increase `Perceived Stress` in females and it is about 0.559 which is seen lesser in male respondents."
                 ),
                 tags$li(
-                  "During", tags$b("Extraversion")," the `Perceived Support` in males are higher (0.263) in comparison to females (0.2331)."
+                  "During",
+                  tags$b("Extraversion"),
+                  " the `Perceived Support` in males are higher (0.263) in comparison to females (0.2331)."
                 ),
                 tags$li(
-                  tags$b("Extraversion")," reduces the perceived stress significantly in both cases and it is highly effective for females than male respondents."
+                  tags$b("Extraversion"),
+                  " reduces the perceived stress significantly in both cases and it is highly effective for females than male respondents."
                 )
               )),
               
@@ -356,11 +358,8 @@ ui <-
                              offset = 1,
                              br(),
                              
-                             tags$img(
-                               src = "sentiment_2020.png",
-                               width = "800px",
-                               height = "400px"
-                             ),
+                             plotlyOutput("word_sentiment_2020", width = "800px", height = "400px"),
+                             
                              br(),
                              br(),
                            )
@@ -372,11 +371,8 @@ ui <-
                              offset = 1,
                              br(),
                              
-                             tags$img(
-                               src = "sentiment_2021.png",
-                               width = "800px",
-                               height = "400px"
-                             ),
+                             plotlyOutput("word_sentiment_2021", width = "800px", height = "400px"),
+                             
                              br(),
                              br(),
                            )
@@ -387,14 +383,11 @@ ui <-
                     12,
                     "This gives us an important insight after a year while the negativity towards the ",
                     tags$b("virus"),
-                    "has decreased,
-                             the other ongoing after effects of the pandemic such as ",
+                    "and the other ongoing after effects of the pandemic such as ",
                     tags$b("death"),
                     ", ",
                     tags$b("risk"),
-                    " symptoms seem to
-                             still add to the negative sentiment.
-                             On the other hand after a year, there can be seen a huge rise in the positive sentiment as people are ",
+                    " symptoms has increased. On the other hand after a year, there can be seen a huge rise in the positive sentiment as people are ",
                     tags$b("recovering"),
                     ",",
                     tags$b("helping"),
@@ -412,81 +405,82 @@ ui <-
                 )
               )
             ),
-            tabPanel("Network Analysis",
-                     tabsetPanel(
-                       tabPanel("2020",
-                                fluidRow(
-                                  column(
-                                    1,
-                                    offset = 1,
-                                    br(),
-                                    
-                                    fade_in(
-                                      duration = "slow",
-                                      tags$img(
-                                        src = "network2020.png",
-                                        width = "800px",
-                                        height = "400px"
-                                      )
-                                    ),
-                                    br(),
-                                    br(),
-                                  )
-                                )),
-                       
-                         tabPanel("2021",
-                                  fluidRow(
-                                    column(
-                                      1,
-                                      offset = 1,
-                                      br(),
-                                      
-                                      fade_in(
-                                        duration = "slow",
-                                        tags$img(
-                                          src = "network2021.png",
-                                          width = "800px",
-                                          height = "400px"
-                                        )
-                                      ),
-                                      br(),
-                                      br(),
-                                    )
-                                  ))),
-
-                     
-                     fluidRow(
-                       column(
-                         12,
-                         "In 2020 we observe that there is not much awareness with the pandemic. In 2021 we can observe that words like ",
-                         tags$b("doses"),
-                         ", ",
-                         tags$b("age"),
-                         " occur together, and the ",
-                         tags$b("coronavirus"),
-                         " cluster include
+            tabPanel(
+              "Network Analysis",
+              tabsetPanel(tabPanel("2020",
+                                   fluidRow(
+                                     column(
+                                       1,
+                                       offset = 1,
+                                       br(),
+                                       
+                                       fade_in(
+                                         duration = "slow",
+                                         tags$img(
+                                           src = "network2020.png",
+                                           width = "800px",
+                                           height = "400px"
+                                         )
+                                       ),
+                                       br(),
+                                       br(),
+                                     )
+                                   )),
+                          
+                          tabPanel("2021",
+                                   fluidRow(
+                                     column(
+                                       1,
+                                       offset = 1,
+                                       br(),
+                                       
+                                       fade_in(
+                                         duration = "slow",
+                                         tags$img(
+                                           src = "network2021.png",
+                                           width = "800px",
+                                           height = "400px"
+                                         )
+                                       ),
+                                       br(),
+                                       br(),
+                                     )
+                                   ))),
+              
+              
+              fluidRow(
+                column(
+                  12,
+                  "In 2020 we observe that there is not much awareness with the pandemic. In 2021 we can observe that words like ",
+                  tags$b("doses"),
+                  ", ",
+                  tags$b("age"),
+                  " occur together, and the ",
+                  tags$b("coronavirus"),
+                  " cluster include
                            words like ",
-                         tags$b("lockdown"),
-                         ", ",
-                         tags$b("restrictions"),
-                         ", ",
-                         tags$b("vaccine"),
-                         ", ",
-                         tags$b("testing"),
-                         " which have become a part of daily life."
-                         ,
-                         br(),
-                         br(),
-                         "",
-                         tags$b("Dose"),
-                         " and ",
-                         tags$b("Capacity"),
-                         " have been the most commonly occurring words which tells us how important the number of doses and capacity
+                  tags$b("lockdown"),
+                  ", ",
+                  tags$b("restrictions"),
+                  ", ",
+                  tags$b("vaccine"),
+                  ", ",
+                  tags$b("testing"),
+                  " which have become a part of daily life."
+                  ,
+                  br(),
+                  br(),
+                  "",
+                  tags$b("Dose"),
+                  " and ",
+                  tags$b("Capacity"),
+                  " have been the most commonly occurring words which tells us how important the number of doses and capacity
                            in hospitals has been an issue throughout the world.",
-                         br(),
-                         br()
-                       )
-                     ))
+                  br(),
+                  br()
+                )
+              )
+            )
           )
         )
       ),
@@ -1066,30 +1060,6 @@ server <- function(input, output) {
     world_map_stress_levels(input$continent)
   })
   
-  # Bivariate Plot
-  output$bivariate_graph <- renderPlot({
-    bivariateData$X <- NULL
-    levels(bivariateData$Dem_gender)[levels(bivariateData$Dem_gender) == "Other/would rather not say"] = "Undisclosed"
-    
-    ggpairs(
-      bivariateData,
-      columnLabels = c(
-        "Perceived Stress",
-        "Loneliness",
-        "Perceived Support",
-        "Extraversion",
-        "Gender"
-      ),
-      mapping = ggplot2::aes(col = Dem_gender, alpha = .2),
-      upper = list(continuous = wrap("cor", size = 3)),
-      title = "Bivariate relationship of Perceived Stress, Social Support, Loneliness, and Extraversion"
-    ) +
-      theme(title = element_text(face = "bold")) + theme(plot.title = element_text(hjust = 0.5)) +
-      theme(text = element_text(size = 14))
-    
-  })
-  
-  
   # Government Plot
   output$trust_gov_plot <- renderPlotly({
     ggplotly(
@@ -1124,6 +1094,7 @@ server <- function(input, output) {
     
   })
   
+  # emotion plot 2020
   output$sentiment_2020 <- renderPlotly({
     library(ggplot2)
     ggplot(data = sentiment_2020, aes(x = sentiment, y = Score)) + geom_bar(aes(fill =
@@ -1132,6 +1103,7 @@ server <- function(input, output) {
       xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2020 May")
   })
   
+  # emotion plot 2021
   output$sentiment_2021 <- renderPlotly({
     library(ggplot2)
     ggplot(data = sentiment_2021, aes(x = sentiment, y = Score)) + geom_bar(aes(fill =
@@ -1140,6 +1112,42 @@ server <- function(input, output) {
       xlab("Sentiments") + ylab("scores") + ggtitle("Emotions of people behind the tweets on COVID19 in 2021 June")
   })
   
+  # sentiment with words plot 2020
+  output$word_sentiment_2020 <- renderPlotly({
+    word_sentiment_2020 %>%
+      filter(word != "trump") %>%
+      group_by(sentiment) %>%
+      top_n(10) %>%
+      ungroup() %>%
+      mutate(word = reorder(word, n)) %>%
+      ggplot(aes(word, n, fill = sentiment)) +
+      geom_col(show.legend = FALSE) +
+      scale_y_continuous(limits = c(0, 2000)) +
+      facet_wrap( ~ sentiment, scales = "free_y") +
+      labs(title = "Sentiment with popular words during 2020 June",
+           y = "Contribution to sentiment",
+           x = NULL) +
+      coord_flip()
+  })
+  
+  # sentiment with words plot 2021
+  output$word_sentiment_2021 <- renderPlotly({
+    word_sentiment_2021 %>%
+      group_by(sentiment) %>%
+      top_n(10) %>%
+      ungroup() %>%
+      mutate(word = reorder(word, n)) %>%
+      ggplot(aes(word, n, fill = sentiment)) +
+      geom_col(show.legend = FALSE) +
+      scale_y_continuous(limits = c(0, 2000)) +
+      facet_wrap( ~ sentiment, scales = "free_y") +
+      labs(title = "Sentiment with popular words during 2021 June",
+           y = "Contribution to sentiment",
+           x = NULL) +
+      coord_flip()
+  })
+  
+  # distress source plot
   output$distress_source <- renderPlotly({
     fig_pie <-
       plot_ly(
@@ -1163,6 +1171,7 @@ server <- function(input, output) {
     )
   })
   
+  # coping source plot
   output$coping_source <- renderPlotly({
     fig_pie <-
       plot_ly(
@@ -1190,9 +1199,9 @@ server <- function(input, output) {
   # IRI Reduction Box Plot
   output$iri_red_plot <- renderPlotly({
     INFODEMIC_REDUCED_FILE_PATH <-
-      file.path("infodemics_reduced.csv")
+      file.path("data/infodemics_reduced.csv")
     WORLD_RISK_INDEX_FILE_PATH <-
-      file.path("world_risk_index.csv")
+      file.path("data/world_risk_index.csv")
     dat.red <-
       read.table(INFODEMIC_REDUCED_FILE_PATH,
                  header = T,
@@ -1208,16 +1217,16 @@ server <- function(input, output) {
       dat.red[, c("date", "iso3", "EPI_CONFIRMED", "IRI_ALL")]
     
     for (cc in unique(dat.corr$iso3)) {
-      tmp <- dat.corr[which(dat.corr$iso3 == cc),]
-      tmp <- tmp[order(tmp$date),]
+      tmp <- dat.corr[which(dat.corr$iso3 == cc), ]
+      tmp <- tmp[order(tmp$date), ]
       tmp$EPI_CONFIRMED_DAILY <- c(0, diff(tmp$EPI_CONFIRMED))
       tmp$IRI_ALL_CUMMEAN <- dplyr::cummean(tmp$IRI_ALL)
       dat.corr2 <- rbind(dat.corr2, tmp)
     }
     
-    dat.corr2 <- dat.corr2[!is.na(dat.corr2$IRI_ALL),]
+    dat.corr2 <- dat.corr2[!is.na(dat.corr2$IRI_ALL), ]
     dat.corr2 <-
-      dat.corr2[-which(dat.corr2$EPI_CONFIRMED == 0),]
+      dat.corr2[-which(dat.corr2$EPI_CONFIRMED == 0), ]
     
     bin <- rep(0, nrow(dat.corr2))
     bin[which(dat.corr2$EPI_CONFIRMED <= 2)] <- 0
@@ -1266,9 +1275,10 @@ server <- function(input, output) {
     )
   })
   
+  # references
   get_bib <- reactive({
     df <-
-      bib2df("references.bib") %>% dplyr::select(TITLE, AUTHOR, YEAR, DOI, URL)
+      bib2df("data/references.bib") %>% dplyr::select(TITLE, AUTHOR, YEAR, DOI, URL)
     df$AUTHOR <-
       unlist(lapply(df$AUTHOR, paste, collapse = " "))
     return(df)
