@@ -160,6 +160,7 @@ ui <-
         navlistPanel(
           tabPanel(
             "World Stress Levels",
+            br(),
             plotlyOutput("world_stress_map"),
             "This map indicates the average stress value of each country which can be observed upon hovering your mouse pointer
                           over the desired country.",
@@ -1042,22 +1043,18 @@ server <- function(input, output) {
   
   # world_map_stress_levels
   output$world_stress_map <- renderPlotly({
-    world_map_stress_levels <- function(continent) {
-      map <- plot_ly(
-        mergedData,
-        type = 'choropleth',
-        locations = mergedData$CODE,
-        z = mergedData$PSS10_avg,
-        text = mergedData$COUNTRY,
-        colorscale = "Portland"
-        
-      ) %>%
-        layout(paper_bgcolor = 'transparent')
-      
-      return(map)
-    }
+    world_map_stress_levels <- plot_ly(
+      mergedData,
+      type = 'choropleth',
+      locations = mergedData$CODE,
+      z = mergedData$PSS10_avg,
+      text = mergedData$COUNTRY,
+      colorscale = "Portland",
+      colors = "YlOrRd",
+      colorbar = list(title = "Stress score")
+    )
+    world_map_stress_levels %>% layout(title = "Stress map for different countries indicated by stress levels")
     
-    world_map_stress_levels(input$continent)
   })
   
   # Government Plot
