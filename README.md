@@ -28,6 +28,9 @@ We aim to work on the most recent dataset aggregated from Twitter using twitteR 
 
 Here [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) which provides an interface and access to Twitter web API respectively, [`rtweet`](https://www.rdocumentation.org/packages/rtweet/versions/0.7.0) which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
 
+For the year 2020, we found an academic dataset of twitter id’s which were collected for the purpose of research of coronavirus.The dataset can be downloaded here: _https://zenodo.org/record/3831406#.YOGah-j7Q6b%2F_
+
+
 
 **3. COVID19 Infodemics Observatory**   
 (The Role of Trust and Information during the COVID-19 Pandemic and Infodemic)
