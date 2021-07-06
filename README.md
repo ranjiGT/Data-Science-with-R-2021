@@ -68,7 +68,9 @@ Folder Structure :open_file_folder:
 
 https://rpubs.com/ranjiraj9/covidistress
 
-( _Click the button_ `Hide Toolbars` _at bottom right corner of Rpubs for better view_ )
+( _Click the button_ `Hide Toolbars` _at bottom right corner of Rpubs for better view_. )
+
+_Click_ [here](https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/process_notebook_final/ultimate-process-notebook.Rmd) _to access the source code of the notebook_.
 
 ## `Screencast` :arrow_forward:	
 
