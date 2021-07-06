@@ -55,14 +55,15 @@ Folder Structure :open_file_folder:
 ### A top-level directory layout
 
     .
-    ├── data                   # Parent files (.csv, .sav)
-    ├── files                    # logo and misc. files
+    ├── data                                   # Parent files (.csv, .sav)
+    ├── files                                  # logo and misc. files
     ├── process-nbk
-            ├── data                    #Compiled files (.csv)
-            ├── fig                         #Compiled images (.png, .jp(e)g)
+            ├── data                           #Compiled files (.csv)
+            ├── fig                            #Compiled images (.png, .jp(e)g)
             └── scripts                        #Compiled codes(.R, .Rmd)
     ├── process_notebook_final                 # Final process notebook                                
-    ├── project_proposal                    # Low-level design (LLD) documentation files                  
+    ├── project_proposal                       # Low-level design (LLD) documentation files                  
+    ├── shinyapp                               # code for website             
     ├── .gitignore
     ├── LICENSE
     └── README.md
