@@ -12,6 +12,7 @@ output:
     toc_float: true 
     theme: yeti
     highlight: breezedark
+  
 ---
 # **Psychological & Behavioral distress of COVID-19 & Infodemics** {-}
 
@@ -36,12 +37,12 @@ The COVIDiSTRESS global survey was designed by an international group of social 
 
 The survey was primarily done by independent researchers like [@IRIevolution2020] and [@vanMulukom2021] with a focus to map out all the factors, that might affect people's psychological well-being and their ability to make good decisions during the COVID-19 outbreak all over the world. Researchers from many countries are collaborating on this project even today, to help scientists and decision makers help and communicate. The study procedure mainly was carried out as series of questions in an online survey - mostly answering by clicking boxes to supply opinions or experiences.
 
-[@Vijay] made analysis on tweets in India during 2019-20 and calculated sentiment scores of the people during this timeline. They observed how the sentiment score was getting better with increasing time. Sethi et al.[@Goran] presented a paper in analyzing the tweets across six different countries like USA, UK, Spain, Italy, Sweden and Germany. The analysis is majorly focused on to understand what kind of  sentiment is shared between people across these six countries.
+[@Vijay] made analysis on tweets in India during 2019-20 and calculated sentiment scores of the people during this timeline. They observed how the sentiment score was getting better with increasing time. [@Goran] presented a paper in analyzing the tweets across six different countries like _USA_, _UK_, _Spain_, _Italy_, _Sweden_ and _Germany_. The analysis is majorly focused on to understand what kind of  sentiment is shared between people across these six countries.
 
 
 # **Initial Questions**
 
-As from our motivation, we decided to split our task into 3 mainstream objectives: **Impact of distress level on global level**, **Twitter**, **Infodemics**. Commencing from a basic questionnaire analysis we dive deep into
+As from our motivation, we decided to split our task into 3 mainstream objectives: **Impact of the distress globally**, **Twitter**, **Infodemics**. Commencing from a basic questionnaire analysis we dive deep into
 streamline platforms to look into from where people seek information and how they perceive and assimilate within themselves and share to others which affects their productivity to a large extent.
 
 ### ***How many participants were part of this global survey despite this hard time?***
@@ -70,16 +71,16 @@ Dataset can be downloaded here:
 
 ### **Twitter Data**
 
-For the year 2021, we worked on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+For the year 2021, we worked on the most recent dataset aggregated from Twitter using `twitteR` and `rtweet` libraries within a particular time and location.
 
 Here `twitteR` which provides an interface and access to Twitter web API respectively, `rtweet` which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
 
-
-For the year 2020, we found an academic dataset of twitter id's which were collected for the purpose of research of coronavirus.The dataset can be downloaded here:<https://zenodo.org/record/3831406#.YOGah-j7Q6b/>  
+For the year 2020, we found an academic dataset of twitter id's which were collected for the purpose of research of coronavirus.The dataset can be downloaded here: <https://zenodo.org/record/3831406#.YOGah-j7Q6b/>  
 
 These id's were then used to extract tweets using an open source application called `hydrator`(<https://github.com/DocNow/hydrator/>). The extracted tweets were then filtered by the one's in English language and within a particular time frame.
 
 After extracting tweets from both years, we performed certain pre-processing techniques such as removing stop words, emoji's, cryptic characters and also text conversion to lowercase to maintain semantic integrity.
+
 
 ### **COVID-19 Infodemics Observatory**
 
@@ -97,7 +98,7 @@ These datasets comprises of summary of infodemics data collected from across cou
 
 ```{r setup, include=FALSE}
 chooseCRANmirror(graphics=FALSE, ind=1)
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 source("libloader.R")
 ```
 
@@ -108,19 +109,24 @@ source("libloader.R")
 d <- read_survey("COVIDiSTRESS import April 6 2020 (choice values).csv")
 d
 ```
+
 Our survey dataset contains `r nrow(d)` rows and `r ncol(d)` columns with both `categorical` and `numerical` values.
 
-### Basic information about the survey
 
-How many people do not give consent to participate?
-
-We will use only those records for which the user has marked Consent as "Yes".
+### **Basic information about the survey**
 
 
-```{r survery-eda-1, warning=FALSE, message=FALSE, echo=F}
+```{r sur-block-1, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+d %>% 
+  filter(Consent == "Yes") %>% 
+  nrow()
+```
+
+```{r sur-block-2, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 #Filter for cases with consent
 d <- filter(d, Consent == "Yes")
 ```
+
 
 What was the average percentage of completeness in the survey for each individual?
 
@@ -148,25 +154,30 @@ show(describe(question_completeness_rate))
 
 The average rate of completeness for each individual question is also 75%.
 
-### Decoding the survey trend
+### **Decoding the survey trend**
 
 We perform some basic statistics over the survey data that we have to see the trend in the participation by the respondents to the questions they had.
 
-```{r survey-trend, warning=FALSE, message=FALSE, echo=TRUE, fig.height=5, fig.width=7}
+```{r survey-trend, warning=FALSE, message=FALSE, echo=TRUE, fig.height=5, fig.width=7, fig.align='center'}
 library(ggthemes)
 df <- data.frame(seq_along(question_completeness_rate),
                  question_completeness_rate)
 ggplotly(ggplot(df,
                 aes(x=seq_along(question_completeness_rate),
                     y=question_completeness_rate)) +
-           geom_line() + theme_economist() +
+           geom_line() + 
+           theme_economist() +
            ggtitle("Online survey trend of participants") +
-  theme(plot.title = element_text(hjust = 0.5)) + 
-    theme(plot.title = element_text(face = "bold")))
+           theme(plot.title = element_text(hjust = 0.5)) + 
+           theme(axis.text.y = element_text(face = "bold"))+ 
+           theme(axis.text.x = element_text(face = "bold"))+
+           theme(plot.title = element_text(face = "bold")))
 
 ```
 
-This plot is very crude but we can spot some certain drops with the collected survey data. The first two drops are the experimental questions with *open end questions*. Most of the people choose not to write anything as expected.
+
+The *first two* drops are `experimental questions` and *last three* drops are `open-ended questions` which most participants choose not to answer. Overall the trend of our survey looks similar to most online surveys.
+
 
 How many people have participated in the survey from each country?
 
@@ -179,7 +190,6 @@ How many people participated in the survey according to different language they 
 ```{r resp-country, warning=FALSE, message=FALSE, echo=T}
 d %>% group_by(UserLanguage) %>% dplyr::summarize(n()) %>% print(n=10)
 ```
-
 
 ```{r sur-preproc-1, warning=FALSE, message=FALSE, echo=F}
 d$Dem_edu <- str_remove(d$Dem_edu, "- ")
@@ -380,9 +390,9 @@ ggplotly(ggplot(df_bar, aes(x=fct_reorder(Country, PSS10_avg), y=PSS10_avg, widt
 
 Here we can see that Pakistan and India has highest Stress level due to Corona pandemic. France and Italy has the lowest stress levels among the countries we have selected.
 
-### World Map of stress levels in countries affected with Corona
+### **World Map of stress levels in countries affected with Corona**
 
-```{r geo-map, warning=FALSE}
+```{r map-data, warning=FALSE, message=FALSE, echo=FALSE}
 dmap<-d
 
 data_summary <- function(data, varname, groupnames){
@@ -402,15 +412,27 @@ df_b_world<- data_summary(dmap, varname="PSS10_avg",
 
 df_world <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv")
 mergedData <- merge(df_b_world,df_world,by.x=c("Country"),by.y=c("COUNTRY"))
-world_map_stress_levels <- plot_ly(mergedData, type='choropleth', locations=mergedData$CODE, z=mergedData$PSS10_avg, text=mergedData$COUNTRY, colorscale="Portland")
-world_map_stress_levels %>% layout(title="Stress map for different countries indicated by stress levels")
+
 ```
 
 
-The stress levels marked in red hue ( _level = 4_ ) are highly affected areas which are less and the blue hue ( _level = 2_ ) are more indicating less which are more common in most parts of the countries.
+```{r world-map, warning=FALSE}
+library(plotly)
+world_map_stress_levels <- plot_ly(mergedData, 
+                                   type='choropleth', 
+                                   locations=mergedData$CODE, 
+                                   z=mergedData$PSS10_avg, 
+                                   text=mergedData$COUNTRY, 
+                                   colorscale="Portland",
+                                   colors = "YlOrRd",
+                                   colorbar = list(title="Stress score"))
+world_map_stress_levels %>% layout(title="Stress map for different countries indicated by stress levels")
+```
+
+The stress levels marked in red hue ( _level = 4_ ) are highly affected areas which are less in number and the blue hue ( _level = 2_ ) are less affected areas which are more common in most parts of the countries. The stress severity level is more observed in *South African* countries like **Namibia** and *West African* countries like **Senegal**, **Guinea-Bissau** and **Burkina Faso**.
 
 
-### Distress scale
+### **Distress scale**
 
 What are the major sources of distress during corona?
 
@@ -438,7 +460,7 @@ dis <- d %>% summarize_at(.vars = dplyr::vars(matches("Distress_\\d")), .funs = 
          "Expl_Distress_18"="Loneliness",
          "Expl_Distress_19"="Time I spend inside",
          "Expl_Distress_20"="Time I spend in proximity to others",
-         "Expl_Distress_21"="Not knowing about developments with COVID",
+         "Expl_Distress_21"="        Not knowing about developments with COVID",
          "Expl_Distress_22"="Not knowing how to stop COVID",
          "Expl_Distress_23"="Not knowing how long the measures will last",
          "Expl_Distress_24"="No travel outside my country")
@@ -455,7 +477,7 @@ ggplotly(dis)
 
 The above bar plot shows the comparison of different sources of stress during the corona pandemic. People are more stressed due to the fear of economy collapse, catching corona virus and Risk of being dying. While not able to perform the religious activities have very less affect on people because they can offer their prayers in their home also.
 
-### Coping scale
+### **Coping scale**
 
 How people usually cope with the stress caused by corona?
 
@@ -467,7 +489,7 @@ cop <- d %>% summarize_at(.vars = dplyr::vars(matches("Coping_\\d")), .funs = me
                                 "Expl_Coping_2"="Face-to-face interactions friends/family",
                                 "Expl_Coping_3"="Phonecalls/long-range interactions friends/family",
                                 "Expl_Coping_4"="Face-to-face interactions colleagues",
-                                "Expl_Coping_5"="Phonecalls/long-range interactions colleagues",
+                                "Expl_Coping_5"="                Phonecalls/long-range interactions colleagues",
                                 "Expl_Coping_6"="Social media",
                                 "Expl_Coping_7"="Video games (alone)",
                                 "Expl_Coping_8"="Video games (online)",
@@ -484,7 +506,7 @@ cop <- d %>% summarize_at(.vars = dplyr::vars(matches("Coping_\\d")), .funs = me
   coord_flip(ylim = c(1,5))+
   theme_bw()+
   xlab("Source of coping")+
-  ylab("Level of coping") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("How people usually cope with \nCorona Stress")
+  ylab("Level of coping") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("Coping with stress")
 
 ggplotly(cop)
 ```
@@ -492,7 +514,7 @@ ggplotly(cop)
 This highlights the comparison of different methods people are adopting to cope with the corona stress. According to this survey, people release their stress by having phone calls with their loved ones, by spending time doing some hobby and by obtaining watching TV shows or movies. People are getting more addicted to social media and smartphones which will have a long-term affect even after the corona pandemic.
 
 
-### Trust scale
+### **Trust scale**
 
 What is the level of trust among people on different information sources?
 
@@ -507,7 +529,7 @@ trust <- d %>% summarize_at(.vars = dplyr::vars(matches("OECD")), .funs = mean, 
                                 "OECD_insititutions_3"="Country's Civil service",
                                 "OECD_insititutions_4"="Country's Healthcare system",
                                 "OECD_insititutions_5"="WHO",
-                                "OECD_insititutions_6"="Government's measures against COVID")) %>% 
+                                "OECD_insititutions_6"="   Government's measures against COVID")) %>% 
   ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
   geom_bar(stat = "identity", position = position_dodge(), color="black", fill="darkred")+
   coord_flip(ylim = c(1,10))+
@@ -522,7 +544,7 @@ ggplotly(trust)
 Represents people's trust on different sources on information. Clearly the people trust the information coming from themselves (wisdom) and WHO. An interesting finding here is that people mistrust their owns country parliament and government and turns least towards them for information related to Corona pandemic.
 
 
-### Concern scale
+### **Concern scale**
 
 Which things people concern the most about when they hear about corona virus?
 
@@ -534,21 +556,21 @@ worry <- d %>% summarize_at(.vars = dplyr::vars(matches("concern")), .funs = mea
                                 "Corona_concerns_2"="... My Family",
                                 "Corona_concerns_3"="... My Close Friends",
                                 "Corona_concerns_4"="... My Country",
-                                "Corona_concerns_5"="... Other Countries")) %>% 
+                                "Corona_concerns_5"="   ... Other Countries")) %>% 
   ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
   geom_bar(stat = "identity", position = position_dodge(), color="black", fill="orange")+
   coord_flip(ylim = c(1,6))+
   scale_y_continuous(breaks = seq(1,6,1))+
   theme_bw()+
   xlab("Reason for worry")+
-  ylab("Level of worry")+ theme(axis.text.y = element_text(face = "bold")) + ggtitle("People worry the most about")
+  ylab("Level of worry") + theme(axis.text.y = element_text(face = "bold")) + ggtitle("People worry the most about")
 
 ggplotly(worry)
 ```
 
 People worry most about their family and their country during the corona pandemic. Here an interesting finding is that the people care the least about themselves as compared to their country, friends and family.
 
-### Compliance scale
+### **Compliance scale**
 
 Do the people obeys the instruction given to them to stop spread of corona?
 
@@ -558,7 +580,7 @@ Do the people obeys the instruction given to them to stop spread of corona?
   mutate(Source = dplyr::recode(Source,
                                 "Compliance_1"="I am well informed how I can stop\nthe spread of coronavirus",
                                 "Compliance_2"="I have done everything to reduce\nthe spread of coronavirus",
-                                "Compliance_3"="I have done everything to stop keep\nthe phyisical distance",
+                                "Compliance_3"="   I have done everything to stop keep\nthe phyisical distance",
                                 "Compliance_4"="I feel that keeping distance\nwould have a high personal cost",
                                 "Compliance_5"="I trust others follow guidelines\nto stop the spread of coronavirus",
                                 "Compliance_6"="I have bought large extra supplies")) %>% 
@@ -575,7 +597,7 @@ ggplotly(comp)
 
 People are following the general health and other instructions given to them by the different organization and their countries. This data can be biased also since people will tend to avoid leaving a negative impression.
 
-### Media scale
+### **Media scale**
 
 What are the trusted sources of information people look up to during Corona?
 
@@ -584,19 +606,19 @@ med <- d %>% summarize_at(.vars = dplyr::vars(matches("media_\\d")), .funs = mea
   pivot_longer(cols = everything(), names_to = "Source", values_to = "Value") %>% 
   mutate(Source = dplyr::recode(Source,
                                 "Expl_media_1"="... the government",
-                                "Expl_media_2"="... independent news outlets in the coutnry",
-                                "Expl_media_3"="... news outlets outside the country",
+                                "Expl_media_2"="... independent news outlets in the country",
+                                "Expl_media_3"="            ... news outlets outside the country",
                                 "Expl_media_4"="... friends and family",
                                 "Expl_media_5"="... social media",
-                                "Expl_media_6"="I have heard more positive than negative\nstories about people's behavior")) %>% 
+                                "Expl_media_6"="I have heard more positive than negative \nstories about people's behavior")) %>% 
   ggplot(aes(x = fct_reorder(Source, Value), y = Value)) + 
   geom_bar(stat = "identity", position = position_dodge(), color="black", fill="cyan")+
   coord_flip(ylim = c(1,6))+
   scale_y_continuous(breaks = seq(1,6,1))+
   theme_bw()+
-  xlab("Information sources")+
-  ylab("Level of agreement") + theme(text = element_text(size = 12))  + theme(axis.text.y = element_text(face = "bold")) + 
-  ggtitle("Level of agreement on different information resources")
+  xlab("Information sources") +
+  ylab("Level of agreement") + theme(axis.text.y = element_text(face = "bold")) + 
+  ggtitle("Agreements on information sources")
 
 ggplotly(med)
 ```
@@ -604,9 +626,9 @@ ggplotly(med)
 People look the most for information regarding corona from the country and the independent news outlet in the country.
 
 
-### Bivariate analysis of relevant scales
+### **Bivariate analysis of relevant scales**
 
-Viewing the relationship between `Perceived Stress`, `Social Support`, `Loneliness`, and `extraversion`.
+Viewing the relationship between `Perceived Stress`, `Social Support`, `Loneliness`, and `Extraversion`.
 
 
 ```{r bivar-2, fig.width = 12, fig.height = 12, warning=FALSE,message=FALSE}
@@ -641,7 +663,7 @@ It is evident that in general female respondents are on a higher number as compa
 
 -  During `Extraversion` the `Perceived Support` in males are higher (0.263) in comparison to females (0.2331).
 
--  `Extraversion` reduces the perceived stress significantly in both the cases and it is highly effective for females than male respondents. 
+-  `Extraversion` reduces the perceived stress significantly in both cases and it is highly effective for females than male respondents. 
 
 
 ## **Twitter Analysis**
@@ -650,12 +672,15 @@ We have primarily two datasets - one of them contains tweets from the onset of t
 
 ( _For the security purposes, we show the skeletal code to extract the tweets using dummy credentials. We would load the data via .rds file for our extracted tweets._ [@twitterTutorial] )
 
-```{r tw-con, echo=T, message=F, warning=F, eval=F}
+```{r tw-con-1, echo=F, message=F, warning=F, eval=F}
 appname <- "CovidDistress"
 key <- "ogRXvxribQAEt9tJKQ1rEd0c0"
 secret <- "HlvVRoFg73JJcpcGjYxUWBagWratEIrdagPCeaiToWTKa15vCO"
 access_token <- "15914217-8YYyRRAxRBL0Vu9Y0tAjVFfPvdJdYByfmsiVpLEoD"
 access_secret <- "oeXIkYHBTQpGRxZCKI4q67UN3L8PuJfwb0su6EOkIk22f" 
+```
+
+```{r tw-con-2, echo=T, message=F, warning=F, eval=F}
 twitter_token <- create_token(
   app = appname,
   consumer_key = key,
@@ -668,6 +693,7 @@ corona_tweets <- search_tweets(q = "#covid19 OR #coronavirus",
                                , retryonratelimit = TRUE)
 saveRDS(corona_tweets, "tweets2021.rds")
 ```
+
 
 ```{r tw-read-data, echo=T, message=F, warning=F, eval=T}
 tweets2021_raw <- readRDS("tweets2021.rds")
@@ -732,8 +758,6 @@ tweets2021_raw %>%
 
 #### **Tags of 2021 consisting of a single item from a sequence - Unigrams**
 
-In Unigram we assume that the occurrence of each word is independent of its previous word.
-
 ```{r tw-uni-21, echo=T, message=FALSE, warning=FALSE}
 words <- tweets2021_raw %>%
   mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
@@ -747,7 +771,7 @@ words <- tweets2021_raw %>%
         !str_detect(word, "@\\S+")) %>%
   dplyr::count(word, sort = TRUE)
 words %>% 
-  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+  with(wordcloud(word, n, random.order = FALSE, max.words = 300, colors = brewer.pal(8, "Dark2")))
 ```
 
 It can be seen that in **2021** the greater prominence is given to tweets with hashtags "**capacity**" that appear more frequently in the recent time period. From our research it was found that CAPACITY is a registry of patients with COVID-19 and has been established to answer questions on the role of cardiovascular disease in this pandemic.
@@ -768,7 +792,7 @@ words_2020 <- tweets2020_raw %>%
         !str_detect(word, "@\\S+")) %>%
   dplyr::count(word, sort = TRUE)
 words_2020 %>% 
-  with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
+  with(wordcloud(word, n, random.order = FALSE, max.words = 300, colors = brewer.pal(8, "Dark2")))
 ```
 
 It is pretty evident that "**coronavirus**" outweigh other tags in the year **2020** which was trending when the arrival of the pandemic was sensed which remarks the global sentiment to a large extent. 
@@ -799,7 +823,7 @@ words_bigrams %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 100, colors = brewer.pal(8, "Dark2")))
 ```
 
-It is evident that a conjunctive words such as "**min age**", "**covid 19 pune**" are more frequent and also two-word sequences like "**delta variant**", "**vaccines covishield**" also draws into an attention towards novelty which is more significant in recent times.
+It is evident that conjunctive words such as "**min age**", "**covid 19 pune**" are more frequent and also two-word sequences like "**delta variant**", "**vaccines covishield**" also draws into an attention towards novelty which is more significant in recent times.
 
 
 #### **Tags of 2020 consisting of a two-word sequence - Bigrams**
@@ -863,7 +887,7 @@ tweet2020_wordlist <- tweets2020_raw %>%
 ```
 
 
-```{r tw-senti-top-15, echo=T, message=FALSE, warning=FALSE, fig.width=15}
+```{r tw-senti-top-15, echo=T, message=FALSE, warning=FALSE, fig.width=12}
 library(patchwork)
 
 p1 <- tweet2021_wordlist %>%
@@ -875,10 +899,10 @@ p1 <- tweet2021_wordlist %>%
   xlab(NULL) +
   coord_flip() +
   labs(x = "Count",
-       y = "Unique words"
+       y = "Unique words",
+       title = "Count of unique words found in tweets in 2021"
        )
 
-fig1 <- ggplotly(p1)
 
 p2 <- tweet2020_wordlist %>%
   dplyr::count(word, sort = TRUE) %>%
@@ -890,11 +914,10 @@ p2 <- tweet2020_wordlist %>%
   coord_flip() +
   labs(x = "Count",
        y = "Unique words",
-       title = "Count of unique words found in tweets in 2021 and 2020 respectively")
+       title = "Count of unique words found in tweets in 2020"
+       )
 
-fig2 <- ggplotly(p2)
-
-subplot(fig1, fig2)
+p1+p2
 ```
 
 We are plotting the top **15** words that appeared in twitter in 2020 and 2021.
@@ -1011,6 +1034,88 @@ fig %>% layout(title = 'Emotions of people behind the tweets on COVID19 in 2020'
 ```
 
 Based on a comparative analysis, we infer that in the year 2021 the most dominant sentiment across people was positive while it was negative in the year 2020.
+
+
+### **Network Analysis**
+
+We perform network analysis to check the relation between the correlated words during the pandemic and how they are closely associated with each other across different tweets. It shows how these words have vastly grown in one year increasing the network strength across one or more words.
+
+```{r filter-21, echo=F, warning=FALSE, message=FALSE, results='hide'}
+tweets2021_raw$stripped_text <- tweets2021DF_clean
+# remove punctuation, convert to lowercase, add id for each tweet!
+tweets2021_raw_paired_words <- tweets2021_raw %>%
+  dplyr::select(stripped_text) %>%
+  unnest_tokens(paired_words, stripped_text, token = "ngrams", n = 2)
+tweets2021_raw_paired_words %>%
+  dplyr::count(paired_words, sort = TRUE)
+library(tidyr)
+tweets2021_raw_separated_words <- tweets2021_raw_paired_words %>%
+  separate(paired_words, c("word1", "word2"), sep = " ")
+tweets2021_raw_filtered <- tweets2021_raw_separated_words %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+# new bigram counts:
+covid_words_counts <- tweets2021_raw_filtered %>%
+  dplyr::count(word1, word2, sort = TRUE)
+```
+
+
+```{r net-21, echo=TRUE, warning=FALSE, message=FALSE}
+covid_words_counts %>%
+        filter(n >= 100) %>%
+        drop_na() %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        scale_edge_width(range = c(0.4,1.5)) +
+        geom_node_point(color = "darkslategray3", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1, size = 2.5, check_overlap = TRUE) +
+        theme(legend.position = "none") +
+        labs(title = "Word Network: Tweets using coronavirus hashtags",
+             subtitle = "Year 2021 ",
+             x = "", y = "")
+```
+
+```{r filter-20, echo=F, warning=FALSE, message=FALSE, results='hide'}
+tweets2020_raw$stripped_text <- tweets2020DF_clean
+# remove punctuation, convert to lowercase, add id for each tweet!
+tweets2020_raw_paired_words <- tweets2020_raw %>%
+  dplyr::select(stripped_text) %>%
+  unnest_tokens(paired_words, stripped_text, token = "ngrams", n = 2)
+tweets2020_raw_paired_words %>%
+  dplyr::count(paired_words, sort = TRUE)
+library(tidyr)
+tweets2020_raw_separated_words <- tweets2020_raw_paired_words %>%
+  separate(paired_words, c("word1", "word2"), sep = " ")
+tweets2020_raw_filtered <- tweets2020_raw_separated_words %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+# new bigram counts:
+covid_words_counts_2020 <- tweets2020_raw_filtered %>%
+  dplyr::count(word1, word2, sort = TRUE)
+```
+
+
+```{r net-20, echo=F, warning=FALSE, message=FALSE}
+covid_words_counts_2020 %>%
+        filter(n >= 20) %>%
+        drop_na() %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        # geom_edge_link(aes(edge_alpha = n, edge_width = n))
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        scale_edge_width(range = c(0.4,1.5)) +
+        geom_node_point(color = "darkslategray3", size = 3) +
+        geom_node_text(aes(label = name), vjust = 1, size = 2.5, check_overlap = TRUE) +
+        theme(legend.position = "none") +
+        labs(title = "Word Network: Tweets using coronavirus hashtags",
+             subtitle = "Year 2020 ",
+             x = "", y = "")
+```
+
+In 2020 we observe that there is not much awareness with the pandemic. In 2021 we can observe that words like **doses** and **age** occur together, and the coronavirus cluster include words like _lockdown_ , _restrictions_ , _vaccine_ , _testing_ which have become a part of daily life.
+
+**Dose** and **Capacity** have been the most commonly occurring words which tells us how important the number of doses and capacity in hospitals has been an issue throughout the world.
 
 
 ## **Infodemic Risk Index (IRI) Analysis**
@@ -1510,7 +1615,7 @@ ggplotly(ggplot(data_scatterplot_gov, aes(x=govglob, y=govloc)) +
   geom_text(label=data_scatterplot_gov$country)+
   xlab("Trust in global governments")+
   ylab("Trust in country's government")+
-  ggtitle("Plot for trust among citizens in Country's government for 12 different countries")+
+  ggtitle("Trust among citizens in Country's government of 12 different countries")+
   geom_smooth(method = "lm"))
 ```
 
@@ -1554,7 +1659,7 @@ ggplotly(ggplot(data_scatterplot_scient, aes(x=scientglob, y=scientloc)) +
   geom_text(label=data_scatterplot_scient$country)+
   xlab("Trust in scientists globally")+
   ylab("Trust in country's scientists")+ 
-  ggtitle("Plot for trust among citizens in Country's scientists for 12 different countries")+
+  ggtitle("Trust among citizens in Country's scientists of 12 different countries")+
   geom_smooth(method = "lm"))
 
 ```
@@ -1821,48 +1926,43 @@ The countries included in the analyses, and the respective sample size, are: __A
 __Cyprus__ (27), __Czech Republic__ (1,035), __Denmark__ (7,239), __Estonia__ (25), __Finland__ (10,557), __France__ (10,686), __Germany__ (788), __Greece__ (409), __Hungary__ (1,050), __Ireland__ (122), __Italy__ (819), __Latvia__ (18), __Lithuania__ (7,734), __Luxembourg__ (40), __Malta__ (11), __Netherlands__ (360), __Poland__ (2,874), __Portugal__ (556), __Romania__ (82), __Slovakia__ (41), __Slovenia__ (14), __Spain__ (455), __Sweden__ (288), __Pakistan__ (317), __India__ (50), __China__ (55), __Russia__ (55).
 
 
-Only **86,751** respondents gave consent to participate in the survey. We therefore used only those records for which the user has marked "Consent" as "Yes". ( _Means that they have allowed their given data to be used for scientific research_ )
+Only **86,751** respondents gave consent to participate in the survey. We therefore used only those records for which the user has marked "Consent" as "Yes". ( _Means that they have allowed their given data to be used for scientific research_.)
 
 
-**64.32%**  of the total people who have attended the survey have answered every question till the end of the survey. Out of total 86,751 participants only **8,068** have answered only `one` question.
+**64.32%**  of the total people who have attended the survey have answered every question till the end of the survey. Out of total **86,751** participants only **8,068** have answered only `one` question.
 
 
-The majority of respondents __(67.16%)__ were in full-time, part-time work or self-employed, __16.06%__ were either unemployed or retired, __16.79%__ were students.
-
-The age of the respondents ranged from __18__ to __110__, with a median age of __38__.
-
-Individual's general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures
-participants’ stress during the last week by using indicators of stress responses, for instance, perceived lack of control over events, pressure from mounting difficulties and feeling upset about unexpected changes. Scores are considered __moderate__ above __2.4__, and __high__ above __3.7__. Levels of stress were moderate or lower in many countries. Poland and Portugal reported the highest levels of stress in Europe, and Denmark and the Netherlands the lowest.
-
-Levels of stress remained fairly stable over the middle of April, with a negligible decrease between April 4th and April 13th. Overall levels of stress remained higher in women compared to men throughout the period under consideration.
+Individual's general stress levels were measured using an established ten-item scale developed by psychologists [@jstor1983]. This scale measures participant's stress during the last week by using indicators of stress responses, for instance, perceived lack of control over events, pressure from mounting difficulties and feeling upset about unexpected changes. Scores are considered __moderate__ above __2.4__, and __high__ above __3.7__. Levels of stress were moderate or lower in many countries. Poland and Portugal reported the highest levels of stress in Europe, and Denmark and the Netherlands the lowest. Overall levels of stress remained higher in women compared to men throughout the period under consideration.
 
 Participants were asked to indicate the extent to which a range of different
 factors represented a source of distress during the COVID-19 health crisis. Specifically, participants indicated their disagreement or agreement with how much each factor from a list represented a source of distress ( _1 = Strongly Disagree, 6 = Strongly Agree_ ). Results indicated that people were on average concerned with the __state of the national economy__. Economic considerations were followed closely by
 __health-related risks__ , such as the risks of __being hospitalized__ and of
 __contracting the new disease__ .
 
-Participants were asked how much they trusted six key institutions , in relation to the COVID-19 emergency (on a scale from 1 = not at all to 10 = completely). Specifically, participants were asked about their trust towards the __health care systems__ , the __World Health Organization (W.H.O.)__, the __national governments’ efforts to tackle the COVID-19__ , the __Police__ , the __civil service__ and the national __government__.
+Participants were asked how much they trusted six key institutions, in relation to the COVID-19 emergency (on a scale from 1 = not at all to 10 = completely). Specifically, participants were asked about their trust towards the __health care systems__, the __World Health Organization (W.H.O.)__, the __national governments’ efforts to tackle the COVID-19__ , the __Police__ , the __civil service__ and the national __government__.
 
 Participants were also asked questions related on **which things they worry about the most** during the pandemic. An interesting finding here was that people worry **most** about their *family* and *country* and **least** about *themselves*. 
 
-Overall, it was reported only medium levels of trust, with the highest levels of trust for their country's *healthcare system* and the *WHO*. Trust towards the national government was relatively lower, compared to the other institutions examined. People also prefer the information coming from friends or other people they know.
+Overall, it was reported only medium levels of trust, with the highest levels of trust for their country's *healthcare system* and the *WHO*. Trust towards the national government was relatively low compared to the other institutions examined. People also prefer the information coming from friends or other people they know.
 
-The people were also asked question related to instruction that were given to them by Government and other international health organization to stop the spread of corona virus. Surprisingly, most of the choose the option that follow all the instructions given to them to help stop the corona virus spread.
+Questions related to instructions given by the Government and other international health organizations to stop the spread of coronavirus was asked in the survey.  Surprisingly, most of the choose the option that follow all the instructions.
 
-The bivariate relationship between `Extraversion`, `Perceived Support`, `Perceived Stress`, `Loneliness` is reported in the survey. It is evident that in general female respondents are on a higher number as compared to males in participation. It is very evident that `Loneliness` is the root cause of stress which contributes to a major level. The medians of the boxplot for `Perceived Support` heavily overlap and they do not differ which signifes there is a positive correlation (0.251) among the two groups.
+The bivariate relationship between `Extraversion`, `Perceived Support`, `Perceived Stress`, `Loneliness` is reported in the survey. It is evident that in general female respondents are on a higher number as compared to males in participation. It is very evident that `Loneliness` is the root cause of stress which contributes to a major level. The medians of the box and whiskers plot for `Perceived Support` heavily overlap and they do not differ which signifies there is a positive correlation (0.251) among the two groups.
 
 
-## ***Twitter***
+## ***Twitter*** 
 
-We make use of __35,725__ tweets dated from June 17, 2021 to June 19, 2021 and about __15000__ tweets in English from last year June for our analysis. From our analysis from unigram and bigram tag clouds of 2020, we find that most of the tweets consisted of hashtags with __#coronavirus__ , __#el coronavirus__ followed by __#china__ , __#wuhan__ . Whereas in 2021 the Twitter community seems to post their opinions and views on __#capacity__ , __#vaccines__ , __#coivd19__ , __#cowin covid19__ , __#dose2 capacity__ , __#dose1 capacity__ , __#delta variant__ which shows their inclination towards awareness about the cure rather than panic to an extent.
 
-From the sentimental analysis perspective to capture the tone of the emotions, we targeted the top 15 words where the community expressed their choice of words whenever they posted something on the Twitter page. We report that instead of mentioning the __coronavirus__ community rather resorted to the acronym __covid__ to signify the ease of posting and associating related tweets.
+We make use of _35,725_ tweets dated from _June 17, 2021_ to _June 19, 2021_ and about _15,000_ tweets in English from last year _June_ for our analysis. Based on unigram and bigram tag clouds of 2020, we find that most of the tweets consisted of hashtags with **#coronavirus**, **#el coronavirus** followed by *#china*, *#wuhan*, *#de*. Whereas in 2021, the Twitter community seems to post their opinions and views on #capacity, #vaccines, #coivd19, #cowin coivid19, #dose2 capacity, #dose1 capacity, #delta variant which, shows their inclination towards awareness about the cure rather than panic to an extent.
 
-From network analysis we see that __Dose__ and __Capacity__ have been the most commonly occurring words which tells us how important the number of doses and capacity in hospitals has been an issue throughout the world especially in India. We can see a pattern that __lockdown__ , __restrictions__ , __vaccine__ , __testing__ are the most commonly occurring words together which indicates that they have become a part of daily life.
+From the sentimental analysis perspective to capture the tone of the emotions, we targeted the top 15 words where the community expressed their choice of words whenever they posted something on the Twitter page. We report that instead of mentioning the **"coronavirus"** community rather resorted to the acronym **"covid"** to signify the ease of posting and associating related tweets.
 
-Also from our NRC and based on a comparative analysis, we could see that there is a significant rise in the __positive__ sentiment of the people. The positive sentiment registered by the people in the year 2021 is __24.4%__ while compared with the positive sentiment of __15%__ in the year 2020. Similarly, negative sentiment declined by __6%__ in the year 2021 compared to the year 2020.
+From network analysis we see that **Dose** and **Capacity** have been the most commonly occurring words which tells us how important the number of doses and capacity in hospitals has been an issue throughout the world especially in *India*. We can see a pattern that ***lockdown*** , ***restrictions*** , ***vaccine*** , ***testing*** are the most commonly occurring words together which indicates that they have become a part of daily life.
+
+Also from our NRC and based on a comparative analysis, we could see that there is a significant rise in the positive sentiment of the people. The positive sentiment registered by the people in the year 2021 is **24.4%** while compared with the positive sentiment of **15%** in the year 2020. Similarly, negative sentiment declined by 6 percent in the year 2021 compared to the year 2020.
 
 ## ***Infodemics - We need to flatten this curve***
+
 
 Just as we need to flatten the Covid-19 curve we must also tackle the infodemic curve. Just as with Covid-19 we must attack the curve on two fronts (suppress the contagion and increase our capacity to deal with the surge of information that is coming our way).
 
@@ -1901,12 +2001,17 @@ To our readers we therefore request to abide to the following in the near future
 <center>
 
 
-[`r fa("github", fill = "black")`](https://github.com/ranjiGT/Data-Science-with-R-2021) [`r fa("youtube", fill = "red")`](https://www.youtube.com/)[`r fa("globe", fill = "blue")`](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
+[`r fa("github", fill = "black")`](https://github.com/ranjiGT/Data-Science-with-R-2021) [`r fa("youtube", fill = "red")`](https://youtu.be/b2b1hFEGxa8)[`r fa("globe", fill = "blue")`](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
 
 
 </center>
 
 # **Glossary** {-}
+
+Bigram
+
+: A 2-gram (or bigram) is a two-word sequence of words.
+
 
 Extraversion
 
@@ -1923,6 +2028,11 @@ IRI
 Snowball sampling
 
 :   A non-probability sampling technique where existing study subjects recruit future subjects from among their acquaintances. Thus the sample group is said to grow like a rolling snowball. As the sample builds up, enough data are gathered to be useful for research.
+
+Unigram
+
+: An n-gram consisting of a single item from a sequence.
+
 
 Viral spread
 
