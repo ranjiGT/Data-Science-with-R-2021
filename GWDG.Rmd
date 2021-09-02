@@ -1,0 +1,971 @@
+---
+title: "DS project summarization"
+subtitle: "Python:1, R:1"
+author: "Ranji Raj"
+session: "06.09.2021"
+institute: "Otto von Guericke University, Magdeburg Saxony-Anhalt, Germany"
+# date: "2016/12/12 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["default", "assets/css/my-theme.css", "assets/css/my-fonts.css"]
+    seal: false # custom title slide
+    lib_dir: libs
+    nature:
+      # highlightStyle: solarized-light
+      highlightStyle: github
+      highlightLines: true
+      # highlightLanguage: ["r", "css", "yaml"]
+      countIncrementalSlides: true
+      ratio: "16:9"
+params:
+  url: "https://github.com/ranjiGT"
+---
+
+```{r setup, include=FALSE}
+source("global-slide-settings.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# directory of generated figures
+knitr::opts_chunk$set(fig.path = "figures/_gen/00/")
+# directory of included figures
+fig_path <- "figures/"
+library(xaringanExtra)
+library(embedr)
+library(xaringanBuilder)
+xaringanExtra::use_panelset()
+xaringanExtra::use_tile_view()
+
+```
+
+```{r, child="title-slide.Rmd"}
+```
+
+
+---
+
+
+## About Me 
+
+
+.pull-left70[
+
+- Masters student in Computer Science dept. _(2019-present)_ with focus on **Data & Knowledge Engineering (Data Science)**.
+
+- Completed my Bachelor's in Information Technology ( _2016_ ) from **University of Mumbai**.
+- Worked as a **Jr. Data Scientist & Automation Test Engineer** at **QualityKiosk Technologies Pvt. Ltd.** ( _2016-2018_ )
+  
+- Also a YouTube content creator (**37k+ subscribers**) with focus on teaching Data Science and Programming practices in principle. (Channel name: **Ranji Raj**) <https://www.youtube.com/c/RanjiRaj18/>
+  
+- 4 publications under University of Mumbai for Computer Science subjects (**Operating systems, C-Programming, Computer Architectures, Algorithm Analysis**)
+  
+## Area of Interests 🔍
+
+
+- Data Mining for Medical analysis
+- Optimization & Genetic Algorithms
+- DevOps technologies & HPC
+
+]
+
+.pull-right30[
+
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "IMG_8513_1.jpg"))
+```
+
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics(file.path(fig_path, "OvGU-Logo.jpg"))
+```
+
+
+
+]
+
+---
+
+class: center, middle, inverse
+
+
+```{r, echo=FALSE, out.width="20%"}
+knitr::include_graphics(file.path(fig_path, "py.png"))
+```
+
+_Assignments_: 
+
+Implementation of one algorithm, Poster design & Conceptualization
+
+
+_Team Size_: 5 
+
+---
+
+## Image Classification using Semi-Supervised Learning
+
+
+- Image classification problem on the _PASCAL VOC 2007_ dataset on ~ **9000** images and **20** different classes.
+
+- Consists of several types of random images collected in January 2007 from **Flickr**.
+
+  - **Person**: person
+  - **Animal**: bird, cat, cow, dog, horse, sheep
+  - **Vehicle**: airplane, bicycle, boat, bus, car, motorbike, train
+  - **Indoor**: bottle, char, dining table, potted plant, sofa, tv/monitor
+  
+```{r, echo=FALSE, out.width="20%"}
+knitr::include_graphics(c("000042.jpg","000738.jpg","000138.jpg","000131.jpg","000061.jpg"))
+```
+
+.content-box-yellow[
+
+**Project goal**: To perform image classification from several visual object classes in realistic scenes using a limited number of labeled data points in a semi-supervised fashion and to explore and see if an increased proportion of the labels can help in achieving a better predictive performance in a **semi-supervised learning (SSL)** paradigm.
+
+
+]
+
+---
+
+
+## Feature space of our dataset
+
+```{r, echo=FALSE, out.width="50%", fig.align='center', fig.cap="Fig 1. t-SNE visualization"}
+knitr::include_graphics(file.path(fig_path, "tsne.png"))
+```
+
+
+---
+
+class: center, middle, inverse
+
+## Toolkits 🛠️
+
+
+---
+
+
+## Primary Development Environment
+
+.pull-left[
+
+```{r, echo=FALSE, out.width="70%"}
+knitr::include_graphics(file.path(fig_path, "jupyter.png"))
+```
+]
+
+.pull-right[
+
+.content-box-purple[
+
+- Ideal for team size of 5.
+
+- Helped in collaborative sharing and distributed processing of workloads while at remote.
+
+
+]
+
+```{r, echo=FALSE, out.width="70%", fig.cap="Fig 2. Spawning of Kernels", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "kernels.png"))
+```
+
+
+
+]
+
+
+
+---
+
+
+## Implementation pipeline
+
+`Features`
+- Creating a `dataloader.py`
+
+- **MPEG-7 Color Layout Descriptor, Visual Bag-of-Words(BoV), Speeded Up Robust Features(SURF), Local Binary Patterns, Color Histogram**
+
+- Extracting **15,500** sub-images and storing in numpy array (considering _Droste effect_).
+
+- Combining features using **OpenCV** Python library.
+
+- Constructing a codebook-vector using the _k-means_ clustering algorithm.
+
+- Assign a code from the codebook-vector and produce a histogram.
+
+.pull-left[
+
+```{r, echo=FALSE, out.width="30%", fig.align='center', fig.cap="Fig 3. Droste effect"}
+knitr::include_graphics(file.path(fig_path, "droste.png"))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, out.width="50%", fig.align='center', fig.cap="Fig 4. SURF key-point visualization"}
+knitr::include_graphics(file.path(fig_path, "surf-1.jpg"))
+```
+
+
+]
+
+
+---
+
+## Feature Engineering ⚙️
+
+
+.panelset[
+
+.panel[.panel-name[Undersampling]
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Feature selection by Undersampling"}
+knitr::include_graphics(file.path(fig_path, "LP-1.jpg"))
+```
+
+]
+
+.pull-right[
+
+.content-box-purple[
+
+Class balancing by **Undersampling**
+
+- For our task, since there are volume of 9,000 images there is likely a chance for class imbalance and therefore we found the relevance of performing ``undersampling` that can be defined as removing some observations of the majority class.
+
+- We infer the combination of `Color Histogram` with `Local Binary Patterns` is the best in this setting.
+
+]
+
+
+] ]
+
+
+
+.panel[.panel-name[ANOVA]
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Feature selection by ANOVA"}
+knitr::include_graphics(file.path(fig_path, "LS-2.jpg"))
+```
+
+]
+
+.pull-right[
+
+.content-box-green[
+
+Feature selection by **Analysis of Variance (ANOVA)**
+
+- Considering we have 20 different categorical classes as illustrated (Fig 2.), we use `ANOVA` that provides a statistical aspect to check whether the means of several groups are equal or not.
+
+- We infer the combination of `Color Histogram` with `Color Layout Descriptor` is the best in this setting.
+
+]
+
+
+]
+
+
+]
+
+
+
+.panel[.panel-name[PCA]
+
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Feature selection by PCA"}
+knitr::include_graphics(file.path(fig_path, "LS-3.jpg"))
+```
+
+]
+
+.pull-right[
+
+.content-box-yellow[
+
+Feature selection by **Principal Component Analysis(PCA)**
+
+- By finding a smaller set of new variables, each being a combination of the input variables, containing basically the same information as the input variables we implement our concept of feature selection by using `PCA`
+
+- We infer the combination of `Color Histogram` with `Color Layout Descriptor` is the best in this setting.
+
+]
+
+**Note**: We tried for 3-feature and 4-feature combinations as well.
+
+]
+
+
+]
+
+
+]
+
+---
+
+
+## The Semi-Supervised Learning Concept
+
+All about **Assumptions**...
+
+Since we have **9,000** raw images & after extracting the image within an image from each also any ( _Droste effect_) we estimate to have **15,566** images in total. By this, we assume that an **80-20** split would give roughly **12,000** unlabeled & **3,000** labeled images. 
+
+--
+
+.content-box-blue[
+
+In SSL the training set contains some unlabeled data in addition:
+
+So two goals:
+
+1. Predict the labels on future test set $\Rightarrow$ **Inductive approach**
+2. Predict the labels on the unlabeled instances in the training set $\Rightarrow$ **Transductive approach**
+
+]
+
+--
+
+.content-box-purple[
+
+We used two different categories of algorithms:
+
+- **Graph-based algorithms**
+
+- **Mixture models**
+
+]
+
+---
+
+class: center, middle, inverse
+
+## Algorithms
+
+---
+
+.panelset[
+
+.panel[.panel-name[Graph-based]
+
+.pull-left[
+
+**Label Propagation Algorithm (LPA)**: *Assumption* - Similar images would have similar feature descriptors & so they would be mapped closely in the graph with high weights to the edges connecting to them.
+
+`Hyperparameters`
+
+- $\gamma$: Influences the distance of impact of a single training point.
+
+- **Choice of kernel**: RBF ( _default_ ) / Linear
+
+**Label Spreading**: *Manifold Assumption* - the graphs, constructed based on the local similarity between features, provide a lower-dimensional representation of the high-dimensional input images.
+
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "GBSSL.png"))
+```
+
+.content-box-red[
+
+A graph constructed from labeleld instances $x_1$, $x_2$ & unlabeled instances. The label of unlabeled instance $x_3$ will be affectedmore by the label of $x_1$, which is closer in the graph, than by the label of $x_2$, which is farther in the graph, even though $x_2$ is closer in Euclidean space.
+
+]
+
+
+]
+
+
+]
+
+.panel[.panel-name[Mixture model]
+
+**Semi-Supervised Gaussian Mixture Model(SSGMM)**: *Assumption*- The images come from the mixture model, where the number of features, prior $p(y)$, and conditional $p(x|y)$ are all correct.
+
+In Gaussian Mixture model, we maximize the likelihood function $P(X_{train}|\pi,\mu,\sigma)$ 
+
+- $\pi$: distrubution parameter of label Y,
+
+- $\mu$ and $\sigma$ are set of mean vector and covariance matrix for each categories.
+
+`Hyperparameters`
+
+- $\alpha$: Additive (Laplace/Lidstone) smoothing parameter,
+
+- $\beta$: Weight applied to the contribution of the unlabeled data,
+
+- **fit_prior**: Whether to learn class prior probabilities or not (default=True). If false, a uniform prior will be used.
+
+- **class_prior**: Prior probabilities of the classes. If specified the priors are not adjusted according to the data.
+
+- **tol**: Tolerance for convergence of EM algorithm
+
+- **max_iter**: Maximum number of iterations for EM algorithm
+
+]
+
+
+]
+
+---
+
+class: center, middle, inverse
+
+## Model Selection & Evaluation
+
+---
+
+## Model Selection 
+
+.pull-left[
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "BP-1.jpg"))
+```
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "BP-2.png"))
+```
+
+]
+
+.pull-right[
+
+.content-box-green[
+
+On the features we perform class balancing ( _undersampling_ ), feature selection ( _ANOVA_ ), feature selection ( _PCA_ ) with an enumeration of $2^c$ (where _c_ is the total extracted features). based on this, we analyze from a line plot for all the split points ranging from [0.1, 0.9] which combination is better to be used for model building. Followed by it we effectively determine from a box plot to pick the best model.
+
+]
+
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "BP-3.png"))
+```
+
+]
+
+
+---
+
+## Model Evaluation
+
+
+.panelset[
+
+.panel[.panel-name[Class prediction error plots]
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "CP-3.png"))
+```
+
+]
+
+.pull-right[
+
+.content-box-purple[
+
+
+- We use class prediction error plot which shows the actual targets from the dataset against the predicted values generated by our model.
+
+- It illustrates the support (number of training samples) for each class in the fitted classification model as a stacked bar chart.
+
+- It also shows that for which classes our classifier is having a particularly difficult time with, and more importantly, what incorrect answers it is giving on a per-class basis.
+
+- Like in our `MultinomialNBSS` classifier, it often incorrectly labels "cat" as "cows".
+
+]
+
+
+] ]
+
+
+
+.panel[.panel-name[ROC curves]
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "ROC-3.png"))
+```
+
+]
+
+.pull-right[
+
+.content-box-green[
+
+
+- We use ROC curves to show between the sensitivity & specificity for every possible cut-off combination of tests with different feature combinations.
+
+- AUC measures the entire two-dimensional area underneath the entire ROC-curve.
+
+- Provides an aggregate measure of performance across all possible classification thresholds.
+
+- For `MultinomialNBSS` classifier, the highest AUC value is observed to be 0.83 which is for the "aeroplane" class with 83% correct predictions.
+
+]
+
+
+]
+
+
+]
+
+
+
+.panel[.panel-name[Correlation Heatmaps]
+
+
+.pull-left[
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "LS-4.jpg"))
+```
+
+]
+
+.pull-right[
+
+.content-box-yellow[
+
+
+- We show Correlation heatmaps between all the features to determine the strength of influence of one variable on other.
+
+- Also, they show in a glance which variables are correlated, to what degree, in which direction, and alerts us to potential multi-colinearity problems.
+
+- For `Label Spreading` the correlation coefficient for "aeroplane"-"aeroplane" is the highest starting from the top-left of 17 along the diagonal. 
+]
+
+
+]
+
+
+]
+
+
+]
+
+---
+
+class: center, middle, inverse
+
+## Findings, Comparisons, Conclusions
+
+---
+
+.panelset[
+
+.panel[.panel-name[Intra-model comparison]
+
+```{r, echo=FALSE, out.width="80%", fig.align='center', fig.cap="Table 1. An overview of the results of our SSL techniques with 95% C.I."}
+knitr::include_graphics(file.path(fig_path, "findings.png"))
+```
+
+
+.content-box-purple[
+
+**Inference**
+
+- For our task the best SSL model generalization performance is achieved for `label Spreading` with an accuracy of nearly 31%.
+
+- Transductive graph-based technique showcased better performance than the inductive approach for our task.
+
+]
+
+
+]
+
+.panel[.panel-name[Inter-model comparison]
+
+**Safe**, here means that the generalization performance is never statistically significantly worse than methods using only labeled data.
+
+```{r, echo=FALSE, out.width="40%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "SafeSSL.png"))
+```
+
+.content-box-green[
+
+We trained both on the semi-supervised and supervised models by splitting the data with varying labeled and unlabeled test sizes and compared it with the fixed test set. We then compared the efficiency of SSL to the supervised approach and concluded that the `Safe SSL` assumption **does not** hold as it performed worse for the semi-supervised model.
+
+]
+
+]
+
+]
+
+---
+
+class: center, middle, inverse
+
+
+```{r, echo=FALSE, out.width="20%"}
+knitr::include_graphics(file.path(fig_path, "R.png"))
+```
+
+_Assignments/Role:_
+
+Team lead, Objective 3 implementation, Screencast(+1), Process Notebook
+
+
+_Team Size_: 5 
+
+---
+
+## Psychological & Behavioral distress of COVID-19 & Infodemics
+
+.pull-left70[
+
+- **COVID-19** arrival in **2020** & at its peak and in various forms now.
+
+- Aggravated **mental disorders** and its ill-effects on a larger scale.
+
+- Being **isolated** affects productivity and fall prone to addictive substances.
+
+- Increased **social media** usage and **unplanned sleep** causing distress.
+
+- **Infodemics** plays an **evil role** to all above.
+
+
+## Project goal & research questions
+
+.content-box-purple[
+
+- How people are getting stressed & how they cope with it? - **Objective 1**
+
+- Role of _Twitter_ community during this time period? - **Objective 2**
+
+- Whom should be trusted & whom should be not? - **Objective 3**
+]
+
+]
+
+
+
+
+
+
+
+.pull-right30[
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "logo.svg"))
+```
+
+
+```{r, echo=FALSE, out.width="70%", fig.align='center', fig.cap="osf.io"}
+knitr::include_graphics(file.path(fig_path, "osf.png"))
+```
+
+]
+
+
+---
+
+class: center, middle, inverse
+
+## Objective 1: Global distress survey
+
+```{r, echo=FALSE, out.width="30%"}
+knitr::include_graphics(file.path(fig_path, "sur.png"))
+```
+
+---
+
+.panelset[
+
+.panel[.panel-name[World Map]
+
+```{r, echo=FALSE, out.width="45%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "BFA.png"))
+```
+
+
+.content-box-purple[
+
+- The stress severity level is more observed in South African countries like **Namibia** & West African countries like **Senegal**, **Guinea-Bissau** & **Burkina Faso**
+
+- This helps us to uncover less spoken parts of the world where people are adversely affected and where the media coverage is less.
+
+
+] ]
+
+
+.panel[.panel-name[Pie chart]
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "stress-cope.png"))
+```
+
+]
+
+
+.panel[.panel-name[Scale-1]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "distress-scale.png"))
+```
+
+]
+
+.panel[.panel-name[Scale-2]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "trust.png"))
+```
+
+]
+
+.panel[.panel-name[Scale-3]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "concern.png"))
+```
+
+]
+
+.panel[.panel-name[Scale-4]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "compliance.png"))
+```
+
+]
+
+.panel[.panel-name[Scale-5]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "media-scale.png"))
+```
+
+]
+
+.content-box-blue[
+
+We analyzed the relationship between, *Extraversion*, *Perceived Support*, *Perceived Stress*, *Loneliness* and found that **Loneliness** was the root cause of stress leading to high risk for mental health.
+
+]
+
+]
+
+---
+
+class: center, middle, inverse
+
+## Objective 2: Twitter Sentimental Analysis
+
+```{r, echo=FALSE, out.width="30%"}
+knitr::include_graphics(file.path(fig_path, "tw.png"))
+```
+
+---
+
+.panelset[
+
+.panel[.panel-name[Unigrams]
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "tag-cloud-2.png"))
+```
+
+
+] 
+
+
+.panel[.panel-name[Bigrams]
+
+```{r, echo=FALSE, out.width="70%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "bigram-2021.png"))
+```
+
+]
+
+
+.panel[.panel-name[NRC emotions]
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "tw-bar-2.png"))
+```
+
+]
+
+.panel[.panel-name[Word Network]
+
+```{r, echo=FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "wordnet-21.png"))
+```
+
+]
+
+
+]
+
+
+---
+
+class: center, middle, inverse
+
+## Objective 3: Infodemics
+
+```{r, echo=FALSE, out.width="30%"}
+knitr::include_graphics(file.path(fig_path, "info.png"))
+```
+
+
+---
+
+## IRI analysis by Countries
+
+.panelset[
+
+.panel[.panel-name[Italy]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "ITA_IRI.png"))
+```
+
+
+] 
+
+
+.panel[.panel-name[USA]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "USA_IRI.png"))
+```
+
+]
+
+
+.panel[.panel-name[Venezuela]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "VEN_IRI.png"))
+```
+
+]
+
+.panel[.panel-name[Russia]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "RUS_IRI.png"))
+```
+
+]
+
+
+.panel[.panel-name[South Korea]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "KOR_IRI.png"))
+```
+
+]
+
+.panel[.panel-name[Canada]
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "CAN_IRI.png"))
+```
+
+]
+
+
+.panel[.panel-name[Continent-wise]
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "continent-plot.png"))
+```
+
+]
+
+
+]
+
+---
+
+## Trust scores
+
+.panelset[
+
+.panel[.panel-name[Government]
+
+```{r, echo=FALSE, out.width="90%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "gov.png"))
+```
+
+
+] 
+
+
+.panel[.panel-name[Scientist]
+
+```{r, echo=FALSE, out.width="90%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "sci.png"))
+```
+
+]
+
+
+.panel[.panel-name[Social Media]
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics(file.path(fig_path, "media.png"))
+```
+
+.content-box-yellow[
+
+Citizens became more conscious about COVID-19 from **National Government** with an estimate score of [0.17, 0.27] 
+
+
+]
+
+
+]
+
+
+]
+
+---
+
+## Suppress the Infodemic curve
+
+.content-box-blue[
+
+- Just as we need to flatten the COVID-19 curve we must also tackle the infodemic curve. As with COVID-19 we must attack the curve on two fronts (suppress the contagion & increase our capacity to deal with the surge of information that is coming our way.)
+
+- From our analysis, for relationship between "whether virus naturally occurring or not" & "media", the true correlation is around **13%** which means media plays a key role for overhyping on this question.
+
+- Also, for relationship between "whether virus naturally occurring or not" & "fake news", has the least correlation with **3.6%** it is difficult to verify the trueness of this question as it is very subjective.
+
+- We performed an analysis on how informed the citizens are feeling about the general news about COVID-19 with respect to **fake news** and **media hype**.
+
+  - For the former a _positive_ correlation is observed meaning an average number of people are convinced by fake news over social media.
+  
+  - Whereas, for the latter a _negative_ correlation to this observed meaning an average number of people are likely to be less informed by the media tacit.
+
+]
+
+--
+
+
+.content-box-purple[
+
+**Fact check to alert yourself what is currently going around. Stick to trusted sources, Do not forward messages without checking its authenticity, Increase the supply of data by engaging regularly and meaningfully on the platforms that people are already using.** _In short: Be an informed digital citizen_. 
+
+
+]
+
+---
+
+
+
+
+```{r, child="last-slide.Rmd"}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+build_pdf("DataSciR-Deck-July12.html", complex_slides = TRUE, partial_slides = TRUE)
+
+```
