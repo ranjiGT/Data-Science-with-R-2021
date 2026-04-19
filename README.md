@@ -1,93 +1,160 @@
-# Psychological & Behavioural distress of COVID-19 & Infodemics <img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" align="right" alt="" width="300" />
+# Psychological & Behavioural Distress of COVID-19 & Infodemics
 
+<img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" align="right" alt="Project Logo" width="280" />
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![R](https://img.shields.io/badge/Built%20with-R-blue.svg)](https://www.r-project.org/)
+[![Shiny](https://img.shields.io/badge/Shiny-App-blueviolet.svg)](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
 
-## `Preamble` :scroll:
+A data science project analysing the psychological and behavioural impact of the COVID-19 pandemic, including stress, anxiety, trust in institutions, and the role of social media infodemics — built with R.
 
-The coronavirus COVID-19 pandemic is an unprecedented health crisis that has impacted the world to a large extent. According to WHO, mental disorders are one of the leading causes of disability worldwide, so considering that this pandemic has caused further complications to mental ailment. The stress, anxiety, depression stemming from fear, isolation, and stigma around COVID-19 affected all of us in one way or another. We could see that many people are losing their jobs and the elderly are isolated from their usual support network. The issue is that the effects of the pandemic and mental health, maybe for longer-lasting than the disease itself.    
+---
 
-In this limelight, although the measures are taken to slow the spread of the virus, it has affected our physical activity levels, our eating behaviors, our sleep patterns, and our relationship with addictive substances, including social media. Into this last point, both our increased use of social media while stuck at home, as well as the increased exposure to disaster news past year, have amplified the negative effects of social media on our mental health. This motivates us to perform some diagnostic analysis of this pattern and portray some meaningful insights on global survey data.
+## Table of Contents
 
+- [Overview](#overview)
+- [Datasets](#datasets)
+- [Project Structure](#project-structure)
+- [Process Notebook](#process-notebook)
+- [Shiny Web App](#shiny-web-app)
+- [Screencast](#screencast)
+- [Getting Started](#getting-started)
+- [Contributors](#contributors)
+- [License](#license)
 
-## `Datasets` :globe_with_meridians:	
+---
 
-**1. COVIDISTRESS all global survey data** 
+## Overview
 
-(The COVIDiSTRESS global survey is an open science collaboration,
-created by researchers in over 40 countries to rapidly and organically
-collect data on human experiences of the Coronavirus epidemic 2020.)
-Dataset can be downloaded here:
-[COVIDiSTRESS global survey network  (2020, March 30). COVIDiSTRESS global survey. DOI 10.17605/OSF.IO/Z39US, Retrieved from osf.io/z39us]
-*https://osf.io/z39us/*
+The COVID-19 pandemic is an unprecedented health crisis that has impacted the world to a large extent. According to the WHO, mental disorders are among the leading causes of disability worldwide, and the pandemic has further compounded mental health challenges. Stress, anxiety, and depression — stemming from fear, isolation, and stigma — have affected all of us in one way or another, with widespread job losses and elderly populations isolated from their support networks.
 
-These datasets mainly focus on the stress levels, sources of stress, and trust in institutions across the EU. Furthermore, it also includes factors such as loneliness, media use, personality, social provisions, and perceived sources of psychological relief.
+Measures taken to slow the spread of the virus have also affected physical activity, eating behaviours, sleep patterns, and our relationship with addictive substances — including social media. Increased social media usage during lockdowns, combined with constant exposure to disaster news, has amplified negative effects on mental well-being.
 
+This project performs diagnostic analysis of these patterns and derives meaningful insights from global survey data, Twitter sentiment analysis, and infodemics research.
 
-**2. Twitter Data**  
-We aim to work on the most recent dataset aggregated from Twitter using twitteR and rtweet libraries within a particular time and location.
+---
 
-Here [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) which provides an interface and access to Twitter web API respectively, [`rtweet`](https://www.rdocumentation.org/packages/rtweet/versions/0.7.0) which acts as the client for Twitter's REST and stream APIs will be used to retrieve data.
+## Datasets
 
-For the year 2020, we found an academic dataset of twitter id’s which were collected for the purpose of research of coronavirus.The dataset can be downloaded here: _https://zenodo.org/record/3831406#.YOGah-j7Q6b%2F_
+### 1. COVIDiSTRESS Global Survey
 
+An open science collaboration created by researchers in over 40 countries to collect data on human experiences during the 2020 coronavirus epidemic.
 
+> COVIDiSTRESS global survey network (2020, March 30). COVIDiSTRESS global survey. DOI [10.17605/OSF.IO/Z39US](https://osf.io/z39us/)
 
-**3. COVID19 Infodemics Observatory**   
-(The Role of Trust and Information during the COVID-19 Pandemic and Infodemic)
-Dataset can be downloaded here: [R. Gallotti, N. Castaldo, F. Valle, P. Sacco and M. De Domenico, COVID19 Infodemics Observatory (2020). DOI: 10.17605/OSF.IO/N6UPX]
-[Van Mulukom, V. (2021, May 15). The Role of Trust and Information during the COVID-19 Pandemic and Infodemic. https://doi.org/10.17605/OSF.IO/GFWBQ]
+Covers stress levels, sources of stress, trust in institutions across the EU, loneliness, media use, personality traits, social provisions, and perceived sources of psychological relief.
 
-- *https://osf.io/n6upx/*, 
-- *https://osf.io/67zhg/*, 
-- *https://osf.io/rtacb/*, 
-- *https://osf.io/dh879/*,
-- *https://osf.io/c37wq/*
+### 2. Twitter Data
 
-These datasets comprises of summary of infodemics data collected from across countries, the world risk index, population emotional state, and news reliability.
+COVID-19 related tweets collected using [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) and [`rtweet`](https://www.rdocumentation.org/packages/rtweet/versions/0.7.0) R packages for sentiment analysis.
 
-( _Very large files to this repository has been added via git-lfs._ )
+- **2020 data**: Academic dataset of tweet IDs from [Zenodo](https://zenodo.org/record/3831406)
+- **2021 data**: Collected directly via the Twitter API
 
-Folder Structure :open_file_folder:
-============================
+### 3. COVID-19 Infodemics Observatory
 
-> Folder structure and naming conventions for this project
+Examines the role of trust and information during the pandemic and infodemic.
 
-### A top-level directory layout
+> R. Gallotti, N. Castaldo, F. Valle, P. Sacco and M. De Domenico, COVID19 Infodemics Observatory (2020). DOI: [10.17605/OSF.IO/N6UPX](https://osf.io/n6upx/)
+>
+> Van Mulukom, V. (2021, May 15). The Role of Trust and Information during the COVID-19 Pandemic and Infodemic. DOI: [10.17605/OSF.IO/GFWBQ](https://doi.org/10.17605/OSF.IO/GFWBQ)
 
-    .
-    ├── data                                   # Parent files (.csv, .sav)
-    ├── files                                  # logo and misc. files
-    ├── process-nbk
-            ├── data                           # Compiled files (.csv)
-            ├── fig                            # Compiled images (.png, .jp(e)g)
-            └── scripts                        # Compiled codes(.R, .Rmd)
-    ├── process_notebook_final                 # Final process notebook                                
-    ├── project_proposal                       # Low-level design (LLD) documentation files                  
-    ├── shinyapp                               # code for website             
-    ├── .gitignore
-    ├── LICENSE
-    └── README.md
+Sources: [osf.io/n6upx](https://osf.io/n6upx/) · [osf.io/67zhg](https://osf.io/67zhg/) · [osf.io/rtacb](https://osf.io/rtacb/) · [osf.io/dh879](https://osf.io/dh879/) · [osf.io/c37wq](https://osf.io/c37wq/)
 
-## `Process Notebook` :open_book:
+Includes infodemics summary data, the World Risk Index, population emotional state, and news reliability indicators.
 
-https://rpubs.com/ranjiraj9/covidistress
+> **Note:** Very large files in this repository are tracked via [Git LFS](https://git-lfs.github.com/).
 
-( _Click the button_ `Hide Toolbars` _at bottom right corner of Rpubs for better view_. )
+---
 
-_Click_ [here](https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/process_notebook_final/ultimate-process-notebook.Rmd) _to access the source code of the notebook_.
-
-## `Screencast` :arrow_forward:	
-
-[![screencast](https://img.youtube.com/vi/b2b1hFEGxa8/maxresdefault.jpg)](https://youtu.be/b2b1hFEGxa8)
-
-## `Project website` :trackball:
-
-https://covid-distress-infodemics.shinyapps.io/shinyapp/
-
-
-To launch the app from Rstudio :point_up_2: 
+## Project Structure
 
 ```
+.
+├── data/                        # Raw datasets (.csv, .sav)
+├── files/                       # Logo and miscellaneous assets
+├── process-nbk/
+│   ├── data/                    # Processed data files
+│   ├── fig/                     # Generated figures (.png, .jpg)
+│   └── scripts/                 # Analysis scripts (.R, .Rmd)
+├── process_notebook_final/      # Final process notebook (.Rmd)
+├── project_proposal/            # Project proposal documentation
+├── shinyapp/                    # Shiny web application source code
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+---
+
+## Process Notebook
+
+The full process notebook is published on RPubs:
+
+**[View Process Notebook on RPubs](https://rpubs.com/ranjiraj/covidistress)**
+
+> *Tip: Click "Hide Toolbars" at the bottom-right corner of RPubs for a cleaner reading experience.*
+
+The source code for the notebook is available [here](https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/process_notebook_final/ultimate-process-notebook.Rmd).
+
+---
+
+## Shiny Web App
+
+An interactive dashboard built with R Shiny:
+
+**[covid-distress-infodemics.shinyapps.io](https://covid-distress-infodemics.shinyapps.io/shinyapp/)**
+
+To run the app locally from RStudio:
+
+```r
 library(shiny)
-runApp("covid-distress-infodemics")
+runApp("shinyapp")
 ```
+
+---
+
+## Screencast
+
+[![Screencast](https://img.youtube.com/vi/b2b1hFEGxa8/maxresdefault.jpg)](https://youtu.be/b2b1hFEGxa8)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [R](https://cran.r-project.org/) (>= 4.0)
+- [RStudio](https://posit.co/download/rstudio-desktop/) (recommended)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ranjiGT/Data-Science-with-R-2021.git
+   cd Data-Science-with-R-2021
+   ```
+
+2. Open the `.Rproj` file in RStudio.
+
+3. Install required R packages (listed in individual scripts).
+
+---
+
+## Contributors
+
+This project was developed as a collaborative effort. Thanks to all contributors:
+
+| Name | GitHub |
+|------|--------|
+| **Ranji Raj** | [@ranjiGT](https://github.com/ranjiGT) |
+| **Madhuri Sajith** | [@madhurisajith](https://github.com/madhurisajith) |
+| **Vishnu Jayanand** | [@VishnuJayanand](https://github.com/VishnuJayanand) |
+| **Usama Ashfaq** | [@aaashfaq](https://github.com/aaashfaq) |
+| **Sujith NS** | [@sujithnsudhakar](https://github.com/sujithnsudhakar) |
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
