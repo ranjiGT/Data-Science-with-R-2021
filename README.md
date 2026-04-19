@@ -1,18 +1,24 @@
+<div align="center">
+
 # Psychological & Behavioural Distress of COVID-19 & Infodemics
 
-<img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" align="right" alt="Project Logo" width="280" />
+<img src="https://github.com/ranjiGT/Data-Science-with-R-2021/blob/main/files/logo.svg" alt="Project Logo" width="280" />
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![R](https://img.shields.io/badge/Built%20with-R-blue.svg)](https://www.r-project.org/)
-[![Shiny](https://img.shields.io/badge/Shiny-App-blueviolet.svg)](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
+[![R](https://img.shields.io/badge/Built%20with-R%204.0+-276DC3.svg?logo=r)](https://www.r-project.org/)
+[![Shiny](https://img.shields.io/badge/Shiny-Live%20App-blueviolet.svg?logo=rstudio)](https://covid-distress-infodemics.shinyapps.io/shinyapp/)
+[![RPubs](https://img.shields.io/badge/RPubs-Process%20Notebook-orange.svg)](https://rpubs.com/ranjiraj9/covidistress)
 
-A data science project analysing the psychological and behavioural impact of the COVID-19 pandemic, including stress, anxiety, trust in institutions, and the role of social media infodemics — built with R.
+*Analysing the psychological and behavioural impact of the COVID-19 pandemic — stress, anxiety, trust in institutions, and social media infodemics — using R.*
+
+</div>
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Key Findings](#key-findings)
 - [Datasets](#datasets)
 - [Project Structure](#project-structure)
 - [Process Notebook](#process-notebook)
@@ -30,13 +36,77 @@ The COVID-19 pandemic is an unprecedented health crisis that has impacted the wo
 
 Measures taken to slow the spread of the virus have also affected physical activity, eating behaviours, sleep patterns, and our relationship with addictive substances — including social media. Increased social media usage during lockdowns, combined with constant exposure to disaster news, has amplified negative effects on mental well-being.
 
-This project performs diagnostic analysis of these patterns and derives meaningful insights from global survey data, Twitter sentiment analysis, and infodemics research.
+This project performs diagnostic analysis of these patterns and derives meaningful insights from three complementary data sources:
+
+| Objective | Data Source | Methods |
+|-----------|-------------|---------|
+| Stress & coping analysis | COVIDiSTRESS global survey | Descriptive statistics, correlation analysis |
+| Public sentiment tracking | Twitter (2020 & 2021) | NLP, sentiment analysis, word clouds |
+| Trust & infodemics | COVID-19 Infodemics Observatory | IRI index analysis, regression modelling |
+
+---
+
+## Key Findings
+
+<table>
+<tr>
+<td width="50%">
+
+**Stress Levels Across Countries**
+
+<img src="process_notebook_final/fig/StressLevelCountries.png" alt="Stress levels across countries" width="100%" />
+
+</td>
+<td width="50%">
+
+**Sources of Distress**
+
+<img src="process_notebook_final/fig/SourceOfDistress.png" alt="Sources of distress" width="100%" />
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Tweet Sentiment Analysis (2020)**
+
+<img src="process_notebook_final/fig/sentiment_2020.png" alt="Sentiment 2020" width="100%" />
+
+</td>
+<td width="50%">
+
+**Tweet Sentiment Analysis (2021)**
+
+<img src="process_notebook_final/fig/sentiment_2021.png" alt="Sentiment 2021" width="100%" />
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Word Cloud (2020)**
+
+<img src="process_notebook_final/fig/wordcloud_2020.png" alt="Word cloud 2020" width="100%" />
+
+</td>
+<td width="50%">
+
+**Word Cloud (2021)**
+
+<img src="process_notebook_final/fig/wordcloud_2021.png" alt="Word cloud 2021" width="100%" />
+
+</td>
+</tr>
+</table>
+
+> See the full analysis in the [Process Notebook](https://rpubs.com/ranjiraj/covidistress).
 
 ---
 
 ## Datasets
 
-### 1. COVIDiSTRESS Global Survey
+<details>
+<summary><strong>1. COVIDiSTRESS Global Survey</strong></summary>
 
 An open science collaboration created by researchers in over 40 countries to collect data on human experiences during the 2020 coronavirus epidemic.
 
@@ -44,14 +114,20 @@ An open science collaboration created by researchers in over 40 countries to col
 
 Covers stress levels, sources of stress, trust in institutions across the EU, loneliness, media use, personality traits, social provisions, and perceived sources of psychological relief.
 
-### 2. Twitter Data
+</details>
+
+<details>
+<summary><strong>2. Twitter Data</strong></summary>
 
 COVID-19 related tweets collected using [`twitteR`](https://www.rdocumentation.org/packages/twitteR/versions/1.1.9) and [`rtweet`](https://www.rdocumentation.org/packages/rtweet/versions/0.7.0) R packages for sentiment analysis.
 
 - **2020 data**: Academic dataset of tweet IDs from [Zenodo](https://zenodo.org/record/3831406)
 - **2021 data**: Collected directly via the Twitter API
 
-### 3. COVID-19 Infodemics Observatory
+</details>
+
+<details>
+<summary><strong>3. COVID-19 Infodemics Observatory</strong></summary>
 
 Examines the role of trust and information during the pandemic and infodemic.
 
@@ -62,6 +138,8 @@ Examines the role of trust and information during the pandemic and infodemic.
 Sources: [osf.io/n6upx](https://osf.io/n6upx/) · [osf.io/67zhg](https://osf.io/67zhg/) · [osf.io/rtacb](https://osf.io/rtacb/) · [osf.io/dh879](https://osf.io/dh879/) · [osf.io/c37wq](https://osf.io/c37wq/)
 
 Includes infodemics summary data, the World Risk Index, population emotional state, and news reliability indicators.
+
+</details>
 
 > **Note:** Very large files in this repository are tracked via [Git LFS](https://git-lfs.github.com/).
 
@@ -91,7 +169,7 @@ Includes infodemics summary data, the World Risk Index, population emotional sta
 
 The full process notebook is published on RPubs:
 
-**[View Process Notebook on RPubs](https://rpubs.com/ranjiraj/covidistress)**
+**[View Process Notebook on RPubs](https://rpubs.com/ranjiraj9/covidistress)**
 
 > *Tip: Click "Hide Toolbars" at the bottom-right corner of RPubs for a cleaner reading experience.*
 
@@ -101,9 +179,13 @@ The source code for the notebook is available [here](https://github.com/ranjiGT/
 
 ## Shiny Web App
 
-An interactive dashboard built with R Shiny:
+An interactive dashboard built with R Shiny to explore the data and findings:
 
-**[covid-distress-infodemics.shinyapps.io](https://covid-distress-infodemics.shinyapps.io/shinyapp/)**
+<div align="center">
+
+**[Launch the App](https://covid-distress-infodemics.shinyapps.io/shinyapp/)**
+
+</div>
 
 To run the app locally from RStudio:
 
@@ -116,7 +198,13 @@ runApp("shinyapp")
 
 ## Screencast
 
+<div align="center">
+
 [![Screencast](https://img.youtube.com/vi/b2b1hFEGxa8/maxresdefault.jpg)](https://youtu.be/b2b1hFEGxa8)
+
+*Click the image above to watch the project walkthrough on YouTube.*
+
+</div>
 
 ---
 
@@ -126,16 +214,18 @@ runApp("shinyapp")
 
 - [R](https://cran.r-project.org/) (>= 4.0)
 - [RStudio](https://posit.co/download/rstudio-desktop/) (recommended)
+- [Git LFS](https://git-lfs.github.com/) (for large data files)
 
 ### Installation
 
 1. Clone the repository:
    ```bash
+   git lfs install
    git clone https://github.com/ranjiGT/Data-Science-with-R-2021.git
    cd Data-Science-with-R-2021
    ```
 
-2. Open the `.Rproj` file in RStudio.
+2. Open `Data-Science-with-R-2021.Rproj` in RStudio.
 
 3. Install required R packages (listed in individual scripts).
 
@@ -143,18 +233,34 @@ runApp("shinyapp")
 
 ## Contributors
 
-This project was developed as a collaborative effort. Thanks to all contributors:
-
-| Name | GitHub |
-|------|--------|
-| **Ranji Raj** | [@ranjiGT](https://github.com/ranjiGT) |
-| **Madhuri Sajith** | [@madhurisajith](https://github.com/madhurisajith) |
-| **Vishnu Jayanand** | [@VishnuJayanand](https://github.com/VishnuJayanand) |
-| **Usama Ashfaq** | [@aaashfaq](https://github.com/aaashfaq) |
-| **Sujith NS** | [@sujithnsudhakar](https://github.com/sujithnsudhakar) |
+<table>
+<tr>
+<td align="center"><a href="https://github.com/ranjiGT"><img src="https://github.com/ranjiGT.png" width="80px;" alt=""/><br /><sub><b>Ranji Raj</b></sub></a></td>
+<td align="center"><a href="https://github.com/madhurisajith"><img src="https://github.com/madhurisajith.png" width="80px;" alt=""/><br /><sub><b>Madhuri Sajith</b></sub></a></td>
+<td align="center"><a href="https://github.com/VishnuJayanand"><img src="https://github.com/VishnuJayanand.png" width="80px;" alt=""/><br /><sub><b>Vishnu Jayanand</b></sub></a></td>
+<td align="center"><a href="https://github.com/aaashfaq"><img src="https://github.com/aaashfaq.png" width="80px;" alt=""/><br /><sub><b>Usama Ashfaq</b></sub></a></td>
+<td align="center"><a href="https://github.com/sujithnsudhakar"><img src="https://github.com/sujithnsudhakar.png" width="80px;" alt=""/><br /><sub><b>Sujith NS</b></sub></a></td>
+</tr>
+</table>
 
 ---
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Course
+
+This project (Team #6) was developed as part of the [Data Science with R](https://brain.cs.uni-magdeburg.de/kmd/DataSciR/) course at Otto von Guericke University Magdeburg, 2021.
+
+| # | Team Members | Title | Presented |
+|---|-------------|-------|-----------|
+| 1 | Diana Guzman, Philipp Blüml | Analysis of Finance-related Reddit Communities | Fri, 09.07 |
+| 2 | Anish Kumar Singh, Priyanka Singh, Ramanpreet Kaur, Venkata Srinath Mannam | Classifying Whether Twitter Authors Spread Hate Using Supervised Learning | Fri, 09.07 |
+| 3 | Kiran Babu Thatha, Marcel Schulte, Obinna Patrick Nkwocha, Shweta Pandey, Thorben Hebbelmann | Multi-Perspective and Predictive Analysis of Forests | Fri, 09.07 |
+| 4 | Ammar Ateeq, Muhammad Hashim Naveed, Sidra Aziz | Effect of COVID-19 Induced Lockdown on Mental Wellbeing | Fri, 09.07 |
+| 5 | Indrani Sarkar, Indranil Maji, Michael Thane, Sharanya Hunasamaranahalli Thotadarya | Trends in Programming Language Popularity | Fri, 09.07 |
+| **6** | **Madhuri Sajith, Usama Ashfaq, Vishnu Jayanand, Sujith Nyarakkad Sudhakaran, Ranjiraj Rajendran Nair** | **Behavioral and Psychological Distress of COVID-19 and Infodemics** | **Mon, 12.07** |
+| 7 | Jannik Greif, Kolja Günther, Frank Dreyer | The Impact of NBA Player-related Social Media Posts on Their On-court Performance | Fri, 16.07 |
